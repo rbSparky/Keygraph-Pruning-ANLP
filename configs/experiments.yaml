@@ -1,0 +1,37 @@
+# Experiment grids for ablations
+
+baseline_experiments:
+  - name: "full_kv_govreport"
+    method: "full"
+    dataset: "govreport"
+    num_samples: 5
+    max_new_tokens: 128
+  
+  - name: "sliding_window_1024_govreport"
+    method: "window"
+    dataset: "govreport"
+    window_size: 1024
+    num_samples: 5
+    max_new_tokens: 128
+
+keygraph_experiments:
+  - name: "keygraph_default_govreport"
+    dataset: "govreport"
+    num_samples: 5
+    max_new_tokens: 128
+    r_dim: 32
+    knn_k: 16
+    tau: 0.8
+    rescue: true
+    rescue_probe_size: 6
+  
+  - name: "keygraph_high_compression_govreport"
+    dataset: "govreport"
+    num_samples: 5
+    max_new_tokens: 128
+    r_dim: 64
+    knn_k: 32
+    tau: 0.7
+    rescue: true
+    rescue_probe_size: 6
+    upper_layers_only: true
