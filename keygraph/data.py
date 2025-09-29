@@ -1,7 +1,8 @@
 import os
 from typing import Dict,Any,List,Tuple
-from datasets import load_dataset
-
+from datasets import load_dataset,Dataset,DatasetDict
+import glob
+import pandas as pd
 
 class DatasetAdapter:
     """Base class for dataset adapters."""
@@ -22,9 +23,7 @@ class DatasetAdapter:
 
     def _load_from_parquet(self):
         """Load dataset from parquet files."""
-        import glob
-        import pandas as pd
-        from datasets import Dataset,DatasetDict
+        
 
 
         parquet_files =glob.glob(os.path.join(self.dataset_path,"**/*.parquet"),recursive =True)
