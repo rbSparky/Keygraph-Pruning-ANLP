@@ -78,11 +78,15 @@ def test_rescue_mechanism():
 
         class MockModel:
             def __init__(self):
-                self.config =MagicMock()
-                self.config.num_hidden_layers =1
-                self.model =MagicMock()
-                self.model.layers =[MagicMock()]
-                self.model.layers[0].self_attn =MockAttention()
+                self.config = MagicMock()
+                self.config.num_hidden_layers = 1
+                # ADD THESE TWO LINES
+                self.config.hidden_size = 8
+                self.config.num_attention_heads = 2
+                # END OF CHANGE
+                self.model = MagicMock()
+                self.model.layers = [MagicMock()]
+                self.model.layers[0].self_attn = MockAttention()
 
 
         class MockKeyGraphCache:
@@ -216,10 +220,10 @@ def main():
     success3 =test_head_wise_rescue_logic()
 
     if success1 and success2 and success3:
-        print("\n🎉 All UnRoPE and rescue mechanism tests passed!")
+        print("\nAll UnRoPE and rescue mechanism tests passed!")
         return True
     else:
-        print("\n❌ Some tests failed!")
+        print("\n Some tests failed!")
         return False
 
 if __name__ =="__main__":
