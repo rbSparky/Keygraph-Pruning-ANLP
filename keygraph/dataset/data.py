@@ -7,19 +7,18 @@ import pandas as pd
 class DatasetAdapter:
     """Base class for dataset adapters."""
 
-    def __init__(self,dataset_path:str):
-        self.dataset_path =dataset_path
-
+    def __init__(self, dataset_path: str):
+        self.dataset_path = dataset_path
+        
+        # This corrected logic removes 'local_files_only=True' to allow downloading.
+        # It will download the data on the first run and load from the local cache on subsequent runs.
         try:
-            self.dataset =load_dataset(dataset_path,local_files_only =True)
-        except:
-
-            try:
-                self.dataset ={
-                "test":load_dataset(dataset_path,split ="test",local_files_only =True)}
-            except:
-
-                self.dataset =self._load_from_parquet()
+            self.dataset = load_dataset(dataset_path)
+            print(f"-> Successfully loaded dataset. Available splits: {list(self.dataset.keys())}")
+        except Exception as e:
+            print(f"Error: Failed to load dataset from '{dataset_path}'.")
+            print("Please check the dataset name/path and your internet connection.")
+            raise e
 
     def _load_from_parquet(self):
         """Load dataset from parquet files."""

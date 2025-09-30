@@ -10,7 +10,7 @@ import torch
 
 from keygraph.utils import set_seed,get_device
 from keygraph.models import load_model_and_tokenizer
-from keygraph.data import GovReportAdapter,NarrativeQAAdapter,QasperAdapter
+from keygraph.dataset.data import GovReportAdapter,NarrativeQAAdapter,QasperAdapter
 from keygraph.baseline.full_kv import full_kv_generate
 from keygraph.baseline.sliding_window import sliding_window_generate
 from keygraph.eval_metrics import evaluate_prediction
