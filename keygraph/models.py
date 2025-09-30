@@ -2,30 +2,36 @@ import torch
 from transformers import AutoModelForCausalLM,AutoTokenizer
 from typing import Tuple,Optional
 
+def load_model_and_tokenizer(model_dir: str, device: torch.device) -> Tuple[AutoModelForCausalLM, AutoTokenizer]:
+    """Load the model and tokenizer correctly once."""
+    print(f"Loading model and tokenizer from {model_dir}")
 
-def load_model_and_tokenizer(model_dir:str,device:torch.device)->Tuple[AutoModelForCausalLM,AutoTokenizer]:
-    """Load the TinyLlama model and tokenizer."""
-    print(f"Loading model from {model_dir}")
+    # 1. Load the tokenizer a single time with all required settings
+    tokenizer = AutoTokenizer.from_pretrained(
+        model_dir,
+        local_files_only=False,
+        trust_remote_code=True,
+        padding_side="left"  # Important for generation
+    )
 
-
-    tokenizer =AutoTokenizer.from_pretrained(
-    model_dir,
-    local_files_only =True,
-    padding_side ="left")
-
-
+    # 2. Set the pad token if it's not already set
     if tokenizer.pad_token is None:
-        tokenizer.pad_token =tokenizer.eos_token
+        tokenizer.pad_token = tokenizer.eos_token
 
+    # 3. Load the model a single time using the recommended `device_map`
+    model = AutoModelForCausalLM.from_pretrained(
+        model_dir,
+        local_files_only=False,
+        trust_remote_code=True,
+        torch_dtype=torch.float16,   # Use float16 for better performance on GPUs
+        device_map='auto'            # Automatically handle device placement (GPU/CPU)
+    )
 
-    model =AutoModelForCausalLM.from_pretrained(
-    model_dir,
-    local_files_only =True,
-    torch_dtype =torch.float16 if device.type =="cuda"else torch.float32).to(device)
-
+    # 4. Set the model to evaluation mode
     model.eval()
-    print(f"Model loaded successfully")
-    return model,tokenizer
+    print("Model and tokenizer loaded successfully.")
+    
+    return model, tokenizer
 
 
 def generate_with_model(
