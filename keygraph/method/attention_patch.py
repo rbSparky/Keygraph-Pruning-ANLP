@@ -5,6 +5,140 @@ from contextlib import contextmanager
 from keygraph.method.keygraph_cache import KeyGraphCache
 import math
 
+def _expand_attn_mask_for_reps(attn_mask: torch.Tensor, num_reps: int):
+    """
+    Prepend a zero (no-penalty) block for 'num_reps' positions to the kv dimension
+    so that the caller's mask aligns after we prefix representative tokens.
+    """
+    if attn_mask is None or num_reps == 0:
+        return attn_mask
+    bsz, one, q_len, kv_len = attn_mask.shape
+    zeros = torch.zeros(bsz, 1, q_len, num_reps, device=attn_mask.device, dtype=attn_mask.dtype)
+    return torch.cat([zeros, attn_mask], dim=-1)
+
+def _make_rep_bias(cluster_sizes: torch.Tensor, q_len: int) -> torch.Tensor:
+    """
+    log|C| additive bias for the C rep positions, broadcastable to [B,1,Q,C].
+    cluster_sizes: [C] (float dtype, on same device)
+    """
+    if cluster_sizes.numel() == 0:
+        return None
+    log_mass = torch.log(cluster_sizes.clamp_min(1.0))  # [C]
+    return log_mass.view(1, 1, 1, -1).expand(1, 1, q_len, -1)  # [1,1,Q,C]
+
+def _sdpa_with_keygraph(
+    query_states,        # [B,H,Q,D]
+    key_states,          # [B,H,S,D]
+    value_states,        # [B,H,S,D]
+    attention_mask,      # [B,1,Q,S] or None (additive mask)
+    keygraph_cache,      # cache object with get_layer_representatives(layer_idx)
+    layer_idx,           # int
+    epsilon_var: float = 1e-3,
+):
+    B, H, Q, D = query_states.shape
+    S = key_states.shape[2]
+
+    # Default path (no KeyGraph)
+    K_full = key_states
+    V_full = value_states
+    attn_mask_total = attention_mask.to(torch.float32) if attention_mask is not None else None
+
+    layer_rep = keygraph_cache.get_layer_representatives(layer_idx)
+    if layer_rep is None or 'K_star' not in layer_rep:
+        return F.scaled_dot_product_attention(
+            query_states, K_full, V_full, attn_mask=attn_mask_total, dropout_p=0.0, is_causal=False
+        )
+
+    # Pull cached tensors (device/dtype align)
+    K_star = layer_rep['K_star'].to(key_states.device, key_states.dtype)         # [H,C,D]
+    V_star = layer_rep['V_star'].to(value_states.device, value_states.dtype)     # [H,C,D]
+    cluster_sizes = layer_rep['cluster_sizes'].to(query_states.device, query_states.dtype)  # [C]
+
+    members_padded = layer_rep['members_padded']    # [C, max_m], long
+    sizes_long     = layer_rep['sizes_long']        # [C], long
+    probe_idx      = layer_rep['probe_idx']         # [C, P], long
+    orig_k         = layer_rep['original_k'].to(key_states.device, key_states.dtype)  # [H,S,D]
+    orig_v         = layer_rep['original_v'].to(value_states.device, value_states.dtype)
+
+    C = K_star.shape[1]
+    K_rep = K_star.unsqueeze(0).expand(B, -1, -1, -1)   # [B,H,C,D]
+    V_rep = V_star.unsqueeze(0).expand(B, -1, -1, -1)   # [B,H,C,D]
+
+    # --- variance-probe (global per layer) ---
+    if probe_idx.numel() > 0:
+        P   = probe_idx.shape[1]
+        d_k = orig_k.shape[-1]
+        probe_clamped = torch.clamp(probe_idx, min=0)                         # [C,P]
+        idx4 = probe_clamped.view(1, C, P, 1).expand(H, C, P, d_k)            # [H,C,P,D]
+        K_probe = orig_k.unsqueeze(1).expand(H, C, S, d_k).gather(2, idx4)    # [H,C,P,D]
+        valid  = (probe_idx >= 0).to(query_states.dtype).view(1,1,1,C,P)      # [1,1,1,C,P]
+        scores = torch.einsum('bhqd,hcpd->bhqcp', query_states, K_probe) / (D ** 0.5)
+        sum_w  = valid.sum(dim=-1).clamp_min(1.0)                             # [1,1,1,C]
+        mean   = (scores * valid).sum(dim=-1) / sum_w                         # [B,H,Q,C]
+        mean2  = (scores * scores * valid).sum(dim=-1) / sum_w                # [B,H,Q,C]
+        var    = (mean2 - mean * mean).relu()                                 # [B,H,Q,C]
+        expand_mask_c = (var > epsilon_var).any(dim=(0,1,2))                  # [C] bool
+    else:
+        expand_mask_c = torch.zeros(C, dtype=torch.bool, device=query_states.device)
+
+    keep_mask_c = ~expand_mask_c
+    keep_idx = keep_mask_c.nonzero(as_tuple=True)[0]   # [C_keep]
+    exp_idx  = expand_mask_c.nonzero(as_tuple=True)[0] # [C_exp]
+
+    # kept reps
+    if keep_idx.numel() > 0:
+        K_keep = K_rep.index_select(2, keep_idx)        # [B,H,C_keep,D]
+        V_keep = V_rep.index_select(2, keep_idx)
+        sizes_keep = cluster_sizes.index_select(0, keep_idx)  # [C_keep]
+    else:
+        K_keep = K_rep[:, :, :0, :]
+        V_keep = V_rep[:, :, :0, :]
+        sizes_keep = cluster_sizes[:0]
+
+    # expanded members
+    if exp_idx.numel() > 0:
+        mem_rows = members_padded.index_select(0, exp_idx)  # [C_exp, max_m]
+        m_sizes  = sizes_long.index_select(0, exp_idx)      # [C_exp]
+        max_m    = mem_rows.shape[1]
+        valid_m  = (torch.arange(max_m, device=mem_rows.device).view(1,-1) < m_sizes.view(-1,1))
+        sel      = mem_rows[valid_m]                        # [M_total]
+        K_mem = orig_k.unsqueeze(0).expand(B, -1, -1, -1).index_select(2, sel)  # [B,H,M,D]
+        V_mem = orig_v.unsqueeze(0).expand(B, -1, -1, -1).index_select(2, sel)
+    else:
+        K_mem = K_rep[:, :, :0, :]
+        V_mem = V_rep[:, :, :0, :]
+
+    # concatenate: kept reps + expanded members + original sequence
+    K_full = torch.cat([K_keep, K_mem, key_states], dim=2)  # [B,H,Ktot,D]
+    V_full = torch.cat([V_keep, V_mem, value_states], dim=2)
+    prefix_len = K_keep.shape[2] + K_mem.shape[2]
+
+    # additive mask: zeros for prefix + caller mask
+    if attention_mask is not None:
+        zeros_prefix = torch.zeros(B, 1, Q, prefix_len, device=attention_mask.device, dtype=attention_mask.dtype)
+        attn_mask_total = torch.cat([zeros_prefix, attention_mask], dim=-1).to(torch.float32)
+    else:
+        attn_mask_total = None
+
+    # log|C| bias only on kept reps (first C_keep positions of prefix)
+    # log|C| bias only on kept reps (first C_keep positions), then pad to FULL KV length
+    if sizes_keep.numel() > 0:
+        rep_bias = _make_rep_bias(sizes_keep, Q)  # [1,1,Q,C_keep]
+        kv_total = K_full.shape[2]                # prefix_len + S
+        pad = kv_total - rep_bias.shape[-1]
+        if pad > 0:
+            rep_bias = torch.cat(
+                [rep_bias, torch.zeros(rep_bias.shape[:-1] + (pad,), device=rep_bias.device, dtype=rep_bias.dtype)],
+                dim=-1
+            )  # [1,1,Q,kv_total]
+        attn_mask_total = (attn_mask_total if attn_mask_total is not None else 0.0) + rep_bias.to(torch.float32)
+
+    return F.scaled_dot_product_attention(
+        query_states, K_full, V_full, attn_mask=attn_mask_total, dropout_p=0.0, is_causal=False
+    )
+
+
+
 # NOTE: The RotatoryPositionalEncoding class remains unchanged.
 class RotatoryPositionalEncoding(nn.Module):
     def __init__(self, embedding_dim, max_len, base=10000):
@@ -55,89 +189,27 @@ def keygraph_attention_patch(model, keygraph_cache, rescue_threshold=0.5):
             key_states = key_states.view(bsz, q_len, self.num_heads, self.head_dim).transpose(1, 2)
             value_states = value_states.view(bsz, q_len, self.num_heads, self.head_dim).transpose(1, 2)
 
+            rope = rope.to(hidden_states.device, hidden_states.dtype)
+
             # Apply RoPE to current query and key states
             query_states = rope(query_states.transpose(1,2)).transpose(1,2)
             key_states = rope(key_states.transpose(1,2)).transpose(1,2)
-            
-            K_star_stacked, V_star_stacked, cluster_sizes_tensor = None, None, None
-            num_clusters = 0
-
-            layer_rep = keygraph_cache.get_layer_representatives(layer_idx)
-            if layer_rep and 'K_star' in layer_rep and layer_rep['K_star']:
-                K_star = layer_rep['K_star']
-                V_star = layer_rep['V_star']
-                cluster_sizes = layer_rep['cluster_sizes']
-                num_clusters = K_star.shape[1]
-
-                # The representatives are now the "past_key_value"
-                K_star_stacked = K_star.unsqueeze(0).expand(bsz, -1, -1, -1)
-                V_star_stacked = V_star.unsqueeze(0).expand(bsz, -1, -1, -1)
-                cluster_sizes_tensor = torch.tensor(cluster_sizes, device=query_states.device, dtype=query_states.dtype)
-
-                # Combine representatives with current keys and values
-                key_states = torch.cat([K_star_stacked, key_states], dim=2)
-                value_states = torch.cat([V_star_stacked, value_states], dim=2)
-
-            # --- Vectorized Attention Calculation ---
-            attn_weights = torch.matmul(query_states, key_states.transpose(2, 3)) / (self.head_dim ** 0.5)
-
-            # FIX: Add the log-mass compensation term for the cluster representatives
-            if num_clusters > 0 and cluster_sizes_tensor is not None:
-                log_mass = torch.log(cluster_sizes_tensor).view(1, 1, 1, num_clusters)
-                attn_weights[:, :, :, :num_clusters] += log_mass
-
-            # Apply attention mask
-            kv_seq_len = key_states.shape[-2]
-            if attention_mask is not None:
-                if attention_mask.size() != (bsz, 1, q_len, kv_seq_len):
-                     raise ValueError(f"Attention mask shape is incorrect. Expected {(bsz, 1, q_len, kv_seq_len)}, got {attention_mask.size()}")
-                attn_weights = attn_weights + attention_mask
-
-            attn_probs = F.softmax(attn_weights, dim=-1, dtype=torch.float32).to(query_states.dtype)
-            
-            # --- Main Attention Output (Calculated Vectorially) ---
-            attn_output = torch.matmul(attn_probs, value_states)
-
-            # --- Rescue Mechanism (Applied per-head if needed) ---
-            entropy = -torch.sum(attn_probs * torch.log(attn_probs + 1e-9), dim=-1)
-            needs_rescue_per_head = torch.any(entropy < rescue_threshold, dim=-1) # Shape: (bsz, num_heads)
-
-            if torch.any(needs_rescue_per_head) and layer_rep and 'original_k' in layer_rep:
-                original_k = layer_rep['original_k'] # Shape: (num_heads, seq_len, head_dim)
-                original_v = layer_rep['original_v'] # Shape: (num_heads, seq_len, head_dim)
                 
-                # Iterate only through heads that need rescuing
-                for h in range(self.num_heads):
-                    if not torch.any(needs_rescue_per_head[:, h]):
-                        continue
+            # === NEW: KeyGraph SDPA path (single call; replaces old manual attention+rescue) ===
+            attn_output = _sdpa_with_keygraph(
+                query_states,          # [B,H,Q,D]  (RoPE already applied above)
+                key_states,            # [B,H,S,D]
+                value_states,          # [B,H,S,D]
+                attention_mask,        # [B,1,Q,S] or None (additive)
+                keygraph_cache,        # captured from outer scope
+                layer_idx,             # int
+                epsilon_var=getattr(self, "epsilon_var", 1e-3),
+            )
 
-                    # For simplicity, if any token in the batch needs rescue for this head,
-                    # we re-compute attention for the whole batch for this head using original KV.
-                    # A more optimized approach would be to do this only for specific batch items.
-                    
-                    # Rebuild K/V cache for this head with original values
-                    rescued_k_h = original_k[h].unsqueeze(0).expand(bsz, -1, -1)
-                    rescued_v_h = original_v[h].unsqueeze(0).expand(bsz, -1, -1)
-                    
-                    # Concatenate with current token's K/V
-                    current_key_states_h = key_states[:, h, num_clusters:, :] # Get current keys for head h
-                    current_value_states_h = value_states[:, h, num_clusters:, :] # Get current values for head h
-                    
-                    full_rescued_k = torch.cat([rescued_k_h, current_key_states_h], dim=1)
-                    full_rescued_v = torch.cat([rescued_v_h, current_value_states_h], dim=1)
-                    
-                    # Re-compute attention for this head
-                    query_states_h = query_states[:, h, :, :]
-                    attn_weights_h = torch.matmul(query_states_h, full_rescued_k.transpose(1, 2)) / (self.head_dim ** 0.5)
-
-                    # Note: A rescued attention mask would also be needed here if the original sequence length is different
-                    attn_probs_h = F.softmax(attn_weights_h, dim=-1, dtype=torch.float32).to(query_states.dtype)
-                    attn_output_h = torch.matmul(attn_probs_h, full_rescued_v)
-                    
-                    # Overwrite the output for the rescued head
-                    attn_output[:, h, :, :] = attn_output_h
-
-
+            # SDPA path doesn't return per-token weights; keep API stable:
+            attn_weights = None
+            present_key_value = (key_states, value_states) if use_cache else None
+            
             # --- Final Projection ---
             attn_output = attn_output.transpose(1, 2).contiguous()
             attn_output = attn_output.reshape(bsz, q_len, self.hidden_size)
