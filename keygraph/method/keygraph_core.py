@@ -1,7 +1,7 @@
 import torch
 import numpy as np
 import torch.nn.functional as F
-
+from keygraph.method.ivf import _torch_ivf_neighbors, _faiss_ivf_flat_neighbors
 
 def build_descriptors_unrope(keys_per_head,pos_idx,rp_matrix =None,r =32):
     """
@@ -75,175 +75,112 @@ def cosine_similarity(a,b):
     return torch.matmul(a_norm,b_norm.transpose(-2,-1))
 
 
-def build_knn_and_clusters(phi,tau =0.8,k =16,mutual =True):
-    """
-    Build kNN graph and clusters using PyTorch operations.
-
-    Args:
-        phi: Descriptors of shape [seq_len, r]
-        tau: Cosine similarity threshold
-        k: Number of neighbors
-        mutual: Whether to use mutual kNN
-
-    Returns:
-        neighbors: List of neighbors for each node
-        clusters: List of clusters (connected components)
-    """
-    seq_len,r =phi.shape
-
-
-    similarities =cosine_similarity(phi,phi)
-
-
-    diag_indices =torch.arange(seq_len,device =phi.device)
-    similarities[diag_indices,diag_indices]=-1.0
-
-
-    topk_similarities,topk_indices =torch.topk(similarities,k =min(k +1,seq_len),dim =1)
-
-
-    neighbors =[]
-    for i in range(seq_len):
-
-        valid_neighbors =[]
-        for j in range(topk_indices[i].shape[0]):
-            neighbor_idx =topk_indices[i,j].item()
-            sim =topk_similarities[i,j].item()
-
-            if neighbor_idx !=i and sim >=tau:
-
-                    valid_neighbors.append(neighbor_idx)
-        neighbors.append(valid_neighbors)
-
-
-    if mutual:
-        mutual_neighbors =[]
-        for i in range(seq_len):
-            mutual_nbrs =[]
-            for nbr in neighbors[i]:
-                if i in neighbors[nbr]:
-                    mutual_nbrs.append(nbr)
-            mutual_neighbors.append(mutual_nbrs)
-        neighbors =mutual_neighbors
-
-
-    clusters =find_connected_components(seq_len,neighbors)
-
-    return neighbors,clusters
-
 @torch.no_grad()
 def build_knn_and_clusters(
     phi: torch.Tensor,
     tau: float = 0.8,
     k: int = 16,
     mutual: bool = True,
+    ann: dict | None = None,
 ):
     """
-    GPU kNN (cosine) + connected components (label propagation).
+    kNN + connected components on GPU.
+    - Default: exact (cosine) via full S = phi @ phi.T
+    - If ann = {"method": "torch_ivf", "params": {...}}, use Torch-IVF candidate path.
 
-    Args:
-        phi: [N, r] descriptors (any dtype supported by matmul/topk). Will be L2-normalized along dim=1.
-        tau: cosine threshold. Neighbors with sim < tau are discarded.
-        k:   retain top-k neighbors per node (after masking the diagonal).
-        mutual: if True, keep only mutual kNN edges; else symmetrize with OR.
-
-    Returns:
-        {
-          'neighbors_idx': LongTensor [N, k]  (invalid slots = -1)
-          'neighbors_sim': Tensor     [N, k]  (invalid slots = -inf)
-          'labels':        LongTensor [N]     (cluster label for each node, 0..C-1)
-        }
+    Returns dict:
+      {
+        "neighbors_idx": LongTensor [N, k_eff]  (invalid slots = -1)
+        "neighbors_sim": Tensor     [N, k_eff]  (invalid slots = -inf)
+        "labels":        LongTensor [N]         (0..C-1)
+      }
     """
     assert phi.dim() == 2, f"phi must be [N, r], got {phi.shape}"
     device, dt = phi.device, phi.dtype
     N = phi.size(0)
+
+    k_eff = max(0, min(k, max(0, N - 1)))
     if N == 0:
         return {
-            "neighbors_idx": torch.empty(0, k, dtype=torch.long, device=device),
-            "neighbors_sim": torch.empty(0, k, dtype=dt, device=device),
+            "neighbors_idx": torch.empty(0, k_eff, dtype=torch.long, device=device),
+            "neighbors_sim": torch.empty(0, k_eff, dtype=dt, device=device),
             "labels":        torch.empty(0, dtype=torch.long, device=device),
         }
-
-    # 1) Cosine sim on device
-    phi = F.normalize(phi, p=2, dim=1)
-    # Full sim matrix (we free it ASAP after topk)
-    S = phi @ phi.T  # [N, N]
-    S.fill_diagonal_(-float("inf"))
-
-    k_eff = max(0, min(k, N - 1))
     if k_eff == 0:
         neighbors_idx = torch.full((N, 0), -1, dtype=torch.long, device=device)
         neighbors_sim = torch.full((N, 0), float("-inf"), dtype=dt, device=device)
     else:
-        neighbors_sim, neighbors_idx = torch.topk(S, k=k_eff, dim=1)  # [N, k]
-        # threshold
-        valid = neighbors_sim >= tau
-        neighbors_idx = torch.where(valid, neighbors_idx, torch.full_like(neighbors_idx, -1))
-        neg_inf = torch.tensor(float("-inf"), device=device, dtype=dt)
-        neighbors_sim = torch.where(valid, neighbors_sim, torch.full_like(neighbors_sim, neg_inf))
+        method = (ann or {}).get("method", "exact")
+        if method == "faiss_ivf_flat":
+            params = (ann or {}).get("params", {}) or {}
+            try:
+                neighbors_idx, neighbors_sim = _faiss_ivf_flat_neighbors(phi, tau=tau, k=k, params=params)
+            except Exception as e:
+                # Graceful fallback: try Torch-IVF if available, else exact
+                # print or log once if you prefer
+                if (ann or {}).get("fallback", "torch_ivf") == "exact":
+                    phi_norm = F.normalize(phi, p=2, dim=1)
+                    S = phi_norm @ phi_norm.T
+                    S.fill_diagonal_(-float("inf"))
+                    neighbors_sim, neighbors_idx = torch.topk(S, k=max(0, min(k, phi.shape[0]-1)), dim=1)
+                    if tau is not None and tau > float("-inf"):
+                        valid = neighbors_sim >= float(tau)
+                        neighbors_idx = torch.where(valid, neighbors_idx, torch.full_like(neighbors_idx, -1))
+                        neg_inf = torch.tensor(float("-inf"), device=phi.device, dtype=phi.dtype)
+                        neighbors_sim = torch.where(valid, neighbors_sim, torch.full_like(neighbors_sim, neg_inf))
+                else:
+                    # Torch-IVF fallback if you kept it in this file
+                    neighbors_idx, neighbors_sim = _torch_ivf_neighbors(phi, tau=tau, k=k, params=(ann or {}).get("params", {}))
+        elif method == "torch_ivf":
+            params = (ann or {}).get("params", {}) or {}
+            neighbors_idx, neighbors_sim = _torch_ivf_neighbors(phi, tau=tau, k=k, params=params)
+        else:
+            # --- exact dense cosine path (Phase B behavior) ---
+            phi_norm = F.normalize(phi, p=2, dim=1)
+            S = phi_norm @ phi_norm.T     # [N, N]
+            S.fill_diagonal_(-float("inf"))
+            neighbors_sim, neighbors_idx = torch.topk(S, k=k_eff, dim=1)  # [N, k_eff]
+            if tau is not None and tau > float("-inf"):
+                valid = neighbors_sim >= float(tau)
+                neighbors_idx = torch.where(valid, neighbors_idx, torch.full_like(neighbors_idx, -1))
+                neg_inf = torch.tensor(float("-inf"), device=device, dtype=dt)
+                neighbors_sim = torch.where(valid, neighbors_sim, torch.full_like(neighbors_sim, neg_inf))
+            del S
 
-    # Build boolean adjacency A from neighbors (ignoring -1 slots)
-    # We will discard S now to free memory.
-    del S
-
+    # --- Build adjacency A from neighbors (ignoring -1), then mutual/OR ---
     if k_eff == 0:
-        A = torch.zeros((N, N), dtype=torch.bool, device=device)
+        M = torch.zeros((N, N), dtype=torch.bool, device=device)
     else:
         A = torch.zeros((N, N), dtype=torch.bool, device=device)
-        row = torch.arange(N, device=device).unsqueeze(1).expand_as(neighbors_idx)  # [N, k]
+        rows = torch.arange(N, device=device).unsqueeze(1).expand_as(neighbors_idx)  # [N, k_eff]
         mask_valid = neighbors_idx >= 0
-        row = row[mask_valid]
-        col = neighbors_idx[mask_valid]
-        if row.numel() > 0:
-            A[row, col] = True
+        if mask_valid.any():
+            A[rows[mask_valid], neighbors_idx[mask_valid]] = True
+        M = (A & A.T) if mutual else (A | A.T)
+        del A
 
-    # Mutual or OR symmetrization
-    M = (A & A.T) if mutual else (A | A.T)
-    del A
-
-    # 2) Connected components via label propagation (GPU)
-    # labels initialized to own indices
+    # --- Connected components via label propagation (GPU) ---
     labels = torch.arange(N, device=device, dtype=torch.long)
-
-    # If there are no edges, every node is its own component
-    if not M.any():
-        # Re-label to 0..N-1 to keep the contract stable
-        # (already true because labels == arange(N))
-        return {
-            "neighbors_idx": neighbors_idx,
-            "neighbors_sim": neighbors_sim,
-            "labels":        labels,  # 0..N-1
-        }
-
-    # Iterative min-label relaxation: at each step, each node takes min label among its neighbors ∪ {itself}.
-    # Implemented with dense masks; memory OK up to ~4k tokens.
-    # To keep types simple, we compute mins in float32 then cast back.
-    labels_f = labels.to(torch.float32)
-
-    # Precompute a big 'inf' sentinel
-    INF = torch.tensor(float("inf"), device=device, dtype=torch.float32)
-
-    # Cap iterations; usually converges in < 10
-    for _ in range(32):
-        # neighbor label matrix: [N, N], with inf where no edge
-        neigh_labels = labels_f.unsqueeze(0).expand(N, N).clone()
-        neigh_labels = neigh_labels.masked_fill(~M, INF)
-        neigh_min = torch.minimum(neigh_labels.min(dim=1).values, labels_f)  # include self
-        changed = ~torch.isclose(neigh_min, labels_f)
-        labels_f = neigh_min
-        if not changed.any():
-            break
-
-    # Compact labels to 0..C-1
-    # (Stable compaction so small ints map to small ints)
-    uniq, inv = torch.unique(labels_f.to(torch.long), return_inverse=True)
-    labels = inv  # [N], 0..C-1
+    if M.any():
+        labels_f = labels.to(torch.float32)
+        INF = torch.tensor(float("inf"), device=device, dtype=torch.float32)
+        for _ in range(32):
+            neigh_labels = labels_f.unsqueeze(0).expand(N, N).clone()
+            neigh_labels = neigh_labels.masked_fill(~M, INF)
+            neigh_min = torch.minimum(neigh_labels.min(dim=1).values, labels_f)
+            changed = ~torch.isclose(neigh_min, labels_f)
+            labels_f = neigh_min
+            if not changed.any():
+                break
+        uniq, inv = torch.unique(labels_f.to(torch.long), return_inverse=True)
+        labels = inv  # [N], 0..C-1
 
     return {
         "neighbors_idx": neighbors_idx,
         "neighbors_sim": neighbors_sim,
         "labels":        labels,
     }
+
 
 
 def find_connected_components(n,edges):
@@ -331,79 +268,4 @@ def aggregate_reps_from_labels(
     denom = counts_long.clamp_min(1).to(device=device, dtype=torch.float32).view(1, C, 1)
     K_star = (K_star_acc / denom).to(dtype=k_dtype)
     V_star = (V_star_acc / denom).to(dtype=v_dtype)
-    return K_star, V_star, cluster_sizes
-
-
-
-def aggregate_reps(K: torch.Tensor,
-                   V: torch.Tensor,
-                   clusters,
-                   per_head: bool = True):
-    """
-    Aggregate keys/values for each cluster to form representatives.
-
-    Args:
-        K: Keys of shape [num_heads, seq_len, head_dim_k] (if per_head) or [seq_len, head_dim_k]
-        V: Values of shape [num_heads, seq_len, head_dim_v] (if per_head) or [seq_len, head_dim_v]
-        clusters: List[List[int]] cluster -> member indices
-        per_head: Expect [H, N, D] inputs and return [H, C, D] outputs if True
-
-    Returns:
-        K_star: Tensor of shape [H, C, Dk] if per_head else [C, Dk]
-        V_star: Tensor of shape [H, C, Dv] if per_head else [C, Dv]
-        cluster_sizes: Tensor of shape [C] (float dtype, same as K/V)
-    """
-    if per_head:
-        H, N, Dk = K.shape
-        _, _, Dv = V.shape
-        device, dtype = K.device, K.dtype
-        C = len(clusters)
-        if C == 0:
-            return (K.new_zeros((H, 0, Dk)),
-                    V.new_zeros((H, 0, Dv)),
-                    K.new_zeros((0,), dtype=dtype))
-
-        K_star_list = []
-        V_star_list = []
-        sizes = []
-
-        for cluster in clusters:
-            idx = torch.as_tensor(cluster, device=device, dtype=torch.long)
-            # [H, |cluster|, D]
-            Kc = K.index_select(1, idx)
-            Vc = V.index_select(1, idx)
-            # mean over members -> [H, D]
-            Kmu = Kc.mean(dim=1)
-            Vmu = Vc.mean(dim=1)
-            K_star_list.append(Kmu)
-            V_star_list.append(Vmu)
-            sizes.append(idx.numel())
-
-        K_star = torch.stack(K_star_list, dim=1)     # [H, C, Dk]
-        V_star = torch.stack(V_star_list, dim=1)     # [H, C, Dv]
-        cluster_sizes = torch.tensor(sizes, device=device, dtype=dtype)  # float dtype for log()
-        return K_star, V_star, cluster_sizes
-
-    # Non-per-head path 
-    N, Dk = K.shape
-    _, Dv = V.shape
-    device, dtype = K.device, K.dtype
-    C = len(clusters)
-    if C == 0:
-        return (K.new_zeros((0, Dk)),
-                V.new_zeros((0, Dv)),
-                K.new_zeros((0,), dtype=dtype))
-    K_star_list = []
-    V_star_list = []
-    sizes = []
-    for cluster in clusters:
-        idx = torch.as_tensor(cluster, device=device, dtype=torch.long)
-        Kmu = K.index_select(0, idx).mean(dim=0)
-        Vmu = V.index_select(0, idx).mean(dim=0)
-        K_star_list.append(Kmu)
-        V_star_list.append(Vmu)
-        sizes.append(idx.numel())
-    K_star = torch.stack(K_star_list, dim=0)         # [C, Dk]
-    V_star = torch.stack(V_star_list, dim=0)         # [C, Dv]
-    cluster_sizes = torch.tensor(sizes, device=device, dtype=dtype)
     return K_star, V_star, cluster_sizes

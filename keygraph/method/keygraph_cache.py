@@ -65,7 +65,7 @@ class KeyGraphCache:
 
         self._build_cache(prompt)
 
-    def _build_cache(self,prompt):
+    def _build_cache(self,prompt,ann=False):
         """
         Build the KeyGraph cache from the prompt.
         """
@@ -124,7 +124,19 @@ class KeyGraphCache:
                 phi, rp_matrix = build_descriptors_unrope(k, pos_idx, r=self.r_dim)
                 self.rp_matrices[layer_idx] = rp_matrix
 
-                knn = build_knn_and_clusters(phi, tau=self.tau, k=self.knn_k, mutual=True)
+                if ann:
+                    knn = build_knn_and_clusters(phi, tau=self.tau, k=self.knn_k, mutual=True, ann={"method": "torch_ivf",
+                    "params": {
+                        "nlist": None,          
+                        "nprobe": 16,           
+                        "kmeans_iters": 4,
+                        "train_subset": 4096,
+                        "seed": 42,
+                        "block_max_dots": 200_000
+                    }})
+                else:
+                    knn = build_knn_and_clusters(phi, tau=self.tau, k=self.knn_k, mutual=True)
+                
                 labels: torch.Tensor = knn["labels"]  # [N]
 
                 num_clusters = int(labels.max().item()) + 1 if labels.numel() else 0
