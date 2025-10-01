@@ -1,0 +1,8 @@
+model_dir:  "${HOME}/offline_bundle/models/TinyLlama-1.1B-Chat-v1.0"
+gov_dir:    "${HOME}/offline_bundle/datasets/ccdv__govreport_summarization"
+nqa_dir:    "${HOME}/offline_bundle/datasets/deepmind__narrativeqa"
+qasper_dir: "${HOME}/offline_bundle/datasets/allenai__qasper"
+
+offline: true
+local_files_only: true
+use_gpu: true
