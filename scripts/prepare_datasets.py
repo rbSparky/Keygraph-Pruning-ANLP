@@ -10,7 +10,7 @@ sys.path.insert(0,os.path.join(os.path.dirname(__file__),'..'))
 from keygraph.data import GovReportAdapter,NarrativeQAAdapter,QasperAdapter
 
 
-def load_config(config_path ="configs/paths.yaml"):
+def load_config(config_path ="../configs/paths.yaml"):
     """Load configuration from YAML file."""
     with open(config_path,'r')as file:
         config =yaml.safe_load(file)
