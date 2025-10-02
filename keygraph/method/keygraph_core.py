@@ -3,70 +3,69 @@ import numpy as np
 import torch.nn.functional as F
 from keygraph.method.ivf import _torch_ivf_neighbors, _faiss_ivf_flat_neighbors
 
-def build_descriptors_unrope(keys_per_head,pos_idx,rp_matrix =None,r =32):
+def build_descriptors_unrope(keys_per_head, pos_idx, rp_matrix=None, r=32, base=10000.0):
     """
-    Build head-invariant descriptors per position using correct inverse RoPE.
+    Build head-invariant descriptors per position using inverse RoPE, *without* view_as_complex.
+    Works with bf16/fp16/fp32.
 
     Args:
-        keys_per_head: Tensor of shape [num_heads, seq_len, head_dim]
-        pos_idx: Position indices of shape [seq_len]
-        rp_matrix: Precomputed random projection matrix
-        r: Dimension of random projection
+        keys_per_head: [H, S, D]  (already RoPE-rotated keys per head)
+        pos_idx:       [S]        (0..S-1)
+        rp_matrix:     [D, r] or None
+        r:             int        (projection dim)
+        base:          float      (RoPE base; must match attention)
 
     Returns:
-        phi: Descriptors of shape [seq_len, r]
+        phi:        [S, r]   (float32)
+        rp_matrix:  [D, r]   (float32, column-normalized)
     """
-    num_heads,seq_len,head_dim =keys_per_head.shape
+    assert keys_per_head.dim() == 3, "keys_per_head must be [H,S,D]"
+    H, S, D = keys_per_head.shape
+    assert D % 2 == 0, "head_dim must be even for RoPE"
 
+    device = keys_per_head.device
 
+    # ---- Work in fp32 for trig; supports bf16/fp16 inputs ----
+    k = keys_per_head.to(torch.float32)      # [H,S,D]
+    x1 = k[..., 0::2]                        # [H,S,D/2]
+    x2 = k[..., 1::2]                        # [H,S,D/2]
 
+    # ---- Build RoPE angles (same formula as your RotatoryPositionalEncoding) ----
+    # inv_freq[j] = base^(-(2j)/D) == 1 / base^{(2j)/D}, but your PE uses arange(0, D, 2)/D
+    inv_freq = 1.0 / (base ** (torch.arange(0, D, 2, device=device, dtype=torch.float32) / D))  # [D/2]
+    # angles[s,j] = pos_idx[s] * inv_freq[j]
+    angles = torch.einsum("s,j->sj", pos_idx.to(device=device, dtype=torch.float32), inv_freq)   # [S, D/2]
+    cos = angles.cos().unsqueeze(0)     # [1,S,D/2]
+    sin = angles.sin().unsqueeze(0)     # [1,S,D/2]
 
-    i =torch.arange(1,head_dim //2 +1,dtype =torch.float32,device =keys_per_head.device)
-    theta =10000 **(-2 *(i -1)/head_dim)
+    # ---- Inverse rotation (undo RoPE):
+    # if forward was:  x' = [x1*cos - x2*sin, x2*cos + x1*sin]
+    # then inverse is: u1 =  x1'*cos + x2'*sin
+    #                  u2 =  x2'*cos - x1'*sin
+    u1 = x1 * cos + x2 * sin            # [H,S,D/2]
+    u2 = x2 * cos - x1 * sin            # [H,S,D/2]
 
+    # Re-interleave to [H,S,D]
+    unrot = torch.empty((H, S, D), device=device, dtype=torch.float32)
+    unrot[..., 0::2] = u1
+    unrot[..., 1::2] = u2
 
-    keys_reshaped =keys_per_head.view(num_heads,seq_len,head_dim //2,2)
+    # ---- Head-invariant mean ----
+    mean_keys = unrot.mean(dim=0)       # [S,D], fp32
 
-
-    keys_complex =torch.view_as_complex(keys_reshaped)
-
-
-
-    angles =-pos_idx.unsqueeze(1)*theta.unsqueeze(0)
-
-
-    rotation_vector =torch.polar(torch.ones_like(angles),angles)
-
-
-    rotation_vector =rotation_vector.unsqueeze(0).unsqueeze(-1)
-    rotation_vector =rotation_vector.expand(num_heads,-1,-1,-1)
-    rotation_vector =rotation_vector.squeeze(-1)
-
-
-    unrope_keys_complex =keys_complex *rotation_vector
-
-
-    unrope_keys_real =torch.view_as_real(unrope_keys_complex)
-    unrope_keys =unrope_keys_real.view(num_heads,seq_len,head_dim)
-
-
-    unrope_keys =torch.nn.functional.normalize(unrope_keys,p =2,dim =-1)
-
-
-    mean_keys =torch.mean(unrope_keys,dim =0)
-
-
+    # ---- Random projection to r dims (column-normalized) ----
     if rp_matrix is None:
+        rp_matrix = torch.randn(D, r, device=device, dtype=torch.float32)
+        rp_matrix = F.normalize(rp_matrix, p=2, dim=0)
+    else:
+        # Ensure fp32 for the matmul (and column-normalized once)
+        if rp_matrix.dtype != torch.float32:
+            rp_matrix = rp_matrix.to(torch.float32)
+        # (Optional) you can re-normalize if you want strict invariance:
+        # rp_matrix = F.normalize(rp_matrix, p=2, dim=0)
 
-        rp_matrix =torch.randn(head_dim,r,device =mean_keys.device)
-
-        rp_matrix =torch.nn.functional.normalize(rp_matrix,p =2,dim =0)
-
-
-    phi =torch.matmul(mean_keys,rp_matrix)
-
-    return phi,rp_matrix
-
+    phi = mean_keys @ rp_matrix         # [S,r], fp32
+    return phi, rp_matrix
 
 def cosine_similarity(a,b):
     """Compute cosine similarity between two tensors."""
