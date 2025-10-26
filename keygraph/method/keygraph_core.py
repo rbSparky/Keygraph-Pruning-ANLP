@@ -51,7 +51,8 @@ def build_descriptors_unrope(keys_per_head, pos_idx, rp_matrix=None, r=32, base=
     unrot[..., 1::2] = u2
 
     # ---- Head-invariant mean ----
-    mean_keys = unrot.mean(dim=0)       # [S,D], fp32
+    norms = unrot.norm(dim=-1, keepdim=True).clamp_min(1e-6)
+    mean_keys = (unrot / norms).mean(dim=0)      # [S,D], fp32
 
     # ---- Random projection to r dims (column-normalized) ----
     if rp_matrix is None:
@@ -181,46 +182,6 @@ def build_knn_and_clusters(
     }
 
 
-
-def find_connected_components(n,edges):
-    """
-    Find connected components using Union-Find.
-
-    Args:
-        n: Number of nodes
-        edges: List of neighbors for each node
-
-    Returns:
-        components: List of components (each component is a list of node indices)
-    """
-
-    parent =list(range(n))
-
-    def find(x):
-        if parent[x]!=x:
-            parent[x]=find(parent[x])
-        return parent[x]
-
-    def union(x,y):
-        px,py =find(x),find(y)
-        if px !=py:
-            parent[px]=py
-
-
-    for i in range(n):
-        for nbr in edges[i]:
-            union(i,nbr)
-
-
-    components ={}
-    for i in range(n):
-        root =find(i)
-        if root not in components:
-            components[root]=[]
-        components[root].append(i)
-
-
-    return list(components.values())
 
 @torch.no_grad()
 def aggregate_reps_from_labels(
