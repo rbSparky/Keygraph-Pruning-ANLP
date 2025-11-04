@@ -71,6 +71,14 @@ def measure_block(tag, flush_after=False):
             print(f"[{tag}] after empty_cache(): alloc={mb(alloc2):,.1f} MB  reserved={mb(reserv2):,.1f} MB")
 
 
+def _make_gqa_map(cfg, device):
+    Hq  = int(getattr(cfg, "num_attention_heads", 0) or getattr(cfg, "n_head", 0))
+    Hkv = int(getattr(cfg, "num_key_value_heads", Hq))
+    group = max(1, Hq // max(1, Hkv))
+    gqa_map = torch.div(torch.arange(Hq, device=device), group, rounding_mode="floor")  # [Hq], values in [0, Hkv-1]
+    return gqa_map, Hq, Hkv
+
+
 # ===================== dashboards =====================
 def _cluster_size_stats(labels: torch.Tensor, _C_hint: int):
     if labels.device.type != "cpu":
@@ -318,17 +326,31 @@ def _build_keygraph_from_past(past, attn_mask_1xS, rope_base, device, dtype, kg_
 
 # ===================== patching LLaMA attention =====================
 def _make_llama_keygraph_forward(attn_mod, layer_cache, patch_cfg):
-    # helper: normalize original returns to exactly 2 items
+    # tiny helpers kept local
+    def _rotate_half(x: torch.Tensor) -> torch.Tensor:
+        x1 = x[..., ::2]; x2 = x[..., 1::2]
+        return torch.stack((-x2, x1), dim=-1).flatten(-2)
+
+    def _rope_apply(x_bhtd: torch.Tensor, position_ids: torch.Tensor, rope_base: float) -> torch.Tensor:
+        # x_bhtd: [B,H,T,D] (queries or keys), apply RoPE
+        B, H, T, D = x_bhtd.shape
+        assert D % 2 == 0
+        half = D // 2
+        idx = torch.arange(0, half, device=x_bhtd.device, dtype=torch.float32)
+        inv = (1.0 / (rope_base ** (2.0 * idx / float(D)))).to(torch.float32)
+        pos = position_ids.to(device=x_bhtd.device, dtype=torch.float32)  # [B,T]
+        freqs = torch.einsum('bt,d->btd', pos, inv)  # [B,T,half]
+        cos = torch.cat([freqs.cos(), freqs.cos()], -1)[:, None, :, :].to(x_bhtd.dtype)
+        sin = torch.cat([freqs.sin(), freqs.sin()], -1)[:, None, :, :].to(x_bhtd.dtype)
+        return (x_bhtd * cos) + (_rotate_half(x_bhtd) * sin)
+
     def _ret2(res):
         if isinstance(res, tuple):
-            if len(res) >= 2:
-                return res[0], res[1]
-            else:
-                return res[0], None
-        else:
-            return res, None
+            return (res + (None,))[:2]
+        return res, None
 
     patch = KeygraphAttentionPatch(attn_mod, layer_cache, patch_cfg).to(layer_cache.repsK.device)
+    rope_base = float(getattr(layer_cache, "rope_base", 10000.0))
 
     def kg_forward(
         hidden_states,
@@ -342,8 +364,7 @@ def _make_llama_keygraph_forward(attn_mod, layer_cache, patch_cfg):
         **kwargs
     ):
         B, T, _ = hidden_states.shape
-
-        # If someone routes prefill here, fall back to original HF attention and slice to 2
+        # if prefill sneaks in, punt to HF
         if T != 1:
             return _ret2(attn_mod._kg_orig_forward(
                 hidden_states=hidden_states,
@@ -356,27 +377,56 @@ def _make_llama_keygraph_forward(attn_mod, layer_cache, patch_cfg):
                 **kwargs
             ))
 
-        # Q projection (derive heads robustly)
-        q = attn_mod.q_proj(hidden_states)  # [B,T,Hq*Dh]
+        # project Q/K/V for the current step
+        q = attn_mod.q_proj(hidden_states)  # [B,1,Hq*Dh]
         Dh = getattr(attn_mod, "head_dim", None)
         if Dh is None:
             Dh = q.shape[-1] // max(1, getattr(attn_mod, "num_attention_heads", 1))
         Hq = q.shape[-1] // Dh
-        Q = q.view(B, T, Hq, Dh).permute(0, 2, 1, 3).contiguous()  # [B,Hq,T,Dh]
+        Q = q.view(B, T, Hq, Dh).permute(0, 2, 1, 3).contiguous()          # [B,Hq,1,Dh]
+        if position_ids is None:
+            position_ids = torch.zeros(B, T, dtype=torch.long, device=hidden_states.device)
+        Q_rope = _rope_apply(Q, position_ids, rope_base=rope_base)          # RoPE(Q)
 
-        # reps-only forward; rescue will pull per-cluster probes from layer_cache inside the patch
+        # base K/V from KeyGraph prefill cache (S_eff)
+        K_bhsd = getattr(layer_cache, "K", None)
+        V_bhsd = getattr(layer_cache, "V", None)
+        if K_bhsd is not None and V_bhsd is not None:
+            K_bhsd = K_bhsd.unsqueeze(0)  # [1,Hkv,S_eff,D]
+            V_bhsd = V_bhsd.unsqueeze(0)  # [1,Hkv,S_eff,D]
+
+        if K_bhsd is not None and V_bhsd is not None:
+            K_bhsd = K_bhsd.unsqueeze(0)  # [1,Hkv,S_eff,D]
+            V_bhsd = V_bhsd.unsqueeze(0)  # [1,Hkv,S_eff,D]
+
+        # ---- NEW: compute current-step self K/V ----
+        k_cur = attn_mod.k_proj(hidden_states)  # [B,1,Hkv*Dh]
+        v_cur = attn_mod.v_proj(hidden_states)  # [B,1,Hkv*Dh]
+        Hkv = k_cur.shape[-1] // Dh
+        K_cur = k_cur.view(B, T, Hkv, Dh).permute(0, 2, 1, 3).contiguous()  # [B,Hkv,1,D]
+        V_cur = v_cur.view(B, T, Hkv, Dh).permute(0, 2, 1, 3).contiguous()  # [B,Hkv,1,D]
+        K_cur = _rope_apply(K_cur, position_ids, rope_base=rope_base)       # RoPE(K)
+
+        # ---- REMOVED THE K_aug/V_aug LOGIC ----
+        
+        # Call patch with separate PAST and CURRENT K/V
         out_bhtd = patch(
-            Q_bhtd=Q, K_bhsd=None, V_bhsd=None,
-            position_ids=position_ids if position_ids is not None
-                         else torch.zeros(B, T, dtype=torch.long, device=hidden_states.device),
-            attn_mask=None
-        )  # [B,Hq,T,Dh]
+            Q_bhtd=Q_rope,
+            K_bhsd=K_bhsd,      # Past K (full, for rescue)
+            V_bhsd=V_bhsd,      # Past V (full, for rescue)
+            K_cur_bhsd=K_cur,   # Current K
+            V_cur_bhsd=V_cur,   # Current V
+            position_ids=position_ids,
+            attn_mask=None,
+        )
 
         out = out_bhtd.permute(0, 2, 1, 3).contiguous().view(B, T, Hq * Dh)
         out = attn_mod.o_proj(out)
-        return out, None   # return exactly 2 items
+        return out, None
 
     return kg_forward
+
+
 
 def _patch_model_with_keygraph(model, layers, patch_cfg):
     blocks = getattr(model, "model", model).layers
@@ -440,12 +490,16 @@ def _keygraph_generate_from_past(model, tok, prompt_ids, past, attn_mask, rope_b
     print_keygraph_dashboard(layers)
 
     # Patch attention (rescue enabled per cfg)
+    gqa_map, Hq, Hkv = _make_gqa_map(model.config, device)
     patch_cfg = PatchConfig(
         top_clusters=top_clusters, mass_alpha=mass_alpha,
         use_representatives_only=(not enable_rescue), enable_rescue=enable_rescue,
         rescue_var_eps=rescue_var_eps, rescue_tokens_per_cluster=rescue_tokens_per_cluster,
-        small_S_exact_fallback=64, gqa_map=None, compute_dtype=dtype, attn_dropout_p=0.0
+        small_S_exact_fallback=64,
+        gqa_map=gqa_map,                  # <- pass it in
+        compute_dtype=dtype, attn_dropout_p=0.0
     )
+    print(gqa_map.tolist()[:16])
     _patch_model_with_keygraph(model, layers, patch_cfg)
 
     # Free baseline KV for fair VRAM view
