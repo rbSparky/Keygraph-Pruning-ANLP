@@ -304,7 +304,15 @@ def _build_probes_and_attach(K_eff, V_eff, pos_idx, rope_base, layer, probe_per_
 
 # ===================== build KG from past (+attach probes) =====================
 def _build_keygraph_from_past(past, attn_mask_1xS, rope_base, device, dtype, kg_cfg, probe_per_cluster):
+    """
+    Build KeyGraph layers from HF past_key_values. We must retain full per-layer K/V so that
+    rescue can expand a cluster to ALL its members without keeping full KV on VRAM.
+    Strategy: store_full_kv=True for prefill build, then move K/V to pinned CPU.
+    """
+    # Ensure we store full K/V for this build (prefill only)
+    kg_cfg.store_full_kv = True
     kg = KeygraphCache(kg_cfg)
+
     layers = []
     valid_idx = attn_mask_1xS.nonzero(as_tuple=False).squeeze(-1)  # [S_eff]
     for (k, v) in past:
@@ -313,15 +321,24 @@ def _build_keygraph_from_past(past, attn_mask_1xS, rope_base, device, dtype, kg_
         K_eff = K_full.index_select(1, valid_idx)   # [Hkv,S_eff,D]
         V_eff = V_full.index_select(1, valid_idx)
         pos_idx = valid_idx.to(torch.long)         # [S_eff]
+
         layer_cache = kg.build_layer(
             K=K_eff, V=V_eff, pos_idx=pos_idx, rope_base=float(rope_base),
             rp_matrix=None, device=device, dtype=dtype
         )
-        # attach lightweight probe K/V so rescue can expand WITHOUT full KV
+
+        # Move full K/V OFF VRAM → pinned CPU (tiny compared to full HF KV, keeps decode VRAM low)
+        if getattr(layer_cache, "K", None) is not None:
+            layer_cache.K = layer_cache.K.to("cpu").pin_memory()
+        if getattr(layer_cache, "V", None) is not None:
+            layer_cache.V = layer_cache.V.to("cpu").pin_memory()
+
+        # Attach small per-cluster probe K/V (already CPU pinned inside helper)
         layer_cache = _build_probes_and_attach(K_eff, V_eff, pos_idx, rope_base,
                                                layer_cache, probe_per_cluster, device, dtype)
         layers.append(layer_cache)
     return layers
+
 
 
 # ===================== patching LLaMA attention =====================
@@ -391,10 +408,6 @@ def _make_llama_keygraph_forward(attn_mod, layer_cache, patch_cfg):
         # base K/V from KeyGraph prefill cache (S_eff)
         K_bhsd = getattr(layer_cache, "K", None)
         V_bhsd = getattr(layer_cache, "V", None)
-        if K_bhsd is not None and V_bhsd is not None:
-            K_bhsd = K_bhsd.unsqueeze(0)  # [1,Hkv,S_eff,D]
-            V_bhsd = V_bhsd.unsqueeze(0)  # [1,Hkv,S_eff,D]
-
         if K_bhsd is not None and V_bhsd is not None:
             K_bhsd = K_bhsd.unsqueeze(0)  # [1,Hkv,S_eff,D]
             V_bhsd = V_bhsd.unsqueeze(0)  # [1,Hkv,S_eff,D]

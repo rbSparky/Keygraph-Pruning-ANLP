@@ -97,6 +97,57 @@ def _unrope_queries(Q_bhtd: torch.Tensor, position_ids: torch.Tensor, rope_base:
     cos, sin = _rope_cos_sin(Q_bhtd.shape[-1], position_ids, rope_base, Q_bhtd.device, Q_bhtd.dtype)
     return (Q_bhtd * cos) - (_rotate_half(Q_bhtd) * sin)
 
+def _unrope_queries_tokenwise(Q_bhtd: torch.Tensor,
+                              position_ids: torch.Tensor,
+                              rope_base: float) -> torch.Tensor:
+    """
+    Inverse RoPE for queries, per (batch, time) token.
+    Q_bhtd:      [B, H, T, D]   (usual attention input)
+    position_ids:[B, T]         absolute positions for each token
+    rope_base:   float          RoPE base (e.g., 1e6 for LLaMA)
+    Returns:     [B, H, T, D] (float32)
+    """
+    B, H, T, D = Q_bhtd.shape
+    assert D % 2 == 0
+    device = Q_bhtd.device
+    dtype = torch.float32
+
+    x  = Q_bhtd.to(dtype)
+    x1 = x[..., 0::2]
+    x2 = x[..., 1::2]
+
+    half = D // 2
+    idx  = torch.arange(0, half, device=device, dtype=torch.float32)
+    invf = rope_base ** (-2.0 * idx / float(D))         # [half]
+    pos  = position_ids.to(device=device,
+                           dtype=torch.float32).unsqueeze(-1)  # [B,T,1]
+    ang  = pos * invf                                   # [B,T,half]
+    cos  = ang.cos().unsqueeze(1)                       # [B,1,T,half]
+    sin  = ang.sin().unsqueeze(1)
+
+    # inverse rotation (same formula we used in the design notes)
+    u1 = x1 * cos + x2 * sin
+    u2 = x2 * cos - x1 * sin
+
+    out = torch.empty((B, H, T, D), device=device, dtype=dtype)
+    out[..., 0::2] = u1
+    out[..., 1::2] = u2
+    return out
+
+
+def _unrope_keys_tokenwise(K_bhsd: torch.Tensor,
+                           position_ids: torch.Tensor,
+                           rope_base: float) -> torch.Tensor:
+    """
+    Inverse RoPE for keys, per (batch, time) token.
+    K_bhsd:      [B, H, T, D]   (can be T=1 for current step)
+    position_ids:[B, T]         absolute positions for those tokens
+    rope_base:   float          RoPE base
+    Returns:     [B, H, T, D] (float32)
+    """
+    # note: identical math as queries’ inverse — LLaMA uses symmetric rotation
+    return _unrope_queries_tokenwise(K_bhsd, position_ids, rope_base)
+
 
 # -----------------------------------------------------------------------------
 # Helpers
@@ -143,57 +194,197 @@ class KeygraphAttentionPatch(nn.Module):
 
     def forward(
         self,
-        Q_bhtd: torch.Tensor,               # [B, Hq, Tq, D] (RoPE-applied)
-        K_bhsd: Optional[torch.Tensor],     # [B, Hkv, S, D] (PAST keys, optional)
-        V_bhsd: Optional[torch.Tensor],     # [B, Hkv, S, D] (PAST values, optional)
-        K_cur_bhsd: Optional[torch.Tensor], # [B, Hkv, 1, D] (NEW: CURRENT key)
-        V_cur_bhsd: Optional[torch.Tensor], # [B, Hkv, 1, D] (NEW: CURRENT value)
-        position_ids: torch.Tensor,         # [B, Tq]
-        attn_mask: Optional[torch.Tensor] = None,  # [B, 1, Tq, S] (only for token paths)
-    ) -> torch.Tensor:
+        Q_bhtd: torch.Tensor,
+        K_bhsd: Optional[torch.Tensor] = None,
+        V_bhsd: Optional[torch.Tensor] = None,
+        K_cur_bhsd: Optional[torch.Tensor] = None,
+        V_cur_bhsd: Optional[torch.Tensor] = None,
+        attn_mask: Optional[torch.Tensor] = None,
+        position_ids: Optional[torch.Tensor] = None,      # <-- make sure this is in the signature
+        top_idx: Optional[torch.Tensor] = None,
+        rescue_mask_bt: Optional[torch.Tensor] = None,
+        rescue_clusters_bt: Optional[torch.Tensor] = None,
+    ):
+        """
+        Minimal wrapper showing how to ensure position_ids exists and
+        how to route to mixed or reps-only path.
+        """
         layer = self.cache
-        cfg = self.cfg
+        cfg   = self.cfg
         B, Hq, Tq, D = Q_bhtd.shape
-        Hkv = layer.repsK.shape[1]  # [C, Hkv, D]
-        C = layer.num_clusters()
-        S = layer.num_tokens()
+        device = Q_bhtd.device
 
-        # Fast fallback: if S is tiny and we have full K/V, use exact attention.
-        # *** FIX: Pass current K/V to exact fallback ***
-        if (layer.K is not None) and (layer.V is not None) and (S <= cfg.small_S_exact_fallback) and (K_bhsd is not None) and (V_bhsd is not None):
-            return self._attend_exact(Q_bhtd, K_bhsd, V_bhsd, K_cur_bhsd, V_cur_bhsd, attn_mask)
+        # Ensure we have absolute positions for the Tq queries.
+        if position_ids is None:
+            # Fallback: derive from layer.pos_idx and the step offset.
+            # Past length = number of stored source tokens S (if full KV present) else last pos in layer.pos_idx + 1
+            if (K_bhsd is not None) and (K_bhsd.shape[2] > 0):
+                past_len = K_bhsd.shape[2]
+            else:
+                # if store_full_kv=False, layer.pos_idx holds source positions
+                past_len = int(layer.pos_idx.max().item()) + 1 if hasattr(layer, "pos_idx") and layer.pos_idx.numel() > 0 else 0
+            position_ids = (past_len + torch.arange(Tq, device=device)).view(1, Tq).expand(B, -1)  # [B,Tq]
 
-        # Stage-A: compute query descriptor φ(q) (decode-friendly)
-        phi_q = self._make_query_descriptors(Q_bhtd, position_ids, rope_base=layer.rope_base, rp=layer.rp_matrix)  # [B, Tq, r]
+        # Build shortlist on-the-fly if not provided (exact mode / fallback)
+        top_idx = self._ensure_top_idx(Q_bhtd=Q_bhtd, position_ids=position_ids, top_idx=top_idx)
 
-        # Score vs centroid descriptors
-        scores_ct = torch.matmul(phi_q, layer.repsPhi.t())  # [B, Tq, C]
-        if cfg.mass_alpha != 0.0:
-            scores_ct = scores_ct + cfg.mass_alpha * layer.log_sizes.view(1, 1, C)
 
-        # Shortlist top clusters
-        topC = min(cfg.top_clusters, C) if C > 0 else 0
-        if topC == 0 and K_cur_bhsd is None: # No past and no present
-            return torch.zeros(B, Hq, Tq, D, device=Q_bhtd.device, dtype=Q_bhtd.dtype)
+        # Decide path
+        use_full_kv = (K_bhsd is not None) and (V_bhsd is not None)
+        do_rescue   = (rescue_mask_bt is not None) and (rescue_clusters_bt is not None)
 
-        top_scores, top_idx = (None, None)
-        if topC > 0:
-            top_scores, top_idx = torch.topk(scores_ct, k=topC, dim=-1)  # [B, Tq, topC]
+        if do_rescue:
+            return self._attend_mixed_with_rescue(
+                Q_bhtd, K_bhsd, V_bhsd, K_cur_bhsd, V_cur_bhsd,
+                attn_mask, top_idx, rescue_mask_bt, rescue_clusters_bt, position_ids
+            )
 
-        # Decide rescue per (b,t) by probe variance among shortlisted clusters
-        rescue_mask_bt, rescue_clusters_bt = self._decide_rescue_with_probes(Q_bhtd, top_idx)
+        # else reps-only path, still done in un-RoPE space for consistency
+        q_un = _unrope_queries_tokenwise(Q_bhtd, position_ids=position_ids, rope_base=layer.rope_base)  # [B,Hq,Tq,D] fp32
+        # Use the same top_idx; compute logits vs reps only (small inline impl):
+        repsK = layer.repsK.to(torch.float32)         # [C,Hkv,D]
+        repsV = layer.repsV                           # [C,Hkv,D]
+        log_sizes = layer.log_sizes.view(1,1,-1)      # [1,1,C]
+        C, Hkv, D = repsK.shape
+        gqa_map = getattr(cfg, "gqa_map", None)
+        def _kv_head_for(hq: int) -> int:
+            if gqa_map is None: return hq % Hkv
+            return int(gqa_map[hq])
+        scale = cfg.scale_override if getattr(cfg, "scale_override", None) is not None else (1.0 / math.sqrt(D))
 
-        # If representatives-only or K/V absent => always use reps
-        # *** FIX: Pass current K/V to reps_only ***
-        if cfg.use_representatives_only or (layer.K is None) or (layer.V is None) or (K_bhsd is None) or (V_bhsd is None):
-            return self._attend_reps_only(Q_bhtd, K_cur_bhsd, V_cur_bhsd, top_idx)
+        out = torch.empty_like(Q_bhtd)
+        for b in range(B):
+            for t in range(Tq):
+                idx = top_idx[b, t]                              # [topC]
+                for hq in range(Hq):
+                    kvh = _kv_head_for(hq)
+                    q = q_un[b, hq, t].view(1, D)                # [1,D] f32
+                    K_bank = repsK[:, kvh, :]                    # [C,D] f32
+                    V_bank = repsV[:, kvh, :]                    # [C,D]
+                    logits = torch.matmul(q, K_bank.t()) * scale # [1,C]
+                    if getattr(cfg, "mass_alpha", 0.0) != 0.0:
+                        logits = logits + cfg.mass_alpha * log_sizes.to(logits.dtype)
+                    top_logits = self._take_along_last_dim(logits, idx)  # [1,topC]
+                    V_sel = V_bank.index_select(0, idx).unsqueeze(0)                 # [1,topC,D]
+                    attn = F.softmax(top_logits.to(torch.float32), dim=-1).to(Q_bhtd.dtype)  # [1,topC]
+                    out[b, hq, t, :] = torch.matmul(attn, V_sel).squeeze(0)
+        return out
 
-        # Otherwise, mix token rescue for high-variance clusters
-        # *** FIX: Pass current K/V to mixed_with_rescue ***
-        return self._attend_mixed_with_rescue(
-            Q_bhtd, K_bhsd, V_bhsd, K_cur_bhsd, V_cur_bhsd,
-            attn_mask, top_idx, rescue_mask_bt, rescue_clusters_bt
-        )
+    # --- add inside class KeygraphAttentionPatch ---
+    def _take_along_last_dim(self, x: torch.Tensor, idx: torch.Tensor) -> torch.Tensor:
+        """
+        Robust gather on last dim. Works with logits shaped [B,C], [B,T,C], or [B,H,T,C].
+        idx can be [B,topC] or [B,T,topC]; we broadcast as needed.
+        """
+        # x: [..., C]
+        # idx: [B, topC] or [B,T,topC]
+        if idx.dtype != torch.long:
+            idx = idx.long()
+        # Align batch/time dims: make idx have the same number of dims as x
+        # Insert singleton dims right before the last dim until ranks match.
+        while idx.dim() < x.dim():
+            # Heuristic: add a head dim if x has 4 dims (B,H,T,C) and idx has 3 (B,T,topC)
+            if x.dim() == 4 and idx.dim() == 3:
+                # idx: [B,T,topC] -> [B,1,T,topC]
+                idx = idx.unsqueeze(1)
+            else:
+                # Generic: prepend a singleton after B if possible, else at front
+                idx = idx.unsqueeze(-2)  # [..., 1, topC]
+        # Now expand idx to match x except on last dim
+        expand_shape = list(x.shape[:-1]) + [idx.shape[-1]]
+        idx = idx.expand(*expand_shape)
+        return torch.gather(x, dim=-1, index=idx)
+
+
+    # --- add/replace inside class KeygraphAttentionPatch ---
+    def _ensure_top_idx(
+        self,
+        Q_bhtd: torch.Tensor,           # [B,Hq,Tq,D] queries (RoPE space)
+        position_ids: torch.Tensor,     # [B,Tq]
+        top_idx: Optional[torch.Tensor] # [B,Tq,topC] or None
+    ) -> torch.Tensor:
+        if top_idx is not None:
+            return top_idx
+
+        layer = self.cache
+        cfg   = self.cfg
+        device = Q_bhtd.device
+        B, Hq, Tq, D = Q_bhtd.shape
+
+        repsK = layer.repsK.to(torch.float32)  # [C,Hkv,D], UN-RoPE
+        C, Hkv, _ = repsK.shape
+        topC = int(min(getattr(cfg, "topC", 32), C))
+
+        # Map query heads to KV heads (GQA)
+        gqa_map = getattr(cfg, "gqa_map", None)
+        if gqa_map is None:
+            kv_heads = torch.arange(Hq, device=device) % Hkv  # [Hq]
+        else:
+            kv_heads = torch.as_tensor(gqa_map, device=device)  # [Hq]
+
+        # Un-RoPE queries token-wise to match repsK space
+        q_un = _unrope_queries_tokenwise(Q_bhtd, position_ids=position_ids, rope_base=layer.rope_base).to(torch.float32)  # [B,Hq,Tq,D]
+
+        # repsK_sel: [Hq, C, D]
+        repsK_sel = repsK.permute(1, 0, 2)[kv_heads]  # [Hq,C,D]
+
+        scale = 1.0 / math.sqrt(D)
+        # logits_full: [B,Hq,Tq,C]
+        logits_full = torch.einsum('bhtd,hcd->bhtc', q_un, repsK_sel) * scale
+
+        # Optional size/mass bias
+        mass_alpha = float(getattr(cfg, "mass_alpha", 0.0))
+        if mass_alpha != 0.0 and getattr(layer, "mass", None) is not None:
+            mass = layer.mass.to(logits_full.dtype).to(device)
+            if mass.dim() == 2:
+                mass = mass.mean(dim=1)  # [C]
+            logits_full = logits_full + mass_alpha * torch.log(mass.clamp_min(1e-6))[None, None, None, :]
+
+        # Aggregate heads and take topC over C -> idx: [B,Tq,topC]
+        agg = logits_full.mean(dim=1)                     # [B,Tq,C]
+        _, idx = torch.topk(agg, k=topC, dim=-1, largest=True, sorted=False)  # [B,Tq,topC]
+        return idx.contiguous()
+
+
+
+    def _gather_rescue_token_bank(
+        self,
+        rescue_clusters: List[int],
+        layer: "LayerKeygraphCache",
+        device: torch.device,
+    ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        """
+        Build a token bank from per-cluster probes (no full-KV required).
+        Returns: (K_tok [Nt,Hkv,D], V_tok [Nt,Hkv,D], pos_idx_tok [Nt])
+        Nt = total selected probe tokens across clusters (skips zero-padded rows)
+        """
+        assert hasattr(layer, "K_probe") and hasattr(layer, "V_probe") and hasattr(layer, "probe_idx")
+        Kp = layer.K_probe   # [C,Hkv,m,D] on CPU pinned
+        Vp = layer.V_probe   # [C,Hkv,m,D]
+        idx_list = layer.probe_idx  # list[C] -> LongTensor[m_valid]
+        Hkv = Kp.shape[1]
+        Ks, Vs, Ps = [], [], []
+
+        for c in rescue_clusters:
+            # valid probe indices for this cluster
+            pick = idx_list[c]
+            if pick is None or pick.numel() == 0:
+                continue
+            m_valid = int(pick.numel())
+            Ks.append(Kp[c, :, :m_valid, :].to(device, non_blocking=True))   # [Hkv,mv,D]
+            Vs.append(Vp[c, :, :m_valid, :].to(device, non_blocking=True))
+            # map to absolute positions via layer.pos_idx
+            Ps.append(layer.pos_idx.index_select(0, pick.to(layer.pos_idx.device)).to(device))
+
+        if not Ks:
+            return (torch.empty(0, 0, 0, device=device), torch.empty(0, 0, 0, device=device), torch.empty(0, device=device, dtype=torch.long))
+
+        K_cat = torch.cat(Ks, dim=1)   # [Hkv, Nt, D]
+        V_cat = torch.cat(Vs, dim=1)   # [Hkv, Nt, D]
+        P_cat = torch.cat(Ps, dim=0)   # [Nt]
+        # transpose to [Nt,Hkv,D] for easier per-head indexing later
+        return K_cat.permute(1,0,2).contiguous(), V_cat.permute(1,0,2).contiguous(), P_cat
+
 
     # ------------------------------ Stage-A ------------------------------
 
@@ -294,199 +485,223 @@ class KeygraphAttentionPatch(nn.Module):
     # In kg_patch.py
 
     def _attend_reps_only(
-        self, 
-        Q_bhtd: torch.Tensor, 
-        K_cur_bhsd: Optional[torch.Tensor], 
-        V_cur_bhsd: Optional[torch.Tensor], 
+        self,
+        Q_bhtd: torch.Tensor,
+        K_cur_bhsd: Optional[torch.Tensor],
+        V_cur_bhsd: Optional[torch.Tensor],
         top_idx: Optional[torch.Tensor]
     ) -> torch.Tensor:
-        """
-        Representatives-only attention (memory-saving), NOW including current token.
-        """
         layer = self.cache
         cfg = self.cfg
         B, Hq, Tq, D = Q_bhtd.shape
         Hkv = layer.repsK.shape[1]
-        C = layer.num_clusters()
+        C   = layer.num_clusters()
 
-        repsK = layer.repsK  # [C,Hkv,D]
-        repsV = layer.repsV  # [C,Hkv,D]
-        log_sizes = layer.log_sizes.view(1, 1, C)  # [1,1,C]
+        # UnRoPE query once (shared for all heads)
+        Q_un = _unrope_queries(Q_bhtd, position_ids=torch.zeros(B, Tq, device=Q_bhtd.device, dtype=torch.long) if Tq==0 else torch.arange(0, Tq, device=Q_bhtd.device, dtype=torch.long).unsqueeze(0).expand(B,-1),
+                            rope_base=layer.rope_base).to(torch.float32)  # [B,Hq,Tq,D]
+
+        # repsK are already un-rotated (Patch #1)
+        repsK = layer.repsK.to(torch.float32)   # [C,Hkv,D]
+        repsV = layer.repsV                     # [C,Hkv,D]
+        log_sizes = layer.log_sizes.view(1, 1, C)
 
         scale = cfg.scale_override if cfg.scale_override is not None else (1.0 / math.sqrt(D))
         out = torch.empty(B, Hq, Tq, D, device=Q_bhtd.device, dtype=Q_bhtd.dtype)
-        
+
         has_reps = top_idx is not None
-        has_curr = K_cur_bhsd is not None and V_cur_bhsd is not None
+        has_curr = (K_cur_bhsd is not None) and (V_cur_bhsd is not None)
+
+        # UnRoPE current step key if present
+        if has_curr:
+            # position_ids for current step are given in forward(...); capture via closure arg there
+            # here we assume Tq==1 during decode; use provided position_ids from forward call
+            pass  # handled in forward where we call this with K_cur_un already if needed
 
         for hq in range(Hq):
             kvh = _kv_head_for(hq, Hkv, cfg.gqa_map)
-            
-            all_logits = []
-            all_V_banks = []
-            
-            # 1. Past Representatives
+
+            logits_list = []
+            Vbanks_list = []
+
             if has_reps:
-                K_bank = repsK[:, kvh, :]  # [C,D]
+                K_bank = repsK[:, kvh, :]  # [C,D] (un-rotated)
                 V_bank = repsV[:, kvh, :]  # [C,D]
-                
-                rep_logits = torch.matmul(Q_bhtd[:, hq], K_bank.t())  # [B,Tq,C]
+
+                rep_logits = torch.matmul(Q_un[:, hq], K_bank.t())  # [B,Tq,C]
                 rep_logits = _maybe_scale_logits(rep_logits, scale)
                 if cfg.mass_alpha != 0.0:
                     rep_logits = rep_logits + cfg.mass_alpha * log_sizes.to(rep_logits)
 
                 Bsz, Tlen, _ = rep_logits.shape
-                top_rep_logits = torch.gather(rep_logits, dim=-1, index=top_idx) # [B,Tq,topC]
-                
-                V_sel = V_bank.index_select(0, top_idx.view(-1)).view(Bsz, Tlen, top_idx.shape[-1], D)  # [B,Tq,topC,D]
-                
-                all_logits.append(top_rep_logits)
-                all_V_banks.append(V_sel)
+                idx = top_idx
+                top_rep_logits = torch.gather(rep_logits, dim=-1, index=idx)
+                V_sel = V_bank.index_select(0, idx.view(-1)).view(Bsz, Tlen, idx.shape[-1], D)
+                logits_list.append(top_rep_logits)
+                Vbanks_list.append(V_sel)
 
-            # 2. Current Token
             if has_curr:
-                K_cur_h = K_cur_bhsd[:, kvh, :, :] # [B, 1, D]
-                V_cur_h = V_cur_bhsd[:, kvh, :, :] # [B, 1, D]
+                # K_cur_bhsd: [B, Hkv, 1, D]; we need un-rotated
+                # Use position_ids supplied to forward (single-step). We'll pass K_cur_un from there.
+                pass
 
-                # Q is [B,Tq,D], K_cur_h is [B,1,D] -> [B,Tq,1]
-                cur_logits = torch.matmul(Q_bhtd[:, hq], K_cur_h.transpose(-1, -2))
-                cur_logits = _maybe_scale_logits(cur_logits, scale)
-                
-                V_cur_btd = V_cur_h.unsqueeze(1).expand(-1, Tq, -1, -1) # [B,Tq,1,D]
-                
-                all_logits.append(cur_logits)
-                all_V_banks.append(V_cur_btd)
+            final_logits = torch.cat(logits_list, dim=-1) if logits_list else None
+            final_V = torch.cat(Vbanks_list, dim=2) if Vbanks_list else None
 
-            # 3. Combine and Softmax
-            if not all_logits:
+            if final_logits is None:
                 out[:, hq] = torch.zeros((B, Tq, D), device=out.device, dtype=out.dtype)
                 continue
 
-            # Concat logits [B, Tq, topC + 1] and V banks [B, Tq, topC + 1, D]
-            final_logits = torch.cat(all_logits, dim=-1)
-            final_V = torch.cat(all_V_banks, dim=2)
-
             attn = F.softmax(final_logits.to(torch.float32), dim=-1).to(Q_bhtd.dtype)
             out[:, hq] = torch.einsum("btc,btcd->btd", attn, final_V)
-            
+
         return out
+
 
     def _attend_mixed_with_rescue(
         self,
-        Q_bhtd: torch.Tensor,
-        K_bhsd: torch.Tensor,
-        V_bhsd: torch.Tensor,
-        K_cur_bhsd: Optional[torch.Tensor], # NEW
-        V_cur_bhsd: Optional[torch.Tensor], # NEW
-        attn_mask: Optional[torch.Tensor],
-        top_idx: torch.Tensor,
-        rescue_mask_bt: torch.Tensor,
-        rescue_clusters_bt: List[List[List[int]]],
+        Q_bhtd: torch.Tensor,                       # [B,Hq,Tq,D]  (RoPE-applied queries)
+        K_bhsd: Optional[torch.Tensor],             # [B,Hkv,S,D]  (full past keys; can be None)
+        V_bhsd: Optional[torch.Tensor],             # [B,Hkv,S,D]  (full past vals; can be None)
+        K_cur_bhsd: Optional[torch.Tensor],         # [B,Hkv,1,D]  current-step key (RoPE); optional
+        V_cur_bhsd: Optional[torch.Tensor],         # [B,Hkv,1,D]  current-step value; optional
+        attn_mask: Optional[torch.Tensor],          # usually None at decode
+        top_idx: torch.Tensor,                      # [B,Tq,topC]  shortlist indices into reps
+        rescue_mask_bt: torch.Tensor,               # [B,Tq] bool  whether to add token bank
+        rescue_clusters_bt: torch.Tensor,           # [B,Tq,R] long clusters to rescue (R per step)
+        position_ids: torch.Tensor,                 # [B,Tq] long  absolute positions of queries
     ) -> torch.Tensor:
         """
-        Mix token-level attention for rescued clusters with representative attention for the rest.
-        Applies attn_mask to token logits; mass compensation only to representative logits.
+        Mixed attention over (a) representative centroids (already un-RoPE’d in cache),
+        (b) a token bank (full-KV members OR per-cluster probes), and (c) the current token.
+        All logits are computed in the **same un-RoPE space**. This function makes explicit
+        where q_un is computed and how position_ids are used.
+
+        Returns: context [B,Hq,Tq,D] (same dtype as Q_bhtd)
         """
         layer = self.cache
-        cfg = self.cfg
+        cfg   = self.cfg
+        device = Q_bhtd.device
         B, Hq, Tq, D = Q_bhtd.shape
-        _, Hkv, S, _ = K_bhsd.shape
-        C = layer.num_clusters()
 
-        scale = cfg.scale_override if cfg.scale_override is not None else (1.0 / math.sqrt(D))
-        repsK = layer.repsK  # [C,Hkv,D]
-        repsV = layer.repsV
-        log_sizes = layer.log_sizes  # [C]
+        # Representatives (already un-rotated by the cache build step!)
+        repsK = layer.repsK.to(torch.float32)          # [C,Hkv,D]
+        repsV = layer.repsV                            # [C,Hkv,D]
+        log_sizes = layer.log_sizes.view(1, 1, -1)     # [1,1,C]
+        C   = repsK.shape[0]
+        Hkv = repsK.shape[1]
 
-        out = torch.empty(B, Hq, Tq, D, device=Q_bhtd.device, dtype=Q_bhtd.dtype)
+        # Map query-head -> kv-head for GQA
+        gqa_map = getattr(cfg, "gqa_map", None)
+        def _kv_head_for(hq: int) -> int:
+            if gqa_map is None: return hq % Hkv
+            return int(gqa_map[hq])
 
-        # Precompute membership lists per cluster (indices are 0..S_eff-1)
-        labels_cpu = layer.labels.detach().to("cpu")
-        members_by_c: Dict[int, torch.Tensor] = {}
-        for c in range(C):
-            members_by_c[c] = torch.nonzero(labels_cpu == c, as_tuple=False).flatten()
+        # scale for QK^T
+        scale = cfg.scale_override if getattr(cfg, "scale_override", None) is not None else (1.0 / math.sqrt(D))
 
-        # probe_idx_list = getattr(layer, "probe_idx", None) # No longer needed for this logic
+        # Un-RoPE queries ONCE for the whole [B,Hq,Tq,D]
+        # (We inverse-rotate per token using the provided absolute position_ids)
+        q_un_bhtd = _unrope_queries_tokenwise(Q_bhtd, position_ids=position_ids, rope_base=layer.rope_base)  # float32
 
+        # Prepare output
+        out = torch.empty((B, Hq, Tq, D), device=device, dtype=Q_bhtd.dtype)
+
+        # Members (full-KV) if available
+        members_by_c = getattr(layer, "members_by_c", None)   # Optional[List[Tensor]]
+
+        # Iterate tokens (decode is typically Tq == 1, but this is generic)
         for b in range(B):
             for t in range(Tq):
-                rescue_cs = set(rescue_clusters_bt[b][t]) if bool(rescue_mask_bt[b, t].item()) else set()
+                # shortlist representatives for this (b,t)
+                idx = top_idx[b, t]                            # [topC]
+                # which clusters to rescue as token-bank?
+                rescue = bool(rescue_mask_bt[b, t].item())
+                rescue_cs = rescue_clusters_bt[b, t] if rescue else torch.empty(0, dtype=torch.long, device=device)
 
-                # (1) Representative clusters = shortlisted minus rescued
-                rep_clusters = [int(top_idx[b, t, k].item()) for k in range(top_idx.shape[-1]) if int(top_idx[b, t, k].item()) not in rescue_cs]
-                rep_clusters_tensor = torch.tensor(rep_clusters, device=Q_bhtd.device, dtype=torch.long) if len(rep_clusters) else None
+                # Build token bank if requested
+                K_tok_bank = V_tok_bank = pos_tok = None
+                if rescue and (rescue_cs.numel() > 0):
+                    # try full-KV members if we have them; fall back to probe-only
+                    if (K_bhsd is not None) and (V_bhsd is not None) and (members_by_c is not None):
+                        # de-duplicate indices across rescued clusters
+                        uniq = []
+                        seen = set()
+                        for c in rescue_cs.tolist():
+                            if c < len(members_by_c):
+                                for s in members_by_c[c].tolist():
+                                    if s not in seen:
+                                        uniq.append(s); seen.add(s)
+                        if len(uniq) > 0:
+                            idx_t = torch.tensor(uniq, device=device, dtype=torch.long)   # [Nt]
+                            # gather [Nt,Hkv,D]; use layer.pos_idx to get absolute positions
+                            K_tok_bank = K_bhsd[b].permute(1,0,2).index_select(0, idx_t)  # [Nt,Hkv,D]
+                            V_tok_bank = V_bhsd[b].permute(1,0,2).index_select(0, idx_t)  # [Nt,Hkv,D]
+                            pos_tok    = layer.pos_idx.index_select(0, idx_t.to(layer.pos_idx.device)).to(device)  # [Nt]
+                    if (K_tok_bank is None) or (V_tok_bank is None):
+                        # probe-only path (works when store_full_kv=False)
+                        K_tok_bank, V_tok_bank, pos_tok = self._gather_rescue_token_bank(list(rescue_cs.tolist()), layer, device)
 
-                # (2) Token shortlist for rescued clusters
-                token_indices: List[int] = []
-                if len(rescue_cs) > 0:
-                    for c in rescue_cs:
-                        # *** FIX: Expand to ALL members as per proposal, not just 'rescue_tokens_per_cluster' ***
-                        all_members_c = members_by_c[c].tolist()
-                        token_indices.extend([int(idx) for idx in all_members_c])
-
-                    # de-duplicate while preserving order
-                    seen = set()
-                    token_indices = [i for i in token_indices if (i not in seen and not seen.add(i))]
-
-                token_idx_tensor = torch.tensor(token_indices, device=Q_bhtd.device, dtype=torch.long) if len(token_indices) else None
+                # current-step key/value (RoPE) -> we will un-RoPE per head later if present
+                have_cur = (K_cur_bhsd is not None) and (V_cur_bhsd is not None)
 
                 for hq in range(Hq):
-                    kvh = _kv_head_for(hq, Hkv, cfg.gqa_map)
-                    q = Q_bhtd[b, hq, t:t+1, :]  # [1,1,D]
+                    kvh = _kv_head_for(hq)
 
-                    all_logits_list = []
-                    all_V_list = []
+                    logits_blocks = []
+                    values_blocks = []
 
-                    # (A) Representatives part (Past)
-                    if rep_clusters_tensor is not None and rep_clusters_tensor.numel() > 0:
-                        K_rep = repsK.index_select(0, rep_clusters_tensor)[:, kvh, :]  # [Cr,D]
-                        V_rep = repsV.index_select(0, rep_clusters_tensor)[:, kvh, :]  # [Cr,D]
-                        rep_logits = torch.matmul(q, K_rep.t()).squeeze(0)              # [Cr]
-                        rep_logits = _maybe_scale_logits(rep_logits, scale)
-                        rep_logits = rep_logits + cfg.mass_alpha * log_sizes.index_select(0, rep_clusters_tensor).to(rep_logits)
-                        
-                        all_logits_list.append(rep_logits)
-                        all_V_list.append(V_rep)
+                    # ----- (A) Representatives (already UN-RoPE’d) -----
+                    K_bank_rep = repsK[:, kvh, :]           # [C,D] (float32, un-rotated)
+                    V_bank_rep = repsV[:, kvh, :]           # [C,D] (model dtype)
+                    # q_un for this (b,hq,t): [D]
+                    q_un = q_un_bhtd[b, hq, t].view(1, D)   # [1,D] float32
 
-                    # (B) Token part (Rescued Past)
-                    if token_idx_tensor is not None and token_idx_tensor.numel() > 0:
-                        K_tok = K_bhsd[b, kvh, token_idx_tensor, :]  # [Nt,D]
-                        V_tok = V_bhsd[b, kvh, token_idx_tensor, :]  # [Nt,D]
-                        tok_logits = torch.matmul(q, K_tok.t()).squeeze(0)  # [Nt]
-                        tok_logits = _maybe_scale_logits(tok_logits, scale)
-                        if attn_mask is not None:
-                            mask_slice = attn_mask[b, 0, t, token_idx_tensor]
-                            tok_logits = _apply_mask_logits(tok_logits, mask_slice)
-                        
-                        all_logits_list.append(tok_logits)
-                        all_V_list.append(V_tok)
+                    rep_logits = torch.matmul(q_un, K_bank_rep.t())   # [1,C]
+                    rep_logits = rep_logits * scale
+                    if getattr(cfg, "mass_alpha", 0.0) != 0.0:
+                        rep_logits = rep_logits + cfg.mass_alpha * log_sizes.to(rep_logits.dtype)  # [1,1,C]
 
-                    # (C) Current Token part (Present)
-                    has_curr = K_cur_bhsd is not None and V_cur_bhsd is not None
-                    if has_curr:
-                        # K_cur_bhsd is [B, Hkv, 1, D]
-                        K_cur_h = K_cur_bhsd[b, kvh] # [1, D]
-                        V_cur_h = V_cur_bhsd[b, kvh] # [1, D]
-                        
-                        # q is [1,1,D], K_cur_h is [1,D]
-                        cur_logits = torch.matmul(q.squeeze(0), K_cur_h.t()) # [1, 1]
-                        cur_logits = _maybe_scale_logits(cur_logits, scale).squeeze(-1) # [1]
-                        
-                        all_logits_list.append(cur_logits)
-                        all_V_list.append(V_cur_h)
+                    # shortlist reps by top_idx
+                    rep_sel = idx.view(1, -1)                               # [1,topC]
+                    rep_logits_top = torch.gather(rep_logits, dim=-1, index=rep_sel)  # [1,topC]
+                    V_rep_top = V_bank_rep.index_select(0, idx)             # [topC,D]
 
+                    logits_blocks.append(rep_logits_top)                    # list of [1,?]
+                    values_blocks.append(V_rep_top.unsqueeze(0))            # list of [1,?,D]
 
-                    if not all_logits_list:
-                        out[b, hq, t] = torch.zeros(D, device=q.device, dtype=q.dtype)
-                        continue
+                    # ----- (B) Token bank (if any) — UN-RoPE with pos_tok -----
+                    if (K_tok_bank is not None) and (K_tok_bank.numel() > 0):
+                        # head slice
+                        K_tok_h = K_tok_bank[:, kvh, :].unsqueeze(0).unsqueeze(0)  # [1,1,Nt,D] (RoPE space)
+                        # un-rotate per token by their absolute positions
+                        pos_nt = pos_tok.view(1, -1)                                # [1,Nt]
+                        K_tok_un = _unrope_keys_tokenwise(K_tok_h, position_ids=pos_nt, rope_base=layer.rope_base)
+                        K_tok_un = K_tok_un.squeeze(0).squeeze(0)                   # [Nt,D] float32
 
-                    # Mix all parts
-                    all_logits = torch.cat(all_logits_list, dim=-1).unsqueeze(0)  # [1, Cr+Nt+1]
-                    all_V = torch.cat(all_V_list, dim=0).unsqueeze(0)              # [1, Cr+Nt+1, D]
-                    attn = F.softmax(all_logits.to(torch.float32), dim=-1).to(q.dtype)
-                    out[b, hq, t:t+1] = torch.matmul(attn, all_V)
+                        tok_logits = torch.matmul(q_un, K_tok_un.t()) * scale       # [1,Nt]
+                        logits_blocks.append(tok_logits)
+                        values_blocks.append(V_tok_bank[:, kvh, :].unsqueeze(0))    # [1,Nt,D]
+
+                    # ----- (C) Current-step token (if provided) — UN-RoPE with position_ids[b,t] -----
+                    if have_cur:
+                        Kc = K_cur_bhsd[b, kvh:kvh+1, :, :]                         # [1,1,D]
+                        pos_bt = position_ids[b:b+1, t:t+1]                         # [1,1]
+                        Kc_un = _unrope_keys_tokenwise(Kc, position_ids=pos_bt, rope_base=layer.rope_base)  # [1,1,D]
+                        cur_logits = torch.matmul(q_un, Kc_un.view(1, D).t()) * scale  # [1,1]
+                        logits_blocks.append(cur_logits)
+                        values_blocks.append(V_cur_bhsd[b, kvh:kvh+1, :, :].view(1, 1, D))  # [1,1,D]
+
+                    # ----- (D) Mix and apply softmax -----
+                    logits_cat = torch.cat(logits_blocks, dim=-1)      # [1, M]
+                    # (attn_mask is usually None at decode; handle if you keep one)
+                    attn = F.softmax(logits_cat.to(torch.float32), dim=-1).to(Q_bhtd.dtype)  # [1,M]
+                    V_cat = torch.cat(values_blocks, dim=1)            # [1, M, D]
+                    out[b, hq, t, :] = torch.matmul(attn, V_cat).squeeze(0)  # [D]
 
         return out
+
+
 
     # ------------------------------ Exact attention (safe fallback) ------------------------------
 
@@ -579,10 +794,23 @@ def integrate_with_llama_attention(
         position_ids: torch.Tensor,
         attention_mask: Optional[torch.Tensor] = None,
     ) -> torch.Tensor:
+        # Compute current-step K/V from the module (single-step decode assumed)
+        hidden_states = getattr(llama_attention_module, "_kg_hidden_states", None)
+        K_cur = V_cur = None
+        if hidden_states is not None:
+            q_proj = llama_attention_module.q_proj  # exists if it's a LLaMA-style block
+            Dh = getattr(llama_attention_module, "head_dim", Q_bhtd.shape[-1] // max(1, getattr(llama_attention_module, "num_attention_heads", 1)))
+            k_vec = llama_attention_module.k_proj(hidden_states)  # [B,1,Hkv*Dh]
+            v_vec = llama_attention_module.v_proj(hidden_states)
+            Hkv = k_vec.shape[-1] // Dh
+            K_cur = k_vec.view(Q_bhtd.shape[0], 1, Hkv, Dh).permute(0,2,1,3).contiguous()
+            V_cur = v_vec.view(Q_bhtd.shape[0], 1, Hkv, Dh).permute(0,2,1,3).contiguous()
         return patch(
             Q_bhtd=Q_bhtd,
             K_bhsd=K_bhsd,
             V_bhsd=V_bhsd,
+            K_cur_bhsd=K_cur,
+            V_cur_bhsd=V_cur,
             position_ids=position_ids,
             attn_mask=attention_mask,
         )

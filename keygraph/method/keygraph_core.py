@@ -92,6 +92,40 @@ def cosine_similarity(a: torch.Tensor, b: torch.Tensor) -> torch.Tensor:
     return a_n @ b_n.transpose(-2, -1)
 
 
+# ---- NEW: UnRoPE keys helper (mirror of _unrope_queries) ----
+def unrope_keys(K_hsd: torch.Tensor, pos_idx: torch.Tensor, rope_base: float) -> torch.Tensor:
+    """
+    K_hsd:   [H, S, D] RoPE-applied keys (per head)
+    pos_idx: [S] absolute positions for those keys
+    Return:  [H, S, D] un-rotated keys (float32)
+    """
+    assert K_hsd.dim() == 3 and K_hsd.shape[2] % 2 == 0
+    H, S, D = K_hsd.shape
+    device = K_hsd.device
+    dtype  = torch.float32
+
+    x = K_hsd.to(dtype)
+    x1 = x[..., 0::2]
+    x2 = x[..., 1::2]
+
+    half = D // 2
+    idx  = torch.arange(0, half, device=device, dtype=torch.float32)
+    invf = rope_base ** (-2.0 * idx / float(D))                       # [half]
+    pos  = pos_idx.to(device=device, dtype=torch.float32)             # [S]
+    ang  = torch.einsum("s,d->sd", pos, invf)                         # [S,half]
+    cos  = ang.cos().unsqueeze(0)                                     # [1,S,half]
+    sin  = ang.sin().unsqueeze(0)
+
+    # Inverse rotation for keys (same as queries’ inverse)
+    u1 = x1 * cos + x2 * sin
+    u2 = x2 * cos - x1 * sin
+
+    out = torch.empty((H, S, D), device=device, dtype=dtype)
+    out[..., 0::2] = u1
+    out[..., 1::2] = u2
+    return out
+
+
 # ============================================================================
 # 2)  kNN (FAISS-GPU/CPU) + τ sparsification + mutual/OR + sparse CC via union-find
 # ============================================================================
@@ -154,28 +188,39 @@ def _faiss_gpu_flat_knn(phi_u: torch.Tensor, k: int, gpu_id: int = 0) -> Tuple[t
 @torch.no_grad()
 def _faiss_gpu_ivf_flat_knn(phi_u: torch.Tensor, k: int, nlist: int = 128, nprobe: int = 8, gpu_id: int = 0) -> Tuple[torch.Tensor, torch.Tensor, str]:
     """
-    FAISS-GPU IVF-Flat with IP (cosine on unit-norm). We train on CPU (cheap), then move to GPU.
+    FAISS-GPU IVF-Flat with IP (cosine on unit-norm).
+    Adapt nlist/nprobe for small N; fall back to Flat for tiny N to avoid slow/undertrained IVF.
     """
     assert _FAISS_OK and _FAISS_GPU_OK, "FAISS-GPU not available"
     N, r = phi_u.shape
+
+    # ---- Small-N: Flat is faster & better-trained
+    if N < 2048 or N < 40 * nlist:
+        return _faiss_gpu_flat_knn(phi_u, k=int(min(k, N - 1)), gpu_id=gpu_id)
+
+    # ---- Adapt nlist / nprobe to dataset size
+    nlist_adapt = max(32, min(nlist, int(N // 32)))  # ~32 pts per list
+    nprobe_adapt = max(4, min(nprobe, nlist_adapt))
+
     # Train CPU IVF index
     quant = faiss.IndexFlatIP(r)
-    ivf = faiss.IndexIVFFlat(quant, r, int(nlist), faiss.METRIC_INNER_PRODUCT)
+    ivf = faiss.IndexIVFFlat(quant, r, int(nlist_adapt), faiss.METRIC_INNER_PRODUCT)
     phi_cpu = phi_u.detach().to("cpu").contiguous().numpy()
     ivf.train(phi_cpu)
     ivf.add(phi_cpu)
+
     # Move to GPU
     res = faiss.StandardGpuResources()
     cfg = faiss.GpuClonerOptions()
-    cfg.useFloat16 = True  # memory+speed tradeoff; safe for IP with unit-norm
+    cfg.useFloat16 = True
     gpu_index = faiss.index_cpu_to_gpu(res, gpu_id, ivf, cfg)
-    gpu_index.nprobe = int(nprobe)
+    gpu_index.nprobe = int(nprobe_adapt)
+
     sims, inds = gpu_index.search(phi_cpu, k + 1)
-    inds = torch.from_numpy(inds).to(phi_u.device, dtype=torch.long)
-    sims = torch.from_numpy(sims).to(phi_u.device, dtype=torch.float32)
-    inds = inds[:, 1:(k + 1)]
-    sims = sims[:, 1:(k + 1)]
-    return inds, sims, "faiss_gpu_ivf_flat"
+    inds = torch.from_numpy(inds).to(phi_u.device, dtype=torch.long)[:, 1:(k + 1)]
+    sims = torch.from_numpy(sims).to(phi_u.device, dtype=torch.float32)[:, 1:(k + 1)]
+    return inds, sims, f"faiss_gpu_ivf_flat(nlist={nlist_adapt},nprobe={nprobe_adapt})"
+
 
 
 @torch.no_grad()

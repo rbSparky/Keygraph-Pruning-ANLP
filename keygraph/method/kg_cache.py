@@ -10,6 +10,7 @@ from keygraph.method.keygraph_core import (
     build_descriptors_unrope,    # [H,S,D] + pos -> Phi[S,r], rp_matrix[D,r]
     build_knn_and_clusters,      # Phi -> {labels, ...} (ANN/exact + CC)
     aggregate_reps_from_labels,  # (K,V,labels) -> repsK[C,H,D], repsV[C,H,D], sizes[C]
+    unrope_keys,
 )
 
 __all__ = ["KeygraphCacheConfig", "LayerKeygraphCache", "KeygraphCache"]
@@ -168,8 +169,10 @@ class KeygraphCache:
         labels = knn["labels"].to(torch.long)  # [S]
         assert labels.numel() == S
 
+        K_un = unrope_keys(K, pos_idx, rope_base=float(rope_base)) 
+
         # 3) Representatives (MEANS) + sizes
-        repsK, repsV, sizes = aggregate_reps_from_labels(K, V, labels)
+        repsK, repsV, sizes = aggregate_reps_from_labels(K_un.to(K.dtype), V, labels)
         # Reps are [H,C,D] from core; transpose to [C,H,D] for cache ergonomics
         repsK = repsK.permute(1, 0, 2).contiguous()
         repsV = repsV.permute(1, 0, 2).contiguous()
@@ -312,12 +315,14 @@ class KeygraphCache:
     def _make_ann_spec(backend: str):
         backend = (backend or "exact").lower()
         if backend == "faiss":
-            return {"method": "faiss_ivf_flat", "params": {"nlist": 128, "nprobe": 8}}
+            # prefer training-free FlatIP GPU; IVF adds overhead & warnings on small S
+            return {"method": "faiss_gpu_flat", "params": {"gpu_id": 0}}
         if backend == "torch_ivf":
             return {"method": "torch_ivf", "params": {"nlist": 128, "nprobe": 8}}
         if backend == "exact":
             return None
         raise ValueError(f"Unknown ann_backend: {backend}")
+
 
     @staticmethod
     def _centroids_from_labels(Phi: torch.Tensor, labels: torch.Tensor) -> torch.Tensor:
