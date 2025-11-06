@@ -1,0 +1,2 @@
+tokens_per_second,latency/token,peak_vram_mb,tokens_generated,perplexity,rouge1,rouge2,rougeL,f1,exact_match,dataset,baseline,model,num_samples
+40.755300800556824,0.024538335707166892,2249.038359375,254.33,8.664625275135041,0.28193884162746846,0.09856435851855765,0.15584563507728144,0.10537079628064028,0.0,govreport,full,TinyLlama/TinyLlama-1.1B-Chat-v1.0,100

@@ -1,0 +1,2 @@
+tokens_per_second,latency_per_token,peak_vram_mb,compression_ratio,cache_size,tokens_generated,rouge1,rouge2,rougeL,f1,exact_match,perplexity,baseline,model,num_samples,proxy_tokens_ratio,proxy_token_keep_ratio,random_token_keep_ratio,sink_tokens
+22.57610782526868,0.05227896157724899,2908.400712890625,0.23257038559052426,2422.88,256.0,0.019268323161108904,0.00021679199576130678,0.018958299890538533,0.0015311904060207363,0.0,31.40073322415352,nacl,TinyLlama/TinyLlama-1.1B-Chat-v1.0,100,0.01,0.12,0.07,256

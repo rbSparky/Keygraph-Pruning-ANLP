@@ -203,6 +203,10 @@ def main():
             print(f"Average F1: {avg_metrics.get('f1', 0):.4f}")
             print(f"Average EM: {avg_metrics.get('exact_match', 0):.4f}")
         else:
+
+            print(f"Average ROUGE-1: {avg_metrics.get('rouge1', 0):.4f}")
+            print(f"Average ROUGE-2: {avg_metrics.get('rouge2', 0):.4f}")
+            print(f"Average ROUGE-L: {avg_metrics.get('rougeL', 0):.4f}")
             print(f"Average F1: {avg_metrics.get('f1', 0):.4f}")
             print(f"Average EM: {avg_metrics.get('exact_match', 0):.4f}")
         
@@ -238,7 +242,7 @@ if __name__ == "__main__":
 #     --baseline "full" \
 #     --num_samples 100 \
 #     --max_new_tokens 256 \
-#     --compute_ppl
+#     --compute_ppl 
 
 # python3 run_baseline.py \
 #     --model_dir "TinyLlama/TinyLlama-1.1B-Chat-v1.0" \

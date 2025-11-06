@@ -1,0 +1,1420 @@
+Processing sample 1/100
+Sample ID: govreport_0
+Prompt length: 64714 characters
+This is a friendly reminder - the current text generation call has exceeded the model's predefined maximum length (2048). Depending on the model, you may observe exceptions, performance degradation, or nothing at all.
+Calculating perplexity on generated text...
+Perplexity: 6.11
+Generated 256 tokens
+Tokens/sec: 27.72
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1119
+F1: 0.0593
+EM: 0.0000
+Generated text: oreactor, which is a large container filled with nutrient-rich growth media. The bioreactor is typic...
+
+Processing sample 2/100
+Sample ID: govreport_1
+Prompt length: 61559 characters
+Calculating perplexity on generated text...
+Perplexity: 4.91
+Generated 256 tokens
+Tokens/sec: 29.84
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1260
+F1: 0.0673
+EM: 0.0000
+Generated text: or social media. The notice should clearly state the deadline for nominations and the criteria for s...
+
+Processing sample 3/100
+Sample ID: govreport_2
+Prompt length: 65718 characters
+Calculating perplexity on generated text...
+Perplexity: 3.56
+Generated 256 tokens
+Tokens/sec: 29.87
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1168
+F1: 0.0180
+EM: 0.0000
+Generated text: result in a cost of $100 million to $200 million. The cost of repairing the damage to the submarine ...
+
+Processing sample 4/100
+Sample ID: govreport_3
+Prompt length: 60278 characters
+Calculating perplexity on generated text...
+Perplexity: 3.81
+Generated 256 tokens
+Tokens/sec: 29.83
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1368
+F1: 0.0540
+EM: 0.0000
+Generated text: were cited in 1,119 nursing homes, with 1,019 deficiencies cited during the same period. The most co...
+
+Processing sample 5/100
+Sample ID: govreport_4
+Prompt length: 73751 characters
+Calculating perplexity on generated text...
+Perplexity: 3.47
+Generated 256 tokens
+Tokens/sec: 29.82
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1252
+F1: 0.0618
+EM: 0.0000
+Generated text: the operational release milestone, and (2) provide the PMRC with a report on the status of the proje...
+
+Processing sample 6/100
+Sample ID: govreport_5
+Prompt length: 15335 characters
+Calculating perplexity on generated text...
+Perplexity: 9.78
+Generated 256 tokens
+Tokens/sec: 29.92
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.2006
+F1: 0.0928
+EM: 0.0000
+Generated text: ’ identity information in the public comment system, the APA does require agencies to authenticate s...
+
+Processing sample 7/100
+Sample ID: govreport_6
+Prompt length: 34845 characters
+Calculating perplexity on generated text...
+Perplexity: 6.66
+Generated 256 tokens
+Tokens/sec: 29.88
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1374
+F1: 0.0705
+EM: 0.0000
+Generated text: 8). The Medicare hospice benefit is designed to provide hospice care to beneficiaries with a life ex...
+
+Processing sample 8/100
+Sample ID: govreport_7
+Prompt length: 77797 characters
+Calculating perplexity on generated text...
+Perplexity: 5.94
+Generated 256 tokens
+Tokens/sec: 29.81
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1030
+F1: 0.0775
+EM: 0.0000
+Generated text: RS, the Authorized e-file Provider program is designed to ensure that taxpayers’ information is prot...
+
+Processing sample 9/100
+Sample ID: govreport_8
+Prompt length: 50032 characters
+Calculating perplexity on generated text...
+Perplexity: 7.75
+Generated 256 tokens
+Tokens/sec: 29.91
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1517
+F1: 0.1085
+EM: 0.0000
+Generated text: policies for review and approval of State Plans is a significant weakness in the oversight process. ...
+
+Processing sample 10/100
+Sample ID: govreport_9
+Prompt length: 88727 characters
+Calculating perplexity on generated text...
+Perplexity: 9.50
+Generated 256 tokens
+Tokens/sec: 29.83
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1404
+F1: 0.0845
+EM: 0.0000
+Generated text: MB staff told us that they did not have a specific timeline for implementing the 15 standards, but t...
+
+Processing sample 11/100
+Sample ID: govreport_10
+Prompt length: 11932 characters
+Calculating perplexity on generated text...
+Perplexity: 2.13
+Generated 122 tokens
+Tokens/sec: 28.62
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.0313
+F1: 0.0306
+EM: 0.0000
+Generated text: ), and John E. Dicken (Director). We would be happy to provide you with additional information upon ...
+
+Processing sample 12/100
+Sample ID: govreport_11
+Prompt length: 53069 characters
+Calculating perplexity on generated text...
+Perplexity: 4.24
+Generated 256 tokens
+Tokens/sec: 29.88
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1725
+F1: 0.1048
+EM: 0.0000
+Generated text: 57 percent of veterans receiving disability compensation used VA health care for a service-connected...
+
+Processing sample 13/100
+Sample ID: govreport_12
+Prompt length: 93900 characters
+Calculating perplexity on generated text...
+Perplexity: 3.39
+Generated 256 tokens
+Tokens/sec: 29.77
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1688
+F1: 0.0614
+EM: 0.0000
+Generated text: for SEVP, which is a self-assessment tool that SEVP uses to identify and assess internal and externa...
+
+Processing sample 14/100
+Sample ID: govreport_13
+Prompt length: 47385 characters
+Calculating perplexity on generated text...
+Perplexity: 12.00
+Generated 256 tokens
+Tokens/sec: 29.84
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1308
+F1: 0.0938
+EM: 0.0000
+Generated text: 5 supplemental Economic Support Fund Ebola funding repurposed for the Zika response and about $10 mi...
+
+Processing sample 15/100
+Sample ID: govreport_14
+Prompt length: 41101 characters
+Calculating perplexity on generated text...
+Perplexity: 3.01
+Generated 256 tokens
+Tokens/sec: 29.89
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1370
+F1: 0.0665
+EM: 0.0000
+Generated text: to CBP officials, CBP’s enforcement efforts are focused on identifying and seizing goods that are su...
+
+Processing sample 16/100
+Sample ID: govreport_15
+Prompt length: 43605 characters
+Calculating perplexity on generated text...
+Perplexity: 11.65
+Generated 256 tokens
+Tokens/sec: 29.90
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1485
+F1: 0.0706
+EM: 0.0000
+Generated text: in section 922. These actions are intended to increase the ASD-SO/LIC’s role in the management of SO...
+
+Processing sample 17/100
+Sample ID: govreport_16
+Prompt length: 70991 characters
+Calculating perplexity on generated text...
+Perplexity: 3.79
+Generated 256 tokens
+Tokens/sec: 29.86
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1344
+F1: 0.1128
+EM: 0.0000
+Generated text: to UNRWA. The U.S. government’s education assistance in the West Bank and Gaza is provided through t...
+
+Processing sample 18/100
+Sample ID: govreport_17
+Prompt length: 23015 characters
+Calculating perplexity on generated text...
+Perplexity: 3.83
+Generated 256 tokens
+Tokens/sec: 29.89
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1966
+F1: 0.0962
+EM: 0.0000
+Generated text: Rural Development mission area, some employees expressed concerns about the impact of the business c...
+
+Processing sample 19/100
+Sample ID: govreport_18
+Prompt length: 92450 characters
+Calculating perplexity on generated text...
+Perplexity: 4.71
+Generated 256 tokens
+Tokens/sec: 29.77
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1415
+F1: 0.0687
+EM: 0.0000
+Generated text: process, Inspection redesigned its test procedures to ensure that tests are conducted consistently a...
+
+Processing sample 20/100
+Sample ID: govreport_19
+Prompt length: 18613 characters
+Calculating perplexity on generated text...
+Perplexity: 18.35
+Generated 256 tokens
+Tokens/sec: 29.92
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1440
+F1: 0.1233
+EM: 0.0000
+Generated text: from protecting the Trust Fund from the potential financial losses associated with the bankruptcy of...
+
+Processing sample 21/100
+Sample ID: govreport_20
+Prompt length: 51183 characters
+Calculating perplexity on generated text...
+Perplexity: 3.03
+Generated 256 tokens
+Tokens/sec: 29.84
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.2110
+F1: 0.0789
+EM: 0.0000
+Generated text: growth in Medicaid spending would be driven by the growth in state and local government revenues. In...
+
+Processing sample 22/100
+Sample ID: govreport_21
+Prompt length: 46009 characters
+Calculating perplexity on generated text...
+Perplexity: 4.04
+Generated 256 tokens
+Tokens/sec: 29.87
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1655
+F1: 0.0428
+EM: 0.0000
+Generated text: . VA reports that the reimbursement agreement program has been successful in improving access to car...
+
+Processing sample 23/100
+Sample ID: govreport_22
+Prompt length: 54242 characters
+Calculating perplexity on generated text...
+Perplexity: 3.77
+Generated 256 tokens
+Tokens/sec: 29.87
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1168
+F1: 0.0574
+EM: 0.0000
+Generated text: ury’s Office of Legal Counsel (OLC) for legal review. OFAC officials said the OLC provides a legal o...
+
+Processing sample 24/100
+Sample ID: govreport_23
+Prompt length: 77209 characters
+Calculating perplexity on generated text...
+Perplexity: 4.65
+Generated 256 tokens
+Tokens/sec: 29.80
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1114
+F1: 0.0410
+EM: 0.0000
+Generated text: ation and benefits costs for current employees increased from $11.2 billion in fiscal year 2007 to $...
+
+Processing sample 25/100
+Sample ID: govreport_24
+Prompt length: 47415 characters
+Calculating perplexity on generated text...
+Perplexity: 7.41
+Generated 256 tokens
+Tokens/sec: 29.83
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.0994
+F1: 0.0721
+EM: 0.0000
+Generated text: work on specific research projects. These projects are typically funded through DOE’s Laboratory Dir...
+
+Processing sample 26/100
+Sample ID: govreport_25
+Prompt length: 76070 characters
+Calculating perplexity on generated text...
+Perplexity: 13.05
+Generated 256 tokens
+Tokens/sec: 29.87
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1669
+F1: 0.1145
+EM: 0.0000
+Generated text: , but it was not included in the contingency plans. We recommend that agencies ensure that their con...
+
+Processing sample 27/100
+Sample ID: govreport_26
+Prompt length: 86742 characters
+Calculating perplexity on generated text...
+Perplexity: 5.58
+Generated 256 tokens
+Tokens/sec: 29.81
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1677
+F1: 0.0878
+EM: 0.0000
+Generated text: service under 624 Part D plan sponsor contracts, 95 (91 percent) were used by plan sponsors. The rem...
+
+Processing sample 28/100
+Sample ID: govreport_27
+Prompt length: 84453 characters
+Calculating perplexity on generated text...
+Perplexity: 4.67
+Generated 256 tokens
+Tokens/sec: 29.82
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1322
+F1: 0.0838
+EM: 0.0000
+Generated text: ategy. The Biodefense Coordination Team is responsible for providing advice and recommendations to t...
+
+Processing sample 29/100
+Sample ID: govreport_28
+Prompt length: 25595 characters
+Calculating perplexity on generated text...
+Perplexity: 4.80
+Generated 256 tokens
+Tokens/sec: 29.91
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1468
+F1: 0.0776
+EM: 0.0000
+Generated text: the planning milestones. For example, we reported in 2016 that the Navy did not always adhere to the...
+
+Processing sample 30/100
+Sample ID: govreport_29
+Prompt length: 78358 characters
+Calculating perplexity on generated text...
+Perplexity: 3.85
+Generated 256 tokens
+Tokens/sec: 29.80
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1139
+F1: 0.0269
+EM: 0.0000
+Generated text: P began accepting electronic claims on February 24, 2018, and continued to accept paper claims until...
+
+Processing sample 31/100
+Sample ID: govreport_30
+Prompt length: 44989 characters
+Calculating perplexity on generated text...
+Perplexity: 5.77
+Generated 256 tokens
+Tokens/sec: 29.89
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1551
+F1: 0.1075
+EM: 0.0000
+Generated text: us that the state’s formula funding for mental health services has allowed them to provide trauma-in...
+
+Processing sample 32/100
+Sample ID: govreport_31
+Prompt length: 30700 characters
+Calculating perplexity on generated text...
+Perplexity: 5.81
+Generated 256 tokens
+Tokens/sec: 29.90
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1748
+F1: 0.0965
+EM: 0.0000
+Generated text: , compared to the overall 1.3 percent termination rate for all permanent employees. The highest esti...
+
+Processing sample 33/100
+Sample ID: govreport_32
+Prompt length: 35840 characters
+Calculating perplexity on generated text...
+Perplexity: 4.17
+Generated 256 tokens
+Tokens/sec: 29.90
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1779
+F1: 0.0560
+EM: 0.0000
+Generated text: workshops, VA’s EHRM program officials and Cerner officials discussed the compatibility of the Cerne...
+
+Processing sample 34/100
+Sample ID: govreport_33
+Prompt length: 35051 characters
+Calculating perplexity on generated text...
+Perplexity: 15.03
+Generated 256 tokens
+Tokens/sec: 29.93
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1515
+F1: 0.1140
+EM: 0.0000
+Generated text: s to only those with an aligned Medicaid MCO; and (3) requiring D-SNPs to have an executed contract ...
+
+Processing sample 35/100
+Sample ID: govreport_34
+Prompt length: 56679 characters
+Calculating perplexity on generated text...
+Perplexity: 5.75
+Generated 256 tokens
+Tokens/sec: 29.88
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1831
+F1: 0.0607
+EM: 0.0000
+Generated text: contrast, the rate of opioid prescriptions and DI claims in counties with the highest rates of opioi...
+
+Processing sample 36/100
+Sample ID: govreport_35
+Prompt length: 33721 characters
+Calculating perplexity on generated text...
+Perplexity: 8.95
+Generated 256 tokens
+Tokens/sec: 29.94
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1606
+F1: 0.0924
+EM: 0.0000
+Generated text: , the following are some of the general antifraud controls that EXIM uses to mitigate the fraud risk...
+
+Processing sample 37/100
+Sample ID: govreport_36
+Prompt length: 14674 characters
+Calculating perplexity on generated text...
+Perplexity: 6.57
+Generated 256 tokens
+Tokens/sec: 29.96
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1415
+F1: 0.0926
+EM: 0.0000
+Generated text: 4 months, rather than 12 months, to allow states more time to use their funds. (2) Increasing the ma...
+
+Processing sample 38/100
+Sample ID: govreport_37
+Prompt length: 24404 characters
+Calculating perplexity on generated text...
+Perplexity: 5.85
+Generated 256 tokens
+Tokens/sec: 29.92
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1693
+F1: 0.0832
+EM: 0.0000
+Generated text: However, the launch vehicle provider later reported that the launch vehicle engine experienced an an...
+
+Processing sample 39/100
+Sample ID: govreport_38
+Prompt length: 66009 characters
+Calculating perplexity on generated text...
+Perplexity: 4.54
+Generated 256 tokens
+Tokens/sec: 29.80
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1501
+F1: 0.0733
+EM: 0.0000
+Generated text: our review found that the Navy has achieved a 99 percent completion rate for MAC-MO availabilities. ...
+
+Processing sample 40/100
+Sample ID: govreport_39
+Prompt length: 33788 characters
+Calculating perplexity on generated text...
+Perplexity: 4.05
+Generated 256 tokens
+Tokens/sec: 29.88
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1984
+F1: 0.0841
+EM: 0.0000
+Generated text: and evaluation of its succession planning efforts is not sufficient to ensure that VA is meeting its...
+
+Processing sample 41/100
+Sample ID: govreport_40
+Prompt length: 24935 characters
+Calculating perplexity on generated text...
+Perplexity: 4.04
+Generated 256 tokens
+Tokens/sec: 29.93
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.0979
+F1: 0.0293
+EM: 0.0000
+Generated text: pilots required to operate the UH-60 Blackhawk rotary-wing aircraft in Afghanistan is currently 1,00...
+
+Processing sample 42/100
+Sample ID: govreport_41
+Prompt length: 49926 characters
+Calculating perplexity on generated text...
+Perplexity: 4.55
+Generated 256 tokens
+Tokens/sec: 29.86
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1131
+F1: 0.0548
+EM: 0.0000
+Generated text: 20 million, which was 10 percent lower than the prior year’s appropriation of $135 million. The fina...
+
+Processing sample 43/100
+Sample ID: govreport_42
+Prompt length: 102710 characters
+Calculating perplexity on generated text...
+Perplexity: 7.52
+Generated 256 tokens
+Tokens/sec: 29.78
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1289
+F1: 0.0702
+EM: 0.0000
+Generated text: us that USAID implemented more projects in Guatemala focused on improving law enforcement and crimin...
+
+Processing sample 44/100
+Sample ID: govreport_43
+Prompt length: 40008 characters
+Calculating perplexity on generated text...
+Perplexity: 11.10
+Generated 256 tokens
+Tokens/sec: 29.86
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1392
+F1: 0.1337
+EM: 0.0000
+Generated text: 16 survey found that an estimated 40 percent of students in lower-income households with school-age ...
+
+Processing sample 45/100
+Sample ID: govreport_44
+Prompt length: 20770 characters
+Calculating perplexity on generated text...
+Perplexity: 7.05
+Generated 256 tokens
+Tokens/sec: 29.92
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1529
+F1: 0.0872
+EM: 0.0000
+Generated text: a service that is not covered by FTA’s Public Transportation Emergency Relief Program. In this case,...
+
+Processing sample 46/100
+Sample ID: govreport_45
+Prompt length: 80034 characters
+Calculating perplexity on generated text...
+Perplexity: 4.20
+Generated 256 tokens
+Tokens/sec: 29.79
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1737
+F1: 0.0492
+EM: 0.0000
+Generated text: under the jurisdiction of HHS have primary responsibility for enforcing MH/SU parity requirements in...
+
+Processing sample 47/100
+Sample ID: govreport_46
+Prompt length: 53229 characters
+Calculating perplexity on generated text...
+Perplexity: 6.81
+Generated 256 tokens
+Tokens/sec: 29.86
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1474
+F1: 0.0572
+EM: 0.0000
+Generated text: surplus firearms. CMP’s written request must also include a list of the surplus firearms to be trans...
+
+Processing sample 48/100
+Sample ID: govreport_47
+Prompt length: 41756 characters
+Calculating perplexity on generated text...
+Perplexity: 2.25
+Generated 256 tokens
+Tokens/sec: 29.90
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1348
+F1: 0.0462
+EM: 0.0000
+Generated text: as “environmental liabilities.” DOE’s environmental liability estimates are based on a variety of as...
+
+Processing sample 49/100
+Sample ID: govreport_48
+Prompt length: 14824 characters
+Calculating perplexity on generated text...
+Perplexity: 6.77
+Generated 256 tokens
+Tokens/sec: 29.93
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1744
+F1: 0.0470
+EM: 0.0000
+Generated text: I-STEP activities. TSA’s I-STEP program is designed to improve the security of surface transportatio...
+
+Processing sample 50/100
+Sample ID: govreport_49
+Prompt length: 106524 characters
+Calculating perplexity on generated text...
+Perplexity: 10.52
+Generated 256 tokens
+Tokens/sec: 29.79
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1329
+F1: 0.0695
+EM: 0.0000
+Generated text: HS Cybersecurity Strategy, issued in December 2018, outlines a number of actions that the department...
+
+Processing sample 51/100
+Sample ID: govreport_50
+Prompt length: 32367 characters
+Calculating perplexity on generated text...
+Perplexity: 4.20
+Generated 256 tokens
+Tokens/sec: 29.89
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1224
+F1: 0.0884
+EM: 0.0000
+Generated text: Authorization Act for Fiscal Year 2018 (NDAA) included a provision that requires DOT to submit a nat...
+
+Processing sample 52/100
+Sample ID: govreport_51
+Prompt length: 112328 characters
+Calculating perplexity on generated text...
+Perplexity: 9.61
+Generated 256 tokens
+Tokens/sec: 29.78
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1481
+F1: 0.1066
+EM: 0.0000
+Generated text: procedures for collecting and reporting turn back and got away data. DHS also provides training to a...
+
+Processing sample 53/100
+Sample ID: govreport_52
+Prompt length: 21127 characters
+Calculating perplexity on generated text...
+Perplexity: 7.67
+Generated 256 tokens
+Tokens/sec: 29.93
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1912
+F1: 0.0860
+EM: 0.0000
+Generated text: holders we interviewed also noted that MPF is difficult for beneficiaries to use because it is not i...
+
+Processing sample 54/100
+Sample ID: govreport_53
+Prompt length: 39171 characters
+Calculating perplexity on generated text...
+Perplexity: 3.56
+Generated 256 tokens
+Tokens/sec: 29.87
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1493
+F1: 0.0503
+EM: 0.0000
+Generated text: DPC conducts a preaward review to ensure that the solicitation and contract meet the requirements of...
+
+Processing sample 55/100
+Sample ID: govreport_54
+Prompt length: 102093 characters
+Calculating perplexity on generated text...
+Perplexity: 4.42
+Generated 256 tokens
+Tokens/sec: 29.77
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1837
+F1: 0.0474
+EM: 0.0000
+Generated text: senior executive responsible for the acquisition of materiel and services for the military departmen...
+
+Processing sample 56/100
+Sample ID: govreport_55
+Prompt length: 76769 characters
+Calculating perplexity on generated text...
+Perplexity: 12.06
+Generated 256 tokens
+Tokens/sec: 29.82
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1356
+F1: 0.1001
+EM: 0.0000
+Generated text: could be extracted, and improve the quality of the data. DOD officials said they are working to comp...
+
+Processing sample 57/100
+Sample ID: govreport_56
+Prompt length: 21558 characters
+Calculating perplexity on generated text...
+Perplexity: 1.97
+Generated 256 tokens
+Tokens/sec: 29.92
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1695
+F1: 0.0443
+EM: 0.0000
+Generated text: ive Ordnance Disposal (EOD) forces are outlined in the Joint Doctrine for EOD. The Joint Doctrine fo...
+
+Processing sample 58/100
+Sample ID: govreport_57
+Prompt length: 29437 characters
+Calculating perplexity on generated text...
+Perplexity: 8.26
+Generated 256 tokens
+Tokens/sec: 29.89
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.2216
+F1: 0.0824
+EM: 0.0000
+Generated text: received virtual support only. VHA also provided training to VA medical center directors on the same...
+
+Processing sample 59/100
+Sample ID: govreport_58
+Prompt length: 53224 characters
+Calculating perplexity on generated text...
+Perplexity: 3.44
+Generated 256 tokens
+Tokens/sec: 29.85
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1777
+F1: 0.0441
+EM: 0.0000
+Generated text: remaining applications involved other firearms, artillery, and ammunition items. State reviews and a...
+
+Processing sample 60/100
+Sample ID: govreport_59
+Prompt length: 28313 characters
+Calculating perplexity on generated text...
+Perplexity: 4.34
+Generated 256 tokens
+Tokens/sec: 29.90
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1583
+F1: 0.0927
+EM: 0.0000
+Generated text: report, and the agency has not yet implemented the new certification process for the WOSB program. I...
+
+Processing sample 61/100
+Sample ID: govreport_60
+Prompt length: 40081 characters
+Calculating perplexity on generated text...
+Perplexity: 4.65
+Generated 256 tokens
+Tokens/sec: 29.88
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1527
+F1: 0.0795
+EM: 0.0000
+Generated text: be a common issue for lobbyists who are not familiar with the LDA or the guidance. We have also foun...
+
+Processing sample 62/100
+Sample ID: govreport_61
+Prompt length: 38465 characters
+Calculating perplexity on generated text...
+Perplexity: 5.96
+Generated 256 tokens
+Tokens/sec: 29.87
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1465
+F1: 0.0696
+EM: 0.0000
+Generated text: ATCs use TRACER to track and monitor the referral process, including the status of the referral, the...
+
+Processing sample 63/100
+Sample ID: govreport_62
+Prompt length: 18208 characters
+Calculating perplexity on generated text...
+Perplexity: 5.01
+Generated 256 tokens
+Tokens/sec: 29.93
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1264
+F1: 0.0745
+EM: 0.0000
+Generated text: and guidelines, and DHS will review and approve the plan within 30 days. DHS officials told us that ...
+
+Processing sample 64/100
+Sample ID: govreport_63
+Prompt length: 30373 characters
+Calculating perplexity on generated text...
+Perplexity: 7.18
+Generated 256 tokens
+Tokens/sec: 29.90
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1667
+F1: 0.0773
+EM: 0.0000
+Generated text: or investment in research and development, and the impact of DOD contract financing policies on the ...
+
+Processing sample 65/100
+Sample ID: govreport_64
+Prompt length: 56206 characters
+Calculating perplexity on generated text...
+Perplexity: 5.47
+Generated 256 tokens
+Tokens/sec: 29.84
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1339
+F1: 0.0548
+EM: 0.0000
+Generated text: ing and to addressing the issue. Education’s business rule for reporting zeros is not a management p...
+
+Processing sample 66/100
+Sample ID: govreport_65
+Prompt length: 34544 characters
+Calculating perplexity on generated text...
+Perplexity: 14.63
+Generated 256 tokens
+Tokens/sec: 29.88
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1514
+F1: 0.1433
+EM: 0.0000
+Generated text: DOD did not include the Guideline requirement to ensure that verifiable, reliable, and timely inform...
+
+Processing sample 67/100
+Sample ID: govreport_66
+Prompt length: 41755 characters
+Calculating perplexity on generated text...
+Perplexity: 10.29
+Generated 256 tokens
+Tokens/sec: 29.88
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1447
+F1: 0.1399
+EM: 0.0000
+Generated text: of instruction per year. Figure 8 shows the number of state TCS programs that had requirements for p...
+
+Processing sample 68/100
+Sample ID: govreport_67
+Prompt length: 93662 characters
+Calculating perplexity on generated text...
+Perplexity: 16.91
+Generated 256 tokens
+Tokens/sec: 29.80
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1365
+F1: 0.1346
+EM: 0.0000
+Generated text: closely associated with inherently governmental or critical functions. If the proposed requirement i...
+
+Processing sample 69/100
+Sample ID: govreport_68
+Prompt length: 33948 characters
+Calculating perplexity on generated text...
+Perplexity: 5.89
+Generated 256 tokens
+Tokens/sec: 29.91
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1510
+F1: 0.0434
+EM: 0.0000
+Generated text: two drugs are approved for use in pediatric patients. The most commonly approved REMS are for drugs ...
+
+Processing sample 70/100
+Sample ID: govreport_69
+Prompt length: 25744 characters
+Calculating perplexity on generated text...
+Perplexity: 2.19
+Generated 256 tokens
+Tokens/sec: 29.93
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.0898
+F1: 0.0157
+EM: 0.0000
+Generated text: . The table shows that the F-35B is performing better than the F-35A, F-35C, and F-35D. The F-35B is...
+
+Processing sample 71/100
+Sample ID: govreport_70
+Prompt length: 53615 characters
+Calculating perplexity on generated text...
+Perplexity: 5.20
+Generated 256 tokens
+Tokens/sec: 29.87
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1594
+F1: 0.0731
+EM: 0.0000
+Generated text: same funds that it uses to pay the salaries of its civilian acquisition workforce personnel. We reco...
+
+Processing sample 72/100
+Sample ID: govreport_71
+Prompt length: 52742 characters
+Calculating perplexity on generated text...
+Perplexity: 6.93
+Generated 256 tokens
+Tokens/sec: 29.86
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1246
+F1: 0.0740
+EM: 0.0000
+Generated text: in 2019, we observed a significant reduction in the number of aircraft that were being completed on ...
+
+Processing sample 73/100
+Sample ID: govreport_72
+Prompt length: 25444 characters
+Calculating perplexity on generated text...
+Perplexity: 2.78
+Generated 256 tokens
+Tokens/sec: 29.94
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.0834
+F1: 0.0827
+EM: 0.0000
+Generated text: In addition, the report noted that the cost of building new transmission lines can be higher than th...
+
+Processing sample 74/100
+Sample ID: govreport_73
+Prompt length: 14084 characters
+Calculating perplexity on generated text...
+Perplexity: 5.98
+Generated 256 tokens
+Tokens/sec: 29.94
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1432
+F1: 0.0654
+EM: 0.0000
+Generated text: used to measure contractor performance. VBA officials said that they have identified a number of pot...
+
+Processing sample 75/100
+Sample ID: govreport_74
+Prompt length: 11956 characters
+Calculating perplexity on generated text...
+Perplexity: 12.36
+Generated 256 tokens
+Tokens/sec: 29.93
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1878
+F1: 0.1651
+EM: 0.0000
+Generated text: um requirements to better align with modern aircraft technologies and to better prepare mechanics fo...
+
+Processing sample 76/100
+Sample ID: govreport_75
+Prompt length: 29370 characters
+Calculating perplexity on generated text...
+Perplexity: 7.18
+Generated 256 tokens
+Tokens/sec: 29.89
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1377
+F1: 0.0885
+EM: 0.0000
+Generated text: itized the prosecution of aliens who had entered the country without inspection, including aliens wh...
+
+Processing sample 77/100
+Sample ID: govreport_76
+Prompt length: 38865 characters
+Calculating perplexity on generated text...
+Perplexity: 6.84
+Generated 252 tokens
+Tokens/sec: 29.89
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1212
+F1: 0.0577
+EM: 0.0000
+Generated text: data are not comprehensive and do not include information on the cost of living in different regions...
+
+Processing sample 78/100
+Sample ID: govreport_77
+Prompt length: 29652 characters
+Calculating perplexity on generated text...
+Perplexity: 8.76
+Generated 256 tokens
+Tokens/sec: 29.92
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1169
+F1: 0.0982
+EM: 0.0000
+Generated text: states’ Medicaid shortfall costs for the uninsured decreased by $1.4 billion (12 percent), while non...
+
+Processing sample 79/100
+Sample ID: govreport_78
+Prompt length: 32887 characters
+Calculating perplexity on generated text...
+Perplexity: 6.50
+Generated 256 tokens
+Tokens/sec: 29.92
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1279
+F1: 0.0788
+EM: 0.0000
+Generated text: to excursions. The CAST team also found that excursions accounted for about 10 percent of all commer...
+
+Processing sample 80/100
+Sample ID: govreport_79
+Prompt length: 35593 characters
+Calculating perplexity on generated text...
+Perplexity: 5.78
+Generated 256 tokens
+Tokens/sec: 29.96
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1396
+F1: 0.0863
+EM: 0.0000
+Generated text: ception, OCWR officials stated they will appoint a non-attorney advisor. OCWR officials stated that ...
+
+Processing sample 81/100
+Sample ID: govreport_80
+Prompt length: 73014 characters
+Calculating perplexity on generated text...
+Perplexity: 3.75
+Generated 256 tokens
+Tokens/sec: 29.93
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1469
+F1: 0.0515
+EM: 0.0000
+Generated text: with a state to conduct compliance activities on federal lands. The agreement outlines the scope of ...
+
+Processing sample 82/100
+Sample ID: govreport_81
+Prompt length: 117903 characters
+Calculating perplexity on generated text...
+Perplexity: 5.40
+Generated 256 tokens
+Tokens/sec: 29.82
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1754
+F1: 0.0671
+EM: 0.0000
+Generated text: 000 compact migrants were added to the population. The number of compact migrants living in U.S. sta...
+
+Processing sample 83/100
+Sample ID: govreport_82
+Prompt length: 14030 characters
+Calculating perplexity on generated text...
+Perplexity: 11.93
+Generated 256 tokens
+Tokens/sec: 30.09
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1273
+F1: 0.1469
+EM: 0.0000
+Generated text: from fiscal year 2017 to fiscal year 2018, while the number of H-2B beneficiaries for the constructi...
+
+Processing sample 84/100
+Sample ID: govreport_83
+Prompt length: 49337 characters
+Calculating perplexity on generated text...
+Perplexity: 5.65
+Generated 256 tokens
+Tokens/sec: 30.04
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1593
+F1: 0.0801
+EM: 0.0000
+Generated text: , in 2017, NRC’s OIG recommended that NRC provide licensees with biweekly estimates of charges from ...
+
+Processing sample 85/100
+Sample ID: govreport_84
+Prompt length: 114265 characters
+Calculating perplexity on generated text...
+Perplexity: 9.92
+Generated 256 tokens
+Tokens/sec: 29.90
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.0816
+F1: 0.0787
+EM: 0.0000
+Generated text: and Berks family residential centers. As shown in figure 5, immigration judges vacated 22 percent of...
+
+Processing sample 86/100
+Sample ID: govreport_85
+Prompt length: 121635 characters
+Calculating perplexity on generated text...
+Perplexity: 7.65
+Generated 256 tokens
+Tokens/sec: 29.92
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.0882
+F1: 0.0311
+EM: 0.0000
+Generated text: of the labor market, rather than the health of the economy. The National Academies report notes that...
+
+Processing sample 87/100
+Sample ID: govreport_86
+Prompt length: 64482 characters
+Calculating perplexity on generated text...
+Perplexity: 3.77
+Generated 256 tokens
+Tokens/sec: 30.02
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1509
+F1: 0.0629
+EM: 0.0000
+Generated text: Figure 4 shows the percentage of female active-duty servicemembers by pay grade category for fiscal ...
+
+Processing sample 88/100
+Sample ID: govreport_87
+Prompt length: 27777 characters
+Calculating perplexity on generated text...
+Perplexity: 9.99
+Generated 256 tokens
+Tokens/sec: 30.13
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1423
+F1: 0.1039
+EM: 0.0000
+Generated text: to apply for TEPSLF and then submit a PSLF application. Education officials said that they are worki...
+
+Processing sample 89/100
+Sample ID: govreport_88
+Prompt length: 55586 characters
+Calculating perplexity on generated text...
+Perplexity: 3.09
+Generated 256 tokens
+Tokens/sec: 30.14
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1384
+F1: 0.0572
+EM: 0.0000
+Generated text: uant to its authority under the International Carrier Access Act (ICAA). DOT’s competitive analysis ...
+
+Processing sample 90/100
+Sample ID: govreport_89
+Prompt length: 56837 characters
+Calculating perplexity on generated text...
+Perplexity: 3.59
+Generated 256 tokens
+Tokens/sec: 30.13
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.0430
+F1: 0.0275
+EM: 0.0000
+Generated text: , including:
+- Chlorine, which can cause skin burns, eye irritation, and respiratory problems;
+- Chl...
+
+Processing sample 91/100
+Sample ID: govreport_90
+Prompt length: 22400 characters
+Calculating perplexity on generated text...
+Perplexity: 6.11
+Generated 256 tokens
+Tokens/sec: 30.19
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1648
+F1: 0.0922
+EM: 0.0000
+Generated text: be opened to provide a larger lavatory space for the passenger with an onboard wheelchair. The Space...
+
+Processing sample 92/100
+Sample ID: govreport_91
+Prompt length: 90587 characters
+Calculating perplexity on generated text...
+Perplexity: 5.81
+Generated 256 tokens
+Tokens/sec: 30.06
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1105
+F1: 0.0574
+EM: 0.0000
+Generated text: American Homeowners Act of 2014, S. 1215—were introduced in the Senate and the House of Representati...
+
+Processing sample 93/100
+Sample ID: govreport_92
+Prompt length: 106204 characters
+Calculating perplexity on generated text...
+Perplexity: 5.11
+Generated 256 tokens
+Tokens/sec: 30.02
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1134
+F1: 0.0582
+EM: 0.0000
+Generated text: of households in the top 20 percent in 1989 was about $120,000. In 2016, estimated average wealth of...
+
+Processing sample 94/100
+Sample ID: govreport_93
+Prompt length: 40002 characters
+Calculating perplexity on generated text...
+Perplexity: 4.41
+Generated 256 tokens
+Tokens/sec: 30.16
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1227
+F1: 0.0758
+EM: 0.0000
+Generated text: impacts the ability of DOD to use FFRDCs to support national security needs. In response to the conc...
+
+Processing sample 95/100
+Sample ID: govreport_94
+Prompt length: 29851 characters
+Calculating perplexity on generated text...
+Perplexity: 4.88
+Generated 256 tokens
+Tokens/sec: 30.18
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1378
+F1: 0.0593
+EM: 0.0000
+Generated text: locations (IOLs)—VA’s headquarters in Washington, D.C.; VA’s San Antonio Health Care System; and VA’...
+
+Processing sample 96/100
+Sample ID: govreport_95
+Prompt length: 50416 characters
+Calculating perplexity on generated text...
+Perplexity: 4.00
+Generated 256 tokens
+Tokens/sec: 30.13
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1723
+F1: 0.0528
+EM: 0.0000
+Generated text: the same level of detail as the other installations. The installation officials we spoke with said t...
+
+Processing sample 97/100
+Sample ID: govreport_96
+Prompt length: 49389 characters
+Calculating perplexity on generated text...
+Perplexity: 5.15
+Generated 256 tokens
+Tokens/sec: 30.19
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1337
+F1: 0.0775
+EM: 0.0000
+Generated text: housing markets, including the availability of affordable rental units, the cost of construction, an...
+
+Processing sample 98/100
+Sample ID: govreport_97
+Prompt length: 76693 characters
+Calculating perplexity on generated text...
+Perplexity: 3.20
+Generated 256 tokens
+Tokens/sec: 30.21
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.0983
+F1: 0.0366
+EM: 0.0000
+Generated text: , and the U.S. Virgin Islands. NOAA provides estimates of hurricane storm surge for coastal areas ba...
+
+Processing sample 99/100
+Sample ID: govreport_98
+Prompt length: 44701 characters
+Calculating perplexity on generated text...
+Perplexity: 5.60
+Generated 256 tokens
+Tokens/sec: 30.28
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1533
+F1: 0.0443
+EM: 0.0000
+Generated text: ers can help identify and address design issues that can lead to reliability problems. For example, ...
+
+Processing sample 100/100
+Sample ID: govreport_99
+Prompt length: 44266 characters
+Calculating perplexity on generated text...
+Perplexity: 5.32
+Generated 256 tokens
+Tokens/sec: 30.27
+Latency/token: 0.0000s
+Peak VRAM: 403.72 MB
+ROUGE-L: 0.1347
+F1: 0.0783
+EM: 0.0000
+Generated text: using the same evaluation criteria across all contracts. In response to AAA’s recommendations, in Ap...
+
+================================================================================
+AVERAGE METRICS ACROSS ALL SAMPLES
+================================================================================
+Average Tokens/sec: 29.88
+Average Latency/token: 0.0000s
+Average Peak VRAM: 403.72 MB
+Average Tokens Generated: 254.62
+Average ROUGE-1: 0.2519
+Average ROUGE-2: 0.0677
+Average ROUGE-L: 0.1424
+Average F1: 0.0749
+Average EM: 0.0000
+Average Perplexity: 6.35
+
+Detailed results saved to: runs/baseline_full_govreport/results.csv
+Average metrics saved to: runs/baseline_full_govreport/average_results.csv
+================================================================================

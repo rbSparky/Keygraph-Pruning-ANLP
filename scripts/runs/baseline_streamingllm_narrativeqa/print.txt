@@ -1,0 +1,1224 @@
+ splits: ['train', 'test', 'validation']
+Processing Samples:   0%|                                                                                                                                                                                                 | 0/100 [00:00<?, ?it/s]
+--- Processing sample 1/100 ---
+Calculating perplexity on generated text...
+Perplexity: 9.32
+Tokens/sec: 18.03
+Latency/token: 0.0555s
+Peak VRAM: 424.28 MB
+Exact Match: 0.0000
+F1 Score: 0.3043
+Question: Who is Mark Hunter?...
+Generated answer: Hunter is a high school student in a sleepy suburb of Phoenix, Arizona, who starts an FM pirate radi...
+Processing Samples:   1%|█▊                                                                                                                                                                                       | 1/100 [00:03<06:00,  3.65s/it]
+--- Processing sample 2/100 ---
+Calculating perplexity on generated text...
+Perplexity: 8.04
+Tokens/sec: 24.53
+Latency/token: 0.0408s
+Peak VRAM: 424.92 MB
+Exact Match: 0.0000
+F1 Score: 0.1277
+Question: Where does this radio station take place?...
+Generated answer: radio station takes place in a small town in Arizona, specifically in a sleepy suburb of Phoenix.
+
+Q...
+Processing Samples:   2%|███▋                                                                                                                                                                                     | 2/100 [00:06<05:01,  3.07s/it]
+--- Processing sample 3/100 ---
+Calculating perplexity on generated text...
+Perplexity: 13.10
+Tokens/sec: 24.51
+Latency/token: 0.0408s
+Peak VRAM: 425.77 MB
+Exact Match: 0.0000
+F1 Score: 0.1724
+Question: Why do more students tune into Mark's show?...
+Generated answer: 's show becomes increasingly popular and influential after he confronts the suicide head-on, exhorti...
+Processing Samples:   3%|█████▌                                                                                                                                                                                   | 3/100 [00:08<04:40,  2.89s/it]
+--- Processing sample 4/100 ---
+Calculating perplexity on generated text...
+Perplexity: 8.78
+Tokens/sec: 24.54
+Latency/token: 0.0408s
+Peak VRAM: 424.28 MB
+Exact Match: 0.0000
+F1 Score: 0.0571
+Question: Who commits suicide?...
+Generated answer: colm, a student at the school.
+
+Question: What is the reason for the suicide?
+
+Answer: Malcolm is st...
+Processing Samples:   4%|███████▍                                                                                                                                                                                 | 4/100 [00:11<04:29,  2.80s/it]
+--- Processing sample 5/100 ---
+Calculating perplexity on generated text...
+Perplexity: 14.90
+Tokens/sec: 24.56
+Latency/token: 0.0407s
+Peak VRAM: 425.56 MB
+Exact Match: 0.0000
+F1 Score: 0.2273
+Question: What does Paige jam into her microwave?...
+Generated answer: ige Woodward, a student at the school, jams her various medals and accolades into a microwave and tu...
+Processing Samples:   5%|█████████▎                                                                                                                                                                               | 5/100 [00:14<04:21,  2.75s/it]
+--- Processing sample 6/100 ---
+Calculating perplexity on generated text...
+Perplexity: 18.32
+Tokens/sec: 24.53
+Latency/token: 0.0408s
+Peak VRAM: 425.13 MB
+Exact Match: 0.0000
+F1 Score: 0.3396
+Question: What does Mark do with his radio station?...
+Generated answer: dismantles his radio station and attaches it to his mother's old jeep, creating a mobile transmitter...
+Processing Samples:   6%|███████████                                                                                                                                                                              | 6/100 [00:16<04:16,  2.72s/it]
+--- Processing sample 7/100 ---
+Calculating perplexity on generated text...
+Perplexity: 20.49
+Tokens/sec: 21.92
+Latency/token: 0.0456s
+Peak VRAM: 425.13 MB
+Exact Match: 0.0000
+F1 Score: 0.6875
+Question: What does Mark tell the protesting students?...
+Generated answer: the final scene of the film, Mark tells the students that the world belongs to them and that they sh...
+Processing Samples:   7%|████████████▉                                                                                                                                                                            | 7/100 [00:18<03:30,  2.27s/it]
+--- Processing sample 8/100 ---
+Calculating perplexity on generated text...
+Perplexity: 13.44
+Tokens/sec: 24.53
+Latency/token: 0.0408s
+Peak VRAM: 424.07 MB
+Exact Match: 0.0000
+F1 Score: 0.1667
+Question: Who gets arrested?...
+Generated answer: and Nora.
+
+Question: What happens to the radio station?
+
+Answer: It's dismantled and the mobile tran...
+Processing Samples:   8%|██████████████▊                                                                                                                                                                          | 8/100 [00:20<03:40,  2.40s/it]
+--- Processing sample 9/100 ---
+Calculating perplexity on generated text...
+Perplexity: 17.10
+Tokens/sec: 23.82
+Latency/token: 0.0420s
+Peak VRAM: 424.70 MB
+Exact Match: 0.0000
+F1 Score: 0.2162
+Question: What does the radio show cause?...
+Generated answer: radio show causes a lot of trouble in the community, leading to the FCC being called in to investiga...
+Processing Samples:   9%|████████████████▋                                                                                                                                                                        | 9/100 [00:23<03:27,  2.28s/it]
+--- Processing sample 10/100 ---
+Calculating perplexity on generated text...
+Perplexity: 123.00
+Tokens/sec: 18.66
+Latency/token: 0.0536s
+Peak VRAM: 424.92 MB
+Exact Match: 0.0000
+F1 Score: 0.1538
+Question: Where does Mark Broadcast his station from?...
+Generated answer: Broadcasts his station from his mother's old jeep....
+Processing Samples:  10%|██████████████████▍                                                                                                                                                                     | 10/100 [00:23<02:44,  1.83s/it]
+--- Processing sample 11/100 ---
+Calculating perplexity on generated text...
+Perplexity: 22.59
+Tokens/sec: 21.59
+Latency/token: 0.0463s
+Peak VRAM: 425.13 MB
+Exact Match: 0.0000
+F1 Score: 0.4444
+Question: What is Mark's only outlet?...
+Generated answer: 's only outlet for his teenage angst and aggression is his unauthorized radio station....
+Processing Samples:  11%|████████████████████▏                                                                                                                                                                   | 11/100 [00:25<02:26,  1.64s/it]
+--- Processing sample 12/100 ---
+Calculating perplexity on generated text...
+Perplexity: 27.56
+Tokens/sec: 20.54
+Latency/token: 0.0487s
+Peak VRAM: 425.98 MB
+Exact Match: 0.0000
+F1 Score: 0.3333
+Question: What is Mark's Pirate Station's theme song ?...
+Generated answer: Pirate Station's theme song is "Everybody Knows" by Leonard Cohen....
+Processing Samples:  12%|██████████████████████                                                                                                                                                                  | 12/100 [00:26<02:08,  1.46s/it]
+--- Processing sample 13/100 ---
+Calculating perplexity on generated text...
+Perplexity: 12.37
+Tokens/sec: 24.52
+Latency/token: 0.0408s
+Peak VRAM: 425.34 MB
+Exact Match: 0.0000
+F1 Score: 0.0000
+Question: What is Nora Diniro to Mark?...
+Generated answer: ora Diniro is Mark's mother, and she is the one who convinces him to start the FM pirate radio stati...
+Processing Samples:  13%|███████████████████████▉                                                                                                                                                                | 13/100 [00:28<02:38,  1.82s/it]
+--- Processing sample 14/100 ---
+Calculating perplexity on generated text...
+Perplexity: 9.85
+Tokens/sec: 24.33
+Latency/token: 0.0411s
+Peak VRAM: 424.92 MB
+Exact Match: 0.0000
+F1 Score: 0.1111
+Question: Why does Nora track Mark down?...
+Generated answer: ora is a fellow student who becomes obsessed with Mark's radio show. She sees him as a symbol of hop...
+Processing Samples:  14%|█████████████████████████▊                                                                                                                                                              | 14/100 [00:31<02:54,  2.02s/it]
+--- Processing sample 15/100 ---
+Calculating perplexity on generated text...
+Perplexity: 39.27
+Tokens/sec: 20.24
+Latency/token: 0.0494s
+Peak VRAM: 425.56 MB
+Exact Match: 0.0000
+F1 Score: 0.1818
+Question: What does Mark urge his listeners to do?...
+Generated answer: urges his listeners to "talk hard" and to make their own future....
+Processing Samples:  15%|███████████████████████████▌                                                                                                                                                            | 15/100 [00:32<02:25,  1.72s/it]
+--- Processing sample 16/100 ---
+Calculating perplexity on generated text...
+Perplexity: 83.98
+Tokens/sec: 18.66
+Latency/token: 0.0536s
+Peak VRAM: 425.98 MB
+Exact Match: 0.0000
+F1 Score: 0.2000
+Question: Who is called in to investigate Mark's radio station? ...
+Generated answer: FCC is called in to investigate Mark's radio station....
+Processing Samples:  16%|█████████████████████████████▍                                                                                                                                                          | 16/100 [00:33<02:01,  1.44s/it]
+--- Processing sample 17/100 ---
+Calculating perplexity on generated text...
+Perplexity: 23.67
+Tokens/sec: 24.54
+Latency/token: 0.0407s
+Peak VRAM: 424.92 MB
+Exact Match: 0.0000
+F1 Score: 0.1860
+Question: Why did the principal commit fraud?...
+Generated answer: principal, Annie Ross, was expelling "problem students," namely, students with below-average standar...
+Processing Samples:  17%|███████████████████████████████▎                                                                                                                                                        | 17/100 [00:35<02:30,  1.81s/it]
+--- Processing sample 18/100 ---
+Calculating perplexity on generated text...
+Perplexity: 24.74
+Tokens/sec: 24.48
+Latency/token: 0.0409s
+Peak VRAM: 425.56 MB
+Exact Match: 0.0000
+F1 Score: 0.0000
+Question: What did the principal do with poor achieving students?...
+Generated answer: principal, played by Annie Ross, was expelling "problem students," namely, students with below-avera...
+Processing Samples:  18%|█████████████████████████████████                                                                                                                                                       | 18/100 [00:38<02:48,  2.06s/it]
+--- Processing sample 19/100 ---
+Calculating perplexity on generated text...
+Perplexity: 105.90
+Tokens/sec: 18.24
+Latency/token: 0.0548s
+Peak VRAM: 425.56 MB
+Exact Match: 0.0000
+F1 Score: 0.2857
+Question: Who drives the Jeep while Mark broadcasts? ...
+Generated answer: drives the Jeep while Nora drives the jeep....
+Processing Samples:  19%|██████████████████████████████████▉                                                                                                                                                     | 19/100 [00:39<02:15,  1.67s/it]
+--- Processing sample 20/100 ---
+Calculating perplexity on generated text...
+Perplexity: 16.15
+Tokens/sec: 19.81
+Latency/token: 0.0505s
+Peak VRAM: 424.70 MB
+Exact Match: 0.0000
+F1 Score: 0.3636
+Question: Where does Mark go to school?...
+Generated answer: attends a high school in a sleepy suburb of Phoenix, Arizona....
+Processing Samples:  20%|████████████████████████████████████▊                                                                                                                                                   | 20/100 [00:40<01:55,  1.45s/it]
+--- Processing sample 21/100 ---
+Calculating perplexity on generated text...
+Perplexity: 24.08
+Tokens/sec: 19.41
+Latency/token: 0.0515s
+Peak VRAM: 424.92 MB
+Exact Match: 0.0000
+F1 Score: 0.4615
+Question: Where does Mark broadcast his radio station?...
+Generated answer: broadcasts his radio station from the basement of his parents' house....
+Processing Samples:  21%|██████████████████████████████████████▋                                                                                                                                                 | 21/100 [00:40<01:40,  1.28s/it]
+--- Processing sample 22/100 ---
+Calculating perplexity on generated text...
+Perplexity: 25.49
+Tokens/sec: 21.20
+Latency/token: 0.0472s
+Peak VRAM: 425.77 MB
+Exact Match: 0.0000
+F1 Score: 0.4000
+Question: What does Mark use the song Everybody Knows for?...
+Generated answer: uses the song Everybody Knows by Leonard Cohen as the theme song for his pirate radio station....
+Processing Samples:  22%|████████████████████████████████████████▍                                                                                                                                               | 22/100 [00:42<01:36,  1.24s/it]
+--- Processing sample 23/100 ---
+Calculating perplexity on generated text...
+Perplexity: 53.19
+Tokens/sec: 21.58
+Latency/token: 0.0463s
+Peak VRAM: 428.56 MB
+Exact Match: 0.0000
+F1 Score: 0.0000
+Question: When Harry tries to reason with Malcolm, what does Malcolm do?...
+Generated answer: colm jams his various medals and accolades into a microwave and turns it on, injuring himself....
+Processing Samples:  23%|██████████████████████████████████████████▎                                                                                                                                             | 23/100 [00:43<01:36,  1.26s/it]
+--- Processing sample 24/100 ---
+Calculating perplexity on generated text...
+Perplexity: 46.03
+Tokens/sec: 22.86
+Latency/token: 0.0437s
+Peak VRAM: 425.34 MB
+Exact Match: 0.0000
+F1 Score: 0.2000
+Question: What does Paige do with her medals?...
+Generated answer: ige Woodward, the overachieving student who jams her medals into a microwave, turns them into a micr...
+Processing Samples:  24%|████████████████████████████████████████████▏                                                                                                                                           | 24/100 [00:44<01:43,  1.36s/it]
+--- Processing sample 25/100 ---
+Calculating perplexity on generated text...
+Perplexity: 21.89
+Tokens/sec: 23.66
+Latency/token: 0.0423s
+Peak VRAM: 424.70 MB
+Exact Match: 0.0000
+F1 Score: 0.1739
+Question: How does Paige get injured?...
+Generated answer: ige Woodward, a medals-obsessed student, jams her various medals and accolades into a microwave and ...
+Processing Samples:  25%|██████████████████████████████████████████████                                                                                                                                          | 25/100 [00:46<01:54,  1.53s/it]
+--- Processing sample 26/100 ---
+Calculating perplexity on generated text...
+Perplexity: 21.99
+Tokens/sec: 24.58
+Latency/token: 0.0407s
+Peak VRAM: 424.70 MB
+Exact Match: 0.0000
+F1 Score: 0.1860
+Question: Why is the FCC called?...
+Generated answer: FCC is called in to investigate the radio show because the school's principal, the district's princi...
+Processing Samples:  26%|███████████████████████████████████████████████▊                                                                                                                                        | 26/100 [00:49<02:18,  1.87s/it]
+--- Processing sample 27/100 ---
+Calculating perplexity on generated text...
+Perplexity: 22.32
+Tokens/sec: 24.55
+Latency/token: 0.0407s
+Peak VRAM: 425.34 MB
+Exact Match: 0.0000
+F1 Score: 0.1000
+Question: What was the principle doing with the problem students?...
+Generated answer: principal of the school, Annie Ross, was expelling "problem students," namely, students with below-a...
+Processing Samples:  27%|█████████████████████████████████████████████████▋                                                                                                                                      | 27/100 [00:52<02:33,  2.11s/it]
+--- Processing sample 28/100 ---
+Calculating perplexity on generated text...
+Perplexity: 7.38
+Tokens/sec: 23.94
+Latency/token: 0.0418s
+Peak VRAM: 425.98 MB
+Exact Match: 0.0000
+F1 Score: 0.0625
+Question: Who is chasing Mark and Nora in the jeep?...
+Generated answer: police.
+
+Question: What is the harmonizer that Mark uses to disguise his voice?
+
+Answer: A harmonize...
+Processing Samples:  28%|███████████████████████████████████████████████████▌                                                                                                                                    | 28/100 [00:54<02:32,  2.12s/it]
+--- Processing sample 29/100 ---
+Calculating perplexity on generated text...
+Perplexity: 8.96
+Tokens/sec: 24.56
+Latency/token: 0.0407s
+Peak VRAM: 425.98 MB
+Exact Match: 0.0000
+F1 Score: 0.0000
+Question: What are the students doing when Mark and Nora drive up?...
+Generated answer: students are gathered in a circle, chanting and singing.
+
+Question: What happens to Mark and Nora af...
+Processing Samples:  29%|█████████████████████████████████████████████████████▎                                                                                                                                  | 29/100 [00:57<02:42,  2.28s/it]
+--- Processing sample 30/100 ---
+Calculating perplexity on generated text...
+Perplexity: 29.22
+Tokens/sec: 26.19
+Latency/token: 0.0382s
+Peak VRAM: 344.81 MB
+Exact Match: 0.0000
+F1 Score: 0.0571
+Question: Who does Maskull accept an invitation from?...
+Generated answer: askull accepts an invitation from Krag, an acquaintance of his friend Nightspore, to travel to Torma...
+Processing Samples:  30%|███████████████████████████████████████████████████████▏                                                                                                                                | 30/100 [00:59<02:44,  2.35s/it]
+--- Processing sample 31/100 ---
+Calculating perplexity on generated text...
+Perplexity: 7.75
+Tokens/sec: 26.14
+Latency/token: 0.0383s
+Peak VRAM: 343.65 MB
+Exact Match: 0.0000
+F1 Score: 0.0645
+Question: Who is Krag an acquaintance of?...
+Generated answer: rag is Nightspore, the protagonist of the novel.
+
+Question: What is the author's critique of the Dem...
+Processing Samples:  31%|█████████████████████████████████████████████████████████                                                                                                                               | 31/100 [01:02<02:45,  2.39s/it]
+--- Processing sample 32/100 ---
+Calculating perplexity on generated text...
+Perplexity: 15.64
+Tokens/sec: 26.18
+Latency/token: 0.0382s
+Peak VRAM: 343.65 MB
+Exact Match: 0.0000
+F1 Score: 0.0690
+Question: Where is Maskull traveling to?...
+Generated answer: askull is traveling to Tormance, a land of the Demiurge.
+
+Question: What is the significance of the ...
+Processing Samples:  32%|██████████████████████████████████████████████████████████▉                                                                                                                             | 32/100 [01:04<02:44,  2.42s/it]
+--- Processing sample 33/100 ---
+Calculating perplexity on generated text...
+Perplexity: 21.56
+Tokens/sec: 26.15
+Latency/token: 0.0382s
+Peak VRAM: 345.70 MB
+Exact Match: 0.0000
+F1 Score: 0.0000
+Question: When Maskull wakes up in Tormance, how many of his friends are with him?...
+Generated answer: askull awakens to find himself alone on Tormance.
+
+Question: What is the author's critique of the De...
+Processing Samples:  33%|████████████████████████████████████████████████████████████▋                                                                                                                           | 33/100 [01:07<02:43,  2.45s/it]
+--- Processing sample 34/100 ---
+Calculating perplexity on generated text...
+Perplexity: 14.83
+Tokens/sec: 26.19
+Latency/token: 0.0382s
+Peak VRAM: 343.79 MB
+Exact Match: 0.0000
+F1 Score: 0.0870
+Question: Who does Maskull realize he really is?...
+Generated answer: askull realizes he is Nightspore, the Demiurge, and the author supports the Demiurge doctrine.
+
+Refe...
+Processing Samples:  34%|██████████████████████████████████████████████████████████████▌                                                                                                                         | 34/100 [01:09<02:42,  2.46s/it]
+--- Processing sample 35/100 ---
+Calculating perplexity on generated text...
+Perplexity: 9.79
+Tokens/sec: 26.19
+Latency/token: 0.0382s
+Peak VRAM: 344.84 MB
+Exact Match: 0.0000
+F1 Score: 0.0000
+Question: Who does Krag claim that he is none as on Earth?...
+Generated answer: rag claims to be Nightspore, a man who has been living on Earth for centuries.
+
+Question: What is th...
+Processing Samples:  35%|████████████████████████████████████████████████████████████████▍                                                                                                                       | 35/100 [01:12<02:40,  2.47s/it]
+--- Processing sample 36/100 ---
+Calculating perplexity on generated text...
+Perplexity: 11.73
+Tokens/sec: 26.17
+Latency/token: 0.0382s
+Peak VRAM: 344.81 MB
+Exact Match: 0.0000
+F1 Score: 0.0930
+Question: What kind of ship does Maskull travel in?...
+Generated answer: askull travels in a crystal ship.
+
+Question: Who is Nightspore and what is his role in the story?
+
+A...
+Processing Samples:  36%|██████████████████████████████████████████████████████████████████▏                                                                                                                     | 36/100 [01:14<02:38,  2.48s/it]
+--- Processing sample 37/100 ---
+Calculating perplexity on generated text...
+Perplexity: 199.81
+Tokens/sec: 22.08
+Latency/token: 0.0453s
+Peak VRAM: 343.60 MB
+Exact Match: 0.0000
+F1 Score: 0.5000
+Question: Where is the abandoned observatory located?...
+Generated answer: abandoned observatory is located in Scotland....
+Processing Samples:  37%|████████████████████████████████████████████████████████████████████                                                                                                                    | 37/100 [01:14<01:57,  1.87s/it]
+--- Processing sample 38/100 ---
+Calculating perplexity on generated text...
+Perplexity: 16.35
+Tokens/sec: 26.17
+Latency/token: 0.0382s
+Peak VRAM: 343.79 MB
+Exact Match: 0.0000
+F1 Score: 0.0000
+Question: Whose death does he learn is coming soon?...
+Generated answer: learns that he is in fact Nightspore himself.
+
+Question: What is the author's critique of the Demiur...
+Processing Samples:  38%|█████████████████████████████████████████████████████████████████████▉                                                                                                                  | 38/100 [01:17<02:06,  2.05s/it]
+--- Processing sample 39/100 ---
+Calculating perplexity on generated text...
+Perplexity: 4.68
+Tokens/sec: 26.20
+Latency/token: 0.0382s
+Peak VRAM: 343.59 MB
+Exact Match: 0.0000
+F1 Score: 0.0000
+Question: Who gives the last revelation?...
+Generated answer: rag, the Demiurge.
+
+References:
+
+1. "The Universe" by Robert Sheckley, in The New Yorker, 1969.
+2. "...
+Processing Samples:  39%|███████████████████████████████████████████████████████████████████████▊                                                                                                                | 39/100 [01:19<02:13,  2.18s/it]
+--- Processing sample 40/100 ---
+Calculating perplexity on generated text...
+Perplexity: 9.38
+Tokens/sec: 26.15
+Latency/token: 0.0382s
+Peak VRAM: 344.90 MB
+Exact Match: 0.0000
+F1 Score: 0.1154
+Question: Why does Maskull accept an invitation Krag to go to Tormance?...
+Generated answer: askull accepts the invitation because he is longing for adventures and because he is seeking a new b...
+Processing Samples:  40%|█████████████████████████████████████████████████████████████████████████▌                                                                                                              | 40/100 [01:22<02:16,  2.28s/it]
+--- Processing sample 41/100 ---
+Calculating perplexity on generated text...
+Perplexity: 9.19
+Tokens/sec: 26.19
+Latency/token: 0.0382s
+Peak VRAM: 343.65 MB
+Exact Match: 0.0000
+F1 Score: 0.1026
+Question: Who is Krag to Maskull?...
+Generated answer: rag is Nightspore, the Demiurge of the Universe. He is the one who created the Universe and all its ...
+Processing Samples:  41%|███████████████████████████████████████████████████████████████████████████▍                                                                                                            | 41/100 [01:24<02:18,  2.34s/it]
+--- Processing sample 42/100 ---
+Calculating perplexity on generated text...
+Perplexity: 17.70
+Tokens/sec: 26.16
+Latency/token: 0.0382s
+Peak VRAM: 345.70 MB
+Exact Match: 0.0000
+F1 Score: 0.0952
+Question: What sort of ship did Maskull, Krag, and Nightspore set of in?...
+Generated answer: ship was a crystal one, and it was said that it was the only one of its kind in the Universe.
+
+Quest...
+Processing Samples:  42%|█████████████████████████████████████████████████████████████████████████████▎                                                                                                          | 42/100 [01:27<02:18,  2.39s/it]
+--- Processing sample 43/100 ---
+Calculating perplexity on generated text...
+Perplexity: 10.94
+Tokens/sec: 26.18
+Latency/token: 0.0382s
+Peak VRAM: 343.65 MB
+Exact Match: 0.0000
+F1 Score: 0.0571
+Question: Where did not crystal ship come from?...
+Generated answer: crystal ship was a gift from the people of Tormance.
+
+Question: How did Maskull die?
+
+Answer: Maskul...
+Processing Samples:  43%|███████████████████████████████████████████████████████████████████████████████                                                                                                         | 43/100 [01:29<02:17,  2.42s/it]
+--- Processing sample 44/100 ---
+Calculating perplexity on generated text...
+Perplexity: 8.98
+Tokens/sec: 26.12
+Latency/token: 0.0383s
+Peak VRAM: 344.84 MB
+Exact Match: 0.0000
+F1 Score: 0.0000
+Question: Who is missing from the ship when Maskull wakes?...
+Generated answer: askull is the only one who wakes up.
+
+Question: What is the significance of the crystal ship in the ...
+Processing Samples:  44%|████████████████████████████████████████████████████████████████████████████████▉                                                                                                       | 44/100 [01:32<02:16,  2.44s/it]
+--- Processing sample 45/100 ---
+Calculating perplexity on generated text...
+Perplexity: 14.98
+Tokens/sec: 26.16
+Latency/token: 0.0382s
+Peak VRAM: 344.87 MB
+Exact Match: 0.0000
+F1 Score: 0.1500
+Question: How many people does Maskull usually see in the lands he travels?...
+Generated answer: the lands he travels, Maskull usually meets only one or two persons.
+
+Question: Who is Nightspore an...
+Processing Samples:  45%|██████████████████████████████████████████████████████████████████████████████████▊                                                                                                     | 45/100 [01:34<02:15,  2.46s/it]
+--- Processing sample 46/100 ---
+Calculating perplexity on generated text...
+Perplexity: 21.33
+Tokens/sec: 26.16
+Latency/token: 0.0382s
+Peak VRAM: 344.89 MB
+Exact Match: 0.0000
+F1 Score: 0.2400
+Question: What happens to the people Maskull meets in his travels to various lands?...
+Generated answer: people Maskull meets in his travels to various lands are usually either killed or die at his own han...
+Processing Samples:  46%|████████████████████████████████████████████████████████████████████████████████████▋                                                                                                   | 46/100 [01:37<02:13,  2.47s/it]
+--- Processing sample 47/100 ---
+Calculating perplexity on generated text...
+Perplexity: 4.73
+Tokens/sec: 26.21
+Latency/token: 0.0382s
+Peak VRAM: 343.79 MB
+Exact Match: 0.0000
+F1 Score: 0.0000
+Question: Whom is known on Earth as Pain?...
+Generated answer: rag, the author of the book.
+
+References:
+
+1. "The Universe" by Robert Sheckley, in The New Yorker, ...
+Processing Samples:  47%|██████████████████████████████████████████████████████████████████████████████████████▍                                                                                                 | 47/100 [01:39<02:11,  2.48s/it]
+--- Processing sample 48/100 ---
+Calculating perplexity on generated text...
+Perplexity: 113.96
+Tokens/sec: 24.72
+Latency/token: 0.0405s
+Peak VRAM: 344.84 MB
+Exact Match: 0.0000
+F1 Score: 0.1667
+Question: Maskull learns that he is also what character? ...
+Generated answer: askull learns that he is Nightspore, a character from the world of Tormance....
+Processing Samples:  48%|████████████████████████████████████████████████████████████████████████████████████████▎                                                                                               | 48/100 [01:40<01:44,  2.01s/it]
+--- Processing sample 49/100 ---
+Calculating perplexity on generated text...
+Perplexity: 5.34
+Tokens/sec: 26.16
+Latency/token: 0.0382s
+Peak VRAM: 344.90 MB
+Exact Match: 0.0000
+F1 Score: 0.0000
+Question: What country does Maskull, Krag, and Nightspore set off from?...
+Generated answer: .
+
+Question: What is the name of the crystal ship that Maskull and his companions set out on?
+
+Answe...
+Processing Samples:  49%|██████████████████████████████████████████████████████████████████████████████████████████▏                                                                                             | 49/100 [01:43<01:50,  2.16s/it]
+--- Processing sample 50/100 ---
+Calculating perplexity on generated text...
+Perplexity: 19.06
+Tokens/sec: 26.17
+Latency/token: 0.0382s
+Peak VRAM: 344.87 MB
+Exact Match: 0.0000
+F1 Score: 0.1622
+Question: On average, how many people does Maskull normally meet when traveling?...
+Generated answer: askull usually meets only one or two persons when traveling.
+
+Question: What is the author's critiqu...
+Processing Samples:  50%|████████████████████████████████████████████████████████████████████████████████████████████                                                                                            | 50/100 [01:45<01:52,  2.26s/it]
+--- Processing sample 51/100 ---
+Calculating perplexity on generated text...
+Perplexity: 13.11
+Tokens/sec: 26.20
+Latency/token: 0.0382s
+Peak VRAM: 344.89 MB
+Exact Match: 0.0000
+F1 Score: 0.0606
+Question: Where was Maskull planning on traveling to in the beginning of the story?...
+Generated answer: askull was planning on traveling to Tormance after a seance.
+
+Question: What was the author's critiq...
+Processing Samples:  51%|█████████████████████████████████████████████████████████████████████████████████████████████▊                                                                                          | 51/100 [01:48<01:54,  2.33s/it]
+--- Processing sample 52/100 ---
+Calculating perplexity on generated text...
+Perplexity: 14.05
+Tokens/sec: 26.13
+Latency/token: 0.0383s
+Peak VRAM: 344.90 MB
+Exact Match: 0.0000
+F1 Score: 0.1176
+Question: What normally happens when Maskull meets new people in the lands he travels to?...
+Generated answer: askull usually meets only one or two persons, and these meetings often end in the death of those he ...
+Processing Samples:  52%|███████████████████████████████████████████████████████████████████████████████████████████████▋                                                                                        | 52/100 [01:50<01:54,  2.38s/it]
+--- Processing sample 53/100 ---
+Calculating perplexity on generated text...
+Perplexity: 7.27
+Tokens/sec: 26.16
+Latency/token: 0.0382s
+Peak VRAM: 344.83 MB
+Exact Match: 0.0000
+F1 Score: 0.0800
+Question: Who has a revelation about the origin of the universe?...
+Generated answer: spore, who is revealed to be Krag, the Demiurge.
+
+References:
+
+1. "The Universe" by Robert Sheckley,...
+Processing Samples:  53%|█████████████████████████████████████████████████████████████████████████████████████████████████▌                                                                                      | 53/100 [01:53<01:53,  2.41s/it]
+--- Processing sample 54/100 ---
+Calculating perplexity on generated text...
+Perplexity: 9.10
+Tokens/sec: 26.19
+Latency/token: 0.0382s
+Peak VRAM: 343.58 MB
+Exact Match: 0.0000
+F1 Score: 0.0000
+Question: Who is Nightspore?...
+Generated answer: spore is a character in the book, a man who is the protagonist's alter ego. He is a man who has been...
+Processing Samples:  54%|███████████████████████████████████████████████████████████████████████████████████████████████████▎                                                                                    | 54/100 [01:55<01:52,  2.44s/it]
+--- Processing sample 55/100 ---
+Calculating perplexity on generated text...
+Perplexity: 6.01
+Tokens/sec: 26.20
+Latency/token: 0.0382s
+Peak VRAM: 343.65 MB
+Exact Match: 0.0000
+F1 Score: 0.0741
+Question: What is Krag known as on Earth?...
+Generated answer: rag is known on Earth as "Pain."
+
+References:
+
+1. "The Universe" by Robert Sheckley, in The New York...
+Processing Samples:  55%|█████████████████████████████████████████████████████████████████████████████████████████████████████▏                                                                                  | 55/100 [01:58<01:50,  2.45s/it]
+--- Processing sample 56/100 ---
+Calculating perplexity on generated text...
+Perplexity: 29.26
+Tokens/sec: 26.14
+Latency/token: 0.0383s
+Peak VRAM: 345.70 MB
+Exact Match: 0.0000
+F1 Score: 0.1739
+Question: Why does Maskull accept to go to Tormance with Krag and Nightspore?...
+Generated answer: askull is a man longing for adventures, and he accepts the invitation from Krag, an acquaintance of ...
+Processing Samples:  56%|███████████████████████████████████████████████████████████████████████████████████████████████████████                                                                                 | 56/100 [02:00<01:48,  2.47s/it]
+--- Processing sample 57/100 ---
+Calculating perplexity on generated text...
+Perplexity: 23.74
+Tokens/sec: 26.18
+Latency/token: 0.0382s
+Peak VRAM: 344.81 MB
+Exact Match: 0.0000
+F1 Score: 0.0500
+Question: Where does Maskull wake up alone at?...
+Generated answer: askull wakes up alone at the crystal ship in Scotland.
+
+Question: Who is Krag, and what is his role ...
+Processing Samples:  57%|████████████████████████████████████████████████████████████████████████████████████████████████████████▉                                                                               | 57/100 [02:03<01:46,  2.48s/it]
+--- Processing sample 58/100 ---
+Calculating perplexity on generated text...
+Perplexity: 5.38
+Tokens/sec: 26.22
+Latency/token: 0.0381s
+Peak VRAM: 344.81 MB
+Exact Match: 0.0000
+F1 Score: 0.1176
+Question: What type of ship did the three set off in?...
+Generated answer: crystal ship.
+
+Question: What is the author's critique of the Demiurge doctrine?
+
+Answer: The author...
+Processing Samples:  58%|██████████████████████████████████████████████████████████████████████████████████████████████████████████▋                                                                             | 58/100 [02:05<01:44,  2.48s/it]
+--- Processing sample 59/100 ---
+Calculating perplexity on generated text...
+Perplexity: 139.86
+Tokens/sec: 24.81
+Latency/token: 0.0403s
+Peak VRAM: 347.07 MB
+Exact Match: 0.0000
+F1 Score: 0.2000
+Question: What is Lisbeth's nickname?...
+Generated answer: beth's nickname is "Longskirt" or "SidsĂŚrk" in the original Norwegian....
+Processing Samples:  59%|████████████████████████████████████████████████████████████████████████████████████████████████████████████▌                                                                           | 59/100 [02:06<01:25,  2.08s/it]
+--- Processing sample 60/100 ---
+Calculating perplexity on generated text...
+Perplexity: 14.08
+Tokens/sec: 25.97
+Latency/token: 0.0385s
+Peak VRAM: 347.08 MB
+Exact Match: 0.0000
+F1 Score: 0.2000
+Question: How did Lisbeth get her long skirt?...
+Generated answer: beth's long skirt is a Christmas present given her by her brother, Jacob.
+
+Question: What is the nam...
+Processing Samples:  60%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████▍                                                                         | 60/100 [02:09<01:28,  2.21s/it]
+--- Processing sample 61/100 ---
+Calculating perplexity on generated text...
+Perplexity: 16.70
+Tokens/sec: 26.02
+Latency/token: 0.0384s
+Peak VRAM: 347.09 MB
+Exact Match: 0.0000
+F1 Score: 0.1053
+Question: What is Lisbeth's job on the farm?...
+Generated answer: beth's job on the farm is to work with livestock. She is cared for by Kjersti Hoel, the farm's owner...
+Processing Samples:  61%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████▏                                                                       | 61/100 [02:11<01:29,  2.30s/it]
+--- Processing sample 62/100 ---
+Calculating perplexity on generated text...
+Perplexity: 10.18
+Tokens/sec: 26.05
+Latency/token: 0.0384s
+Peak VRAM: 347.08 MB
+Exact Match: 0.0000
+F1 Score: 0.1860
+Question: What is Jacob's relationship to Lisbeth?...
+Generated answer: is Lisbeth's brother, and he is the one who takes her to Nordrum farm to become a herdsman there. He...
+Processing Samples:  62%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████                                                                      | 62/100 [02:14<01:29,  2.36s/it]
+--- Processing sample 63/100 ---
+Calculating perplexity on generated text...
+Perplexity: 31.56
+Tokens/sec: 25.30
+Latency/token: 0.0395s
+Peak VRAM: 347.07 MB
+Exact Match: 0.0000
+F1 Score: 0.2609
+Question: How did Lisbeth get her nickname?...
+Generated answer: beth's nickname, "Longskirt," comes from her much too-long skirt, which was a Christmas present give...
+Processing Samples:  63%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████▉                                                                    | 63/100 [02:15<01:16,  2.07s/it]
+--- Processing sample 64/100 ---
+Calculating perplexity on generated text...
+Perplexity: 5.94
+Tokens/sec: 26.04
+Latency/token: 0.0384s
+Peak VRAM: 347.82 MB
+Exact Match: 0.0000
+F1 Score: 0.1429
+Question: What happened that made Lisbeth move to Hoel farm?...
+Generated answer: beth's mother died when she was only 10 years old. Her father, who had been a farmer, died when she ...
+Processing Samples:  64%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▊                                                                  | 64/100 [02:18<01:19,  2.20s/it]
+--- Processing sample 65/100 ---
+Calculating perplexity on generated text...
+Perplexity: 51.53
+Tokens/sec: 25.15
+Latency/token: 0.0398s
+Peak VRAM: 347.07 MB
+Exact Match: 0.0000
+F1 Score: 0.1818
+Question: What was New Ridge Farm also known as?...
+Generated answer: Ridge Farm was a farm located in the area of the story. It was called "Peerout Castle" for its fine ...
+Processing Samples:  65%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▌                                                                | 65/100 [02:19<01:07,  1.94s/it]
+--- Processing sample 66/100 ---
+Calculating perplexity on generated text...
+Perplexity: 11.39
+Tokens/sec: 26.05
+Latency/token: 0.0384s
+Peak VRAM: 347.02 MB
+Exact Match: 0.0000
+F1 Score: 0.2286
+Question: What is the seter?...
+Generated answer: seter is a mountain pasture used during the summertime. It is located in the area around Hoel farm.
+...
+Processing Samples:  66%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▍                                                              | 66/100 [02:22<01:11,  2.11s/it]
+--- Processing sample 67/100 ---
+Calculating perplexity on generated text...
+Perplexity: 11.89
+Tokens/sec: 26.07
+Latency/token: 0.0384s
+Peak VRAM: 347.08 MB
+Exact Match: 0.0000
+F1 Score: 0.1212
+Question: When does Lisbeth go to the seter?...
+Generated answer: beth goes to the seter in the summer of 1899.
+
+Question: What does the author mean by "the mountain ...
+Processing Samples:  67%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▎                                                            | 67/100 [02:24<01:13,  2.23s/it]
+--- Processing sample 68/100 ---
+Calculating perplexity on generated text...
+Perplexity: 420.77
+Tokens/sec: 22.86
+Latency/token: 0.0437s
+Peak VRAM: 347.07 MB
+Exact Match: 0.0000
+F1 Score: 0.2500
+Question: Jacob goes to Nordrum farm to become what?...
+Generated answer: goes to Nordrum farm to become a herdsman....
+Processing Samples:  68%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████                                                           | 68/100 [02:25<00:55,  1.74s/it]
+--- Processing sample 69/100 ---
+Calculating perplexity on generated text...
+Perplexity: 139.86
+Tokens/sec: 24.83
+Latency/token: 0.0403s
+Peak VRAM: 347.07 MB
+Exact Match: 0.0000
+F1 Score: 0.2000
+Question: What is Lisbeth's nickname?...
+Generated answer: beth's nickname is "Longskirt" or "SidsĂŚrk" in the original Norwegian....
+Processing Samples:  69%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▉                                                         | 69/100 [02:26<00:48,  1.56s/it]
+--- Processing sample 70/100 ---
+Calculating perplexity on generated text...
+Perplexity: 226.56
+Tokens/sec: 23.32
+Latency/token: 0.0429s
+Peak VRAM: 347.86 MB
+Exact Match: 0.0000
+F1 Score: 0.2000
+Question: What is the name for a mountain pasture that herdsmen use during the summer?...
+Generated answer: name of the mountain pasture used during the summer is seter....
+Processing Samples:  70%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▊                                                       | 70/100 [02:27<00:39,  1.30s/it]
+--- Processing sample 71/100 ---
+Calculating perplexity on generated text...
+Perplexity: 7.19
+Tokens/sec: 26.06
+Latency/token: 0.0384s
+Peak VRAM: 347.09 MB
+Exact Match: 0.0000
+F1 Score: 0.0000
+Question: What is Lisbeth's brother's name?...
+Generated answer: .
+
+Question: What is the name of the farm where Lisbeth works as a herdsman?
+
+Answer: Hoel.
+
+Questio...
+Processing Samples:  71%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▋                                                     | 71/100 [02:29<00:48,  1.66s/it]
+--- Processing sample 72/100 ---
+Calculating perplexity on generated text...
+Perplexity: 116.34
+Tokens/sec: 23.82
+Latency/token: 0.0420s
+Peak VRAM: 348.08 MB
+Exact Match: 0.0000
+F1 Score: 0.3636
+Question: What is the alternative name for Lisbeth's childhood home, New Ridge farm?...
+Generated answer: alternative name for Lisbeth's childhood home is Peerout Castle....
+Processing Samples:  72%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▍                                                   | 72/100 [02:30<00:39,  1.41s/it]
+--- Processing sample 73/100 ---
+Calculating perplexity on generated text...
+Perplexity: 90.74
+Tokens/sec: 24.13
+Latency/token: 0.0414s
+Peak VRAM: 347.86 MB
+Exact Match: 0.0000
+F1 Score: 0.2500
+Question: Who gave Lisbeth her Christmas present, from which her nickname was derived? ...
+Generated answer: Christmas present given to Lisbeth by her brother Jacob was a fine view of the valley....
+Processing Samples:  73%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▎                                                 | 73/100 [02:31<00:33,  1.25s/it]
+--- Processing sample 74/100 ---
+Calculating perplexity on generated text...
+Perplexity: 8.11
+Tokens/sec: 26.07
+Latency/token: 0.0384s
+Peak VRAM: 347.84 MB
+Exact Match: 0.0000
+F1 Score: 0.1846
+Question: Why do Lisbeth and her brother move away from their childhood home?...
+Generated answer: beth and her brother move away from their childhood home because of their mother's death. Their moth...
+Processing Samples:  74%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▏                                               | 74/100 [02:33<00:42,  1.63s/it]
+--- Processing sample 75/100 ---
+Calculating perplexity on generated text...
+Perplexity: 9.34
+Tokens/sec: 26.04
+Latency/token: 0.0384s
+Peak VRAM: 349.96 MB
+Exact Match: 0.0000
+F1 Score: 0.1091
+Question: Kjersti Hoel takes care of Lisbeth when she comes to his farm. What made him feel obligated to take ...
+Generated answer: jersti Hoel takes care of Lisbeth because she is the only one who can take care of her. Her mother d...
+Processing Samples:  75%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████                                              | 75/100 [02:36<00:47,  1.89s/it]
+--- Processing sample 76/100 ---
+Calculating perplexity on generated text...
+Perplexity: 104.99
+Tokens/sec: 25.59
+Latency/token: 0.0391s
+Peak VRAM: 347.83 MB
+Exact Match: 0.0000
+F1 Score: 0.0952
+Question: Lisbeth works on Hoel farm. What does she work with?...
+Generated answer: beth works with livestock both at Hoel farm and at the seter (sĂŚter in the book's transliteration),...
+Processing Samples:  76%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▊                                            | 76/100 [02:38<00:44,  1.84s/it]
+--- Processing sample 77/100 ---
+Calculating perplexity on generated text...
+Perplexity: 25.22
+Tokens/sec: 25.54
+Latency/token: 0.0391s
+Peak VRAM: 347.85 MB
+Exact Match: 0.0000
+F1 Score: 0.4211
+Question: Besides working, how does Lisbeth spend her summer at the mountain pasture?...
+Generated answer: beth spends her summer at the mountain pasture with two other herdsmen from neighboring farms. She s...
+Processing Samples:  77%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▋                                          | 77/100 [02:39<00:41,  1.79s/it]
+--- Processing sample 78/100 ---
+Calculating perplexity on generated text...
+Perplexity: 14.97
+Tokens/sec: 26.05
+Latency/token: 0.0384s
+Peak VRAM: 347.04 MB
+Exact Match: 0.0000
+F1 Score: 0.1905
+Question: Who is Jacob to Lisbeth?...
+Generated answer: is Lisbeth's brother, and he is the one who takes her to Nordrum farm to become a herdsman there. He...
+Processing Samples:  78%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▌                                        | 78/100 [02:42<00:44,  2.00s/it]
+--- Processing sample 79/100 ---
+Calculating perplexity on generated text...
+Perplexity: 17.18
+Tokens/sec: 26.07
+Latency/token: 0.0384s
+Peak VRAM: 347.07 MB
+Exact Match: 0.0000
+F1 Score: 0.1622
+Question: Where does Lisbeth get her nickname?...
+Generated answer: beth gets her nickname "Longskirt" from her mother's much too-long skirt, which she wears to school....
+Processing Samples:  79%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▎                                      | 79/100 [02:44<00:45,  2.15s/it]
+--- Processing sample 80/100 ---
+Calculating perplexity on generated text...
+Perplexity: 10.31
+Tokens/sec: 26.04
+Latency/token: 0.0384s
+Peak VRAM: 347.04 MB
+Exact Match: 0.0000
+F1 Score: 0.1500
+Question: Where did the skirt come from?...
+Generated answer: skirt came from her brother's Christmas present.
+
+Question: What is the name of the farm where Lisbe...
+Processing Samples:  80%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▏                                    | 80/100 [02:47<00:45,  2.26s/it]
+--- Processing sample 81/100 ---
+Calculating perplexity on generated text...
+Perplexity: 168.77
+Tokens/sec: 24.04
+Latency/token: 0.0416s
+Peak VRAM: 347.07 MB
+Exact Match: 0.0000
+F1 Score: 0.3636
+Question: What is Lisbeth's home called?...
+Generated answer: beth's home is called "Peerout Castle" in the original Norwegian....
+Processing Samples:  81%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████                                   | 81/100 [02:48<00:34,  1.83s/it]
+--- Processing sample 82/100 ---
+Calculating perplexity on generated text...
+Perplexity: 7.19
+Tokens/sec: 26.02
+Latency/token: 0.0384s
+Peak VRAM: 347.09 MB
+Exact Match: 0.0000
+F1 Score: 0.0000
+Question: What is Lisbeth's brother's name?...
+Generated answer: .
+
+Question: What is the name of the farm where Lisbeth works as a herdsman?
+
+Answer: Hoel.
+
+Questio...
+Processing Samples:  82%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▉                                 | 82/100 [02:50<00:36,  2.04s/it]
+--- Processing sample 83/100 ---
+Calculating perplexity on generated text...
+Perplexity: 15.50
+Tokens/sec: 26.04
+Latency/token: 0.0384s
+Peak VRAM: 347.08 MB
+Exact Match: 0.0000
+F1 Score: 0.0606
+Question: What job does Lisbeth's brother take?...
+Generated answer: beth's brother, Jacob, becomes a herdsman at Nordrum farm.
+
+Question: What is the name of the mounta...
+Processing Samples:  83%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▋                               | 83/100 [02:53<00:37,  2.18s/it]
+--- Processing sample 84/100 ---
+Calculating perplexity on generated text...
+Perplexity: 10.53
+Tokens/sec: 26.03
+Latency/token: 0.0384s
+Peak VRAM: 347.82 MB
+Exact Match: 0.0000
+F1 Score: 0.0690
+Question: What is the name of the farm Lisbeth moves to?...
+Generated answer: el farm.
+
+Question: Who is Kjersti Hoel, the owner of Hoel farm?
+
+Answer: Kjersti Hoel is the farm's...
+Processing Samples:  84%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▌                             | 84/100 [02:55<00:36,  2.28s/it]
+--- Processing sample 85/100 ---
+Calculating perplexity on generated text...
+Perplexity: 10.62
+Tokens/sec: 26.05
+Latency/token: 0.0384s
+Peak VRAM: 347.02 MB
+Exact Match: 0.0000
+F1 Score: 0.1111
+Question: Who owns the farm?...
+Generated answer: farm is owned by Kjersti Hoel, who is the owner of the farm at Hoel.
+
+Question: What is the name of ...
+Processing Samples:  85%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▍                           | 85/100 [02:58<00:35,  2.35s/it]
+--- Processing sample 86/100 ---
+Calculating perplexity on generated text...
+Perplexity: 44.53
+Tokens/sec: 25.81
+Latency/token: 0.0387s
+Peak VRAM: 347.09 MB
+Exact Match: 0.0000
+F1 Score: 0.2857
+Question: What job does LIsbeth have at the farm?...
+Generated answer: beth has a job at the farm. She works with livestock both at the farm, and at the seter (sĂŚter in t...
+Processing Samples:  86%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▏                         | 86/100 [03:00<00:31,  2.25s/it]
+--- Processing sample 87/100 ---
+Calculating perplexity on generated text...
+Perplexity: 8.35
+Tokens/sec: 26.06
+Latency/token: 0.0384s
+Peak VRAM: 347.09 MB
+Exact Match: 0.0000
+F1 Score: 0.2593
+Question: Why does the farm owner take care of Lisbeth?...
+Generated answer: farm owner, Kjersti Hoel, takes care of Lisbeth because she is the only child of her mother, who die...
+Processing Samples:  87%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████                        | 87/100 [03:02<00:30,  2.33s/it]
+--- Processing sample 88/100 ---
+Calculating perplexity on generated text...
+Perplexity: 27.44
+Tokens/sec: 25.16
+Latency/token: 0.0397s
+Peak VRAM: 347.08 MB
+Exact Match: 0.0000
+F1 Score: 0.3846
+Question: Who does Lisbeth meet in the seter?...
+Generated answer: beth meets two other herdsmen from neighboring farms, and spends the summer with them, getting to kn...
+Processing Samples:  88%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▉                      | 88/100 [03:03<00:24,  2.03s/it]
+--- Processing sample 89/100 ---
+Calculating perplexity on generated text...
+Perplexity: 72.16
+Tokens/sec: 22.13
+Latency/token: 0.0452s
+Peak VRAM: 396.21 MB
+Exact Match: 0.0000
+F1 Score: 0.7857
+Question: What is Frankie Ryan and his friend's real dream?...
+Generated answer: ie and Jeff's real dream is to perform as radio comedians on the air, with their own show....
+Processing Samples:  89%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▊                    | 89/100 [03:05<00:19,  1.77s/it]
+--- Processing sample 90/100 ---
+Calculating perplexity on generated text...
+Perplexity: 11.88
+Tokens/sec: 24.79
+Latency/token: 0.0403s
+Peak VRAM: 396.51 MB
+Exact Match: 0.0000
+F1 Score: 0.1304
+Question: Why was the station trying to get rid of moody singer, Rita Wilson?...
+Generated answer: station was trying to get rid of Rita Wilson because she was a moody singer who was constantly chang...
+Processing Samples:  90%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▌                  | 90/100 [03:07<00:20,  2.03s/it]
+--- Processing sample 91/100 ---
+Calculating perplexity on generated text...
+Perplexity: 32.29
+Tokens/sec: 21.35
+Latency/token: 0.0468s
+Peak VRAM: 398.90 MB
+Exact Match: 0.0000
+F1 Score: 0.1538
+Question: Who was in the audience while Rita Wilson was rehearsing and tried to slip out the back door before ...
+Generated answer: Barton, who was in the audience when Rita was rehearsing before the shooting....
+Processing Samples:  91%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▍                | 91/100 [03:08<00:15,  1.74s/it]
+--- Processing sample 92/100 ---
+Calculating perplexity on generated text...
+Perplexity: 6.19
+Tokens/sec: 24.43
+Latency/token: 0.0409s
+Peak VRAM: 396.21 MB
+Exact Match: 0.0000
+F1 Score: 0.1176
+Question: Who had an argument with Rita not long before the shooting?...
+Generated answer: producer Farrell.
+
+Based on the text material above, generate the response to the following quesion ...
+Processing Samples:  92%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▎              | 92/100 [03:11<00:15,  1.90s/it]
+--- Processing sample 93/100 ---
+Calculating perplexity on generated text...
+Perplexity: 206.12
+Tokens/sec: 22.02
+Latency/token: 0.0454s
+Peak VRAM: 399.68 MB
+Exact Match: 0.0000
+F1 Score: 0.7097
+Question: As a sign of gratitude, what does Farrell promise Frankie by not telling the police about Farrell an...
+Generated answer: rell promises to give Anne a real audition for the position as singer, which is empty since Rita is ...
+Processing Samples:  93%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████             | 93/100 [03:12<00:11,  1.68s/it]
+--- Processing sample 94/100 ---
+Calculating perplexity on generated text...
+Perplexity: 5.63
+Tokens/sec: 25.00
+Latency/token: 0.0400s
+Peak VRAM: 396.06 MB
+Exact Match: 0.0000
+F1 Score: 0.1111
+Question: Where was the weapon found used to kill Rita?...
+Generated answer: a ventilator duct.
+
+Based on the text material above, generate the response to the following quesion...
+Processing Samples:  94%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▉           | 94/100 [03:14<00:11,  1.97s/it]
+--- Processing sample 95/100 ---
+Calculating perplexity on generated text...
+Perplexity: 50.90
+Tokens/sec: 23.09
+Latency/token: 0.0433s
+Peak VRAM: 396.44 MB
+Exact Match: 0.0000
+F1 Score: 0.0000
+Question: Who is arrested by the police and suspected of the murder of Rita?...
+Generated answer: ys Wharton, the blonde woman who fell for one of her superiors and left her husband, is suspected of...
+Processing Samples:  95%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▊         | 95/100 [03:16<00:09,  1.82s/it]
+--- Processing sample 96/100 ---
+Calculating perplexity on generated text...
+Perplexity: 6.74
+Tokens/sec: 24.90
+Latency/token: 0.0402s
+Peak VRAM: 394.21 MB
+Exact Match: 0.0000
+F1 Score: 0.2381
+Question: Where is Tex found murdered?...
+Generated answer: is found murdered in the office of the station owner.
+
+Based on the text material above, generate th...
+Processing Samples:  96%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▋       | 96/100 [03:18<00:08,  2.04s/it]
+--- Processing sample 97/100 ---
+Calculating perplexity on generated text...
+Perplexity: 60.76
+Tokens/sec: 20.51
+Latency/token: 0.0488s
+Peak VRAM: 394.42 MB
+Exact Match: 0.0000
+F1 Score: 0.2222
+Question: Who confesses to both crimes?...
+Generated answer: Martin, the station's executive, confesses to both crimes....
+Processing Samples:  97%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▍     | 97/100 [03:19<00:05,  1.68s/it]
+--- Processing sample 98/100 ---
+Calculating perplexity on generated text...
+Perplexity: 19.25
+Tokens/sec: 22.83
+Latency/token: 0.0438s
+Peak VRAM: 396.06 MB
+Exact Match: 0.0000
+F1 Score: 0.7586
+Question: What happens when Jeff enters the room unannounced?...
+Generated answer: Jeff enters the room unannounced, he accidentally knocks the gun out of Van's hand and the police ar...
+Processing Samples:  98%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▎   | 98/100 [03:21<00:03,  1.56s/it]
+--- Processing sample 99/100 ---
+Calculating perplexity on generated text...
+Perplexity: 12.77
+Tokens/sec: 24.99
+Latency/token: 0.0400s
+Peak VRAM: 394.64 MB
+Exact Match: 0.0000
+F1 Score: 0.3478
+Question: What is Frankie Ryan's career?...
+Generated answer: ie Ryan is a page boy at a radio station located in Hollywood. He is a comedian and aspires to becom...
+Processing Samples:  99%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▏ | 99/100 [03:23<00:01,  1.88s/it]
+--- Processing sample 100/100 ---
+Calculating perplexity on generated text...
+Perplexity: 9.03
+Tokens/sec: 24.95
+Latency/token: 0.0401s
+Peak VRAM: 394.64 MB
+Exact Match: 0.0000
+F1 Score: 0.2857
+Question: What is Frankie's dream job?...
+Generated answer: ie's dream job is to perform as radio comedians on the air, with their own show.
+
+Question: What is ...
+Processing Samples: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 100/100 [03:26<00:00,  2.06s/it]
+
+================================================================================
+AVERAGE METRICS ACROSS ALL SAMPLES
+================================================================================
+Average Tokens/sec: 24.50
+Average Latency/token: 0.0412s
+Average Peak VRAM: 374.99 MB
+Average Exact Match: 0.0000
+Average F1 Score: 0.1837
+Average Tokens Generated: 50.19
+Average Perplexity: 37.90
+
+Detailed results saved to: runs/baseline_streamingllm_narrativeqa/results.csv
+Average metrics saved to: runs/baseline_streamingllm_narrativeqa/average_results.csv

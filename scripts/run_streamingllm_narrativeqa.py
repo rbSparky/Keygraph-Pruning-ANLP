@@ -12,6 +12,9 @@ from keygraph.streaming.streaming_llm.enable_streaming_llm import enable_streami
 from keygraph.models import load_model_and_tokenizer
 from tqdm import tqdm
 
+import time
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from typing import Tuple, Optional, Callable
 
 @torch.no_grad()
 def compute_perplexity(model, tokenizer, text, stride=512):
@@ -49,57 +52,67 @@ def compute_perplexity(model, tokenizer, text, stride=512):
             
     ppl = torch.exp(torch.stack(nlls).mean())
     return ppl.item()
-
-def streaming_llm_generate(model, tokenizer, prompt, max_new_tokens, kv_cache):
+@torch.no_grad()
+def streaming_llm_generate(
+    model: AutoModelForCausalLM,
+    tokenizer: AutoTokenizer,
+    prompt: str,
+    max_new_tokens: int,
+    kv_cache: Callable  # This is the function from enable_streaming_llm
+) -> Tuple[str, dict]:
     """
-    Generates text using StreamingLLM by processing the prompt in chunks to avoid OOM.
+    Generates text using StreamingLLM.
+    MODIFIED: This version DOES NOT TRUNCATE the prompt.
+    It processes the full, long context in chunks.
     """
     device = model.device
     metrics = {}
-    inputs = tokenizer(prompt, return_tensors="pt").to(device)
+    
+    # 1. Tokenize the prompt WITHOUT TRUNCATION
+    print("Tokenizing full prompt (no truncation)...")
+    inputs = tokenizer(
+        prompt, 
+        return_tensors="pt",
+        truncation=False,  # <--- MODIFIED
+        max_length=None,   # <--- MODIFIED
+        padding=False
+    ).to(device)
+    
     input_ids = inputs.input_ids
+    print(f"Full prompt token count: {input_ids.shape[1]}")
 
+    # 2. Reset VRAM and start timer
     if torch.cuda.is_available():
         torch.cuda.reset_peak_memory_stats(device)
         torch.cuda.empty_cache()
+    
     start_time = time.perf_counter()
-
-    # Initialize with None - let the model create the cache structure
+    
+    # 3. Process prompt in chunks (Prefill)
     past_key_values = None
-    prompt_chunk_size = 512
+    prompt_chunk_size = 512  # Process 512 tokens at a time
     
-    # Process prompt in chunks
-    num_chunks = (input_ids.shape[1] + prompt_chunk_size - 1) // prompt_chunk_size
-    
+    print(f"Processing prompt in {input_ids.shape[1] // prompt_chunk_size + 1} chunks...")
     for i in range(0, input_ids.shape[1], prompt_chunk_size):
-        chunk = input_ids[:, i:i + prompt_chunk_size]
+        chunk = input_ids[:, i:min(i + prompt_chunk_size, input_ids.shape[1])]
         
         with torch.no_grad():
-            # For the first chunk, past_key_values will be None
-            # For subsequent chunks, we pass the cached values
             outputs = model(
                 input_ids=chunk, 
                 past_key_values=past_key_values, 
                 use_cache=True
             )
         
-        # Apply streaming KV cache management after the model forward pass
-        # This keeps only the recent tokens and attention sinks
-        past_key_values = outputs.past_key_values
-        
-        # Only apply kv_cache eviction starting from the second chunk
-        # This ensures the cache is properly initialized first
-        if past_key_values is not None and i > 0:
-            past_key_values = kv_cache(past_key_values)
-
-    # After processing all prompt chunks, apply kv_cache one more time
-    if past_key_values is not None:
-        past_key_values = kv_cache(past_key_values)
-
-    # Generate new tokens
+        # Apply StreamingLLM eviction *after* each chunk
+        past_key_values = kv_cache(outputs.past_key_values)
+    
+    print("Prompt processing complete.")
+    
+    # 4. Generation loop
     generated_ids = []
+    # Get the next token prediction from the last chunk's output
     pred_token_idx = outputs.logits[:, -1, :].argmax(dim=-1).unsqueeze(1)
-
+    
     for _ in range(max_new_tokens):
         with torch.no_grad():
             outputs = model(
@@ -108,17 +121,20 @@ def streaming_llm_generate(model, tokenizer, prompt, max_new_tokens, kv_cache):
                 use_cache=True
             )
         
+        # Apply StreamingLLM eviction *after* each new token
         past_key_values = kv_cache(outputs.past_key_values)
-        pred_token_idx = outputs.logits[:, -1, :].argmax(dim=-1).unsqueeze(1)
-        generated_ids.append(pred_token_idx.item())
         
-        if pred_token_idx.item() == tokenizer.eos_token_id:
+        pred_token_idx = outputs.logits[:, -1, :].argmax(dim=-1).unsqueeze(1)
+        token_id = pred_token_idx.item()
+        generated_ids.append(token_id)
+        
+        if token_id == tokenizer.eos_token_id:
             break
-
+    
     end_time = time.perf_counter()
     generated_text = tokenizer.decode(generated_ids, skip_special_tokens=True)
-
-    # Calculate metrics
+    
+    # 5. Calculate metrics
     total_time = end_time - start_time
     tokens_generated = len(generated_ids)
     
@@ -126,9 +142,8 @@ def streaming_llm_generate(model, tokenizer, prompt, max_new_tokens, kv_cache):
     metrics['tokens_per_second'] = tokens_generated / total_time if total_time > 0 else 0
     metrics['tokens_generated'] = tokens_generated
     metrics['peak_vram_mb'] = torch.cuda.max_memory_allocated(device) / (1024 * 1024) if torch.cuda.is_available() else 0.0
-
+    
     return generated_text, metrics
-
 
 def main(args):
     # Load model and tokenizer
@@ -248,3 +263,14 @@ if __name__ == "__main__":
     parser.add_argument("--compute_ppl", action="store_true", help="Enable perplexity calculation")
     args = parser.parse_args()
     main(args)
+
+
+#     --model_dir "TinyLlama/TinyLlama-1.1B-Chat-v1.0" \
+#     --dataset "narrativeqa" \
+#     --dataset_dir "narrativeqa" \
+#     --baseline "full" \
+#     --num_samples 100 \
+#     --max_new_tokens 64 \
+#     --compute_ppl
+
+# python3 run_streamingllm_narrativeqa.py     --model_dir "TinyLlama/TinyLlama-1.1B-Chat-v1.0"     --dataset_dir "narrativeqa"     --num_samples 100     --max_new_tokens 256     --compute_ppl

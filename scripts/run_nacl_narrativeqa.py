@@ -12,7 +12,9 @@ from keygraph.logging_utils import log_metrics_to_csv
 from nacl_eviction import NACLEviction
 from keygraph.models import load_model_and_tokenizer
 from tqdm import tqdm
-
+import time
+from transformers import AutoModelForCausalLM, AutoTokenizer, DynamicCache
+from typing import Tuple, Optional, Callable
 
 @torch.no_grad()
 def compute_perplexity(model, tokenizer, text, stride=512):
@@ -51,21 +53,44 @@ def compute_perplexity(model, tokenizer, text, stride=512):
     ppl = torch.exp(torch.stack(nlls).mean())
     return ppl.item()
 
-
 @torch.no_grad()
 def nacl_generate(model, tokenizer, prompt, max_new_tokens, nacl_eviction, args):
     """
     Generates text using NACL KV cache eviction.
     
-    IMPORTANT: NACL eviction is applied AFTER the full prompt is encoded,
-    not during chunked processing.
+    MODIFIED: This version is now aware of the model's 2048 limit.
+    It loads the full prompt, logs its real length, and then
+    truncates it to the 2048-token limit, just like the 'Full' baseline.
     """
     device = model.device
     metrics = {}
     
-    # Tokenize the prompt
-    inputs = tokenizer(prompt, return_tensors="pt").to(device)
+    # --- MODIFICATION START ---
+    # 1. Tokenize the prompt WITHOUT TRUNCATION to see its real length
+    print("Tokenizing full prompt (no truncation)...")
+    inputs = tokenizer(
+        prompt,
+        return_tensors="pt",
+        truncation=False,
+        max_length=None,
+        padding=False
+    ).to(device)
+    
     input_ids = inputs.input_ids
+    prompt_tokens = input_ids.shape[1]
+    print(f"Full prompt token count: {prompt_tokens}")
+
+    # 2. Check against model's hard limit and truncate
+    max_pos = model.config.max_position_embeddings
+    if prompt_tokens > max_pos:
+        print(f"WARNING: Prompt ({prompt_tokens} tokens) exceeds model's max position embeddings ({max_pos}).")
+        # Truncate to fit the model's absolute limit
+        input_ids = input_ids[:, -max_pos:]
+        print(f"Truncated to {input_ids.shape[1]} tokens to fit model max length.")
+    
+    original_cache_size = input_ids.shape[1] # This will be 2048 for long docs
+    # --- MODIFICATION END ---
+    
     
     # Performance measurement setup
     if torch.cuda.is_available():
@@ -73,16 +98,15 @@ def nacl_generate(model, tokenizer, prompt, max_new_tokens, nacl_eviction, args)
         torch.cuda.empty_cache()
     start_time = time.perf_counter()
 
-    # ===== PHASE 1: ENCODE FULL PROMPT (NO EVICTION YET) =====
+    # ===== PHASE 1: ENCODE FULL (TRUNCATED) PROMPT =====
     past_key_values = None
     prompt_chunk_size = args.chunk_size
     
     print(f"Processing prompt with NACL (length: {input_ids.shape[1]} tokens)...")
-    print(f"  Chunk size: {prompt_chunk_size}")
     
     # Process prompt in chunks WITHOUT eviction
     for i in range(0, input_ids.shape[1], prompt_chunk_size):
-        chunk = input_ids[:, i:i + prompt_chunk_size]
+        chunk = input_ids[:, i:min(i + prompt_chunk_size, input_ids.shape[1])]
         
         with torch.no_grad():
             outputs = model(
@@ -94,27 +118,43 @@ def nacl_generate(model, tokenizer, prompt, max_new_tokens, nacl_eviction, args)
         # Update past_key_values WITHOUT eviction during prefill
         past_key_values = outputs.past_key_values
         
-        if i % (prompt_chunk_size * 4) == 0:  # Print every 4 chunks
-            print(f"  Processed {i + chunk.shape[1]} / {input_ids.shape[1]} tokens")
+    # Convert DynamicCache to tuple for NACL eviction
+    if hasattr(past_key_values, 'to_legacy_cache'):
+        past_key_values_tuple = past_key_values.to_legacy_cache()
+    else:
+        past_key_values_tuple = past_key_values # Assume it's already a tuple
     
-    print(f"Prefill complete. Full KV cache size: {past_key_values[0][0].shape[2]} tokens")
+    print(f"Prefill complete. Full KV cache size: {past_key_values_tuple[0][0].shape[2]} tokens")
     
     # ===== PHASE 2: APPLY NACL EVICTION TO FULL CACHE =====
     print("Applying NACL eviction to full KV cache...")
-    past_key_values = nacl_eviction.evict(
-        past_key_values=past_key_values,
+    evicted_cache_tuple = nacl_eviction.evict(
+        past_key_values=past_key_values_tuple,
         current_length=input_ids.shape[1]
     )
     
-    if past_key_values is not None:
-        evicted_cache_size = past_key_values[0][0].shape[2]
+    if evicted_cache_tuple is not None:
+        evicted_cache_size = evicted_cache_tuple[0][0].shape[2]
         print(f"After eviction, KV cache size: {evicted_cache_size} tokens")
+        
+        # Convert tuple back to DynamicCache for model compatibility
+        if hasattr(DynamicCache, 'from_legacy_cache'):
+             past_key_values = DynamicCache.from_legacy_cache(evicted_cache_tuple)
+        else:
+             past_key_values = evicted_cache_tuple # Fallback
     else:
         print("Warning: eviction returned None!")
-        return "", {}
+        evicted_cache_size = 0
+        past_key_values = None # Reset cache
 
     # ===== PHASE 3: GENERATION WITH COMPRESSED CACHE =====
     generated_ids = []
+    
+    # Handle edge case where cache is empty
+    if past_key_values is None:
+        print("Error: KV Cache is None after eviction. Aborting generation.")
+        return "", {}
+        
     pred_token_idx = outputs.logits[:, -1, :].argmax(dim=-1).unsqueeze(1)
 
     for step in range(max_new_tokens):
@@ -125,14 +165,29 @@ def nacl_generate(model, tokenizer, prompt, max_new_tokens, nacl_eviction, args)
                 use_cache=True
             )
         
+        current_seq_len = original_cache_size + step + 1
+        
+        # Convert to tuple, evict, convert back
+        if hasattr(outputs.past_key_values, 'to_legacy_cache'):
+            pkv_tuple = outputs.past_key_values.to_legacy_cache()
+        else:
+            pkv_tuple = outputs.past_key_values
+            
         # During generation, optionally continue eviction
         if args.evict_during_generation:
-            past_key_values = nacl_eviction.evict(
-                past_key_values=outputs.past_key_values,
-                current_length=input_ids.shape[1] + step + 1
+            evicted_tuple = nacl_eviction.evict(
+                past_key_values=pkv_tuple,
+                current_length=current_seq_len
             )
         else:
-            past_key_values = outputs.past_key_values
+            # If not evicting, just pass the cache through
+            evicted_tuple = pkv_tuple
+
+        # Convert back to DynamicCache
+        if hasattr(DynamicCache, 'from_legacy_cache'):
+            past_key_values = DynamicCache.from_legacy_cache(evicted_tuple)
+        else:
+            past_key_values = evicted_tuple
         
         pred_token_idx = outputs.logits[:, -1, :].argmax(dim=-1).unsqueeze(1)
         generated_ids.append(pred_token_idx.item())
@@ -158,18 +213,11 @@ def nacl_generate(model, tokenizer, prompt, max_new_tokens, nacl_eviction, args)
     else:
         metrics['peak_vram_mb'] = 0.0
     
-    # Calculate compression ratio
-    original_cache_size = input_ids.shape[1]  # Original prompt length
-    if past_key_values is not None:
-        compressed_cache_size = past_key_values[0][0].shape[2]  # Actual cache size
-        metrics['compression_ratio'] = compressed_cache_size / original_cache_size if original_cache_size > 0 else 1.0
-        metrics['cache_size'] = compressed_cache_size
-    else:
-        metrics['compression_ratio'] = 1.0
-        metrics['cache_size'] = original_cache_size
+    # Calculate compression ratio based on the final evicted cache size
+    metrics['compression_ratio'] = evicted_cache_size / original_cache_size if original_cache_size > 0 else 1.0
+    metrics['cache_size'] = evicted_cache_size # The size after the *initial* eviction
 
     return generated_text, metrics
-
 
 def main(args):
     # Load model and tokenizer

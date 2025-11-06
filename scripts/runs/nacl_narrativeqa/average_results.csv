@@ -1,0 +1,3 @@
+tokens_per_second,latency_per_token,peak_vram_mb,compression_ratio,cache_size,tokens_generated,exact_match,f1,perplexity,baseline,model,num_samples,proxy_tokens_ratio,proxy_token_keep_ratio,random_token_keep_ratio,sink_tokens
+29.18209990893472,0.034645488143852925,332.2374267578125,1.1268516487347315,535.36,50.09,0.0,0.18434622061212494,55.378093638420104,nacl,TinyLlama/TinyLlama-1.1B-Chat-v1.0,100,0.01,0.12,0.07,256
+41.69285751803276,0.024046224041703153,2211.7937255859374,1.0,485.27,49.6,0.0,0.19046955479428265,56.255450234413146,nacl,TinyLlama/TinyLlama-1.1B-Chat-v1.0,100,0.01,0.12,0.07,256
