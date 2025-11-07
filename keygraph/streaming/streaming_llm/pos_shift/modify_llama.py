@@ -13,6 +13,7 @@ from transformers.models.llama.modeling_llama import (
     apply_rotary_pos_emb,
     repeat_kv,
 )
+from transformers.cache_utils import Cache, DynamicCache
 import types
 
 __all__ = ["enable_llama_pos_shift_attention"]
@@ -34,10 +35,17 @@ def llama_pos_shift_attention_forward(
     attention_mask: Optional[torch.Tensor] = None,
     position_ids: Optional[torch.LongTensor] = None,
     past_key_value: Optional[Tuple[torch.Tensor]] = None,
+    past_key_values: Optional[Cache] = None,  # Support new Cache objects
     output_attentions: bool = False,
     use_cache: bool = False,
+    cache_position: Optional[torch.LongTensor] = None,
     **kwargs,
 ) -> Tuple[torch.Tensor, Optional[torch.Tensor], Optional[Tuple[torch.Tensor]]]:
+    
+    # Handle both parameter names for compatibility
+    if past_key_values is not None:
+        past_key_value = past_key_values
+    
     bsz, q_len, _ = hidden_states.size()
 
     if self.config.pretraining_tp > 1:
@@ -83,21 +91,56 @@ def llama_pos_shift_attention_forward(
         bsz, q_len, self.num_key_value_heads, self.head_dim
     ).transpose(1, 2)
 
+    # FIXED: Handle both Cache objects and tuples
     kv_seq_len = key_states.shape[-2]
     if past_key_value is not None:
-        kv_seq_len += past_key_value[0].shape[-2]
+        if isinstance(past_key_value, Cache):
+            # For Cache objects, get the length properly
+            try:
+                cache_len = past_key_value.get_seq_length(self.layer_idx)
+                kv_seq_len += cache_len
+            except:
+                # Cache is empty, no additional length
+                pass
+        elif isinstance(past_key_value, (tuple, list)) and len(past_key_value) > 0:
+            # For tuple format
+            kv_seq_len += past_key_value[0].shape[-2]
+    
+    # Get rotary embeddings - use seq_len as INTEGER (not tensor!)
     cos, sin = self.rotary_emb(value_states, seq_len=kv_seq_len)
+    
+    # Generate position_ids if not provided
+    if position_ids is None:
+        if cache_position is not None:
+            position_ids = cache_position.unsqueeze(0)
+        else:
+            position_ids = torch.arange(
+                kv_seq_len - q_len, kv_seq_len, dtype=torch.long, device=hidden_states.device
+            )
+            position_ids = position_ids.unsqueeze(0)
+    
     ### Shift Pos: query pos is min(cache_size, idx)
-    # query_states, key_states = apply_rotary_pos_emb(query_states, key_states, cos, sin, position_ids)
     query_states = apply_rotary_pos_emb_single(query_states, cos, sin, position_ids)
     ###
 
+    # FIXED: Handle both Cache objects and tuples for concatenation
     if past_key_value is not None:
-        # reuse k, v, self_attention
-        key_states = torch.cat([past_key_value[0], key_states], dim=2)
-        value_states = torch.cat([past_key_value[1], value_states], dim=2)
+        if isinstance(past_key_value, Cache):
+            # For Cache objects, use update method which handles concatenation
+            key_states, value_states = past_key_value.update(key_states, value_states, self.layer_idx)
+        elif isinstance(past_key_value, (tuple, list)) and len(past_key_value) > 0:
+            # For tuple format, manual concatenation
+            key_states = torch.cat([past_key_value[0], key_states], dim=2)
+            value_states = torch.cat([past_key_value[1], value_states], dim=2)
 
-    past_key_value = (key_states, value_states) if use_cache else None
+    # Prepare return value for cache
+    if use_cache:
+        if isinstance(past_key_value, Cache):
+            past_key_value_return = past_key_value
+        else:
+            past_key_value_return = (key_states, value_states)
+    else:
+        past_key_value_return = None
 
     ### Shift Pos: key pos is the pos in cache
     key_position_ids = torch.arange(kv_seq_len, device=position_ids.device).unsqueeze(0)
@@ -159,17 +202,30 @@ def llama_pos_shift_attention_forward(
     if not output_attentions:
         attn_weights = None
 
-    return attn_output, attn_weights, past_key_value
+    return attn_output, attn_weights, past_key_value_return
 
 
-def enable_llama_pos_shift_attention(model):
-    for name, module in reversed(model._modules.items()):
-        if len(list(module.children())) > 0:
-            enable_llama_pos_shift_attention(
-                module,
-            )
-
-        if isinstance(module, LlamaAttention):
-            model._modules[name].forward = types.MethodType(
-                llama_pos_shift_attention_forward, model._modules[name]
-            )
+def enable_llama_pos_shift_attention(model, recent_size=1020):
+    """
+    Enable position-shifted attention for StreamingLLM.
+    
+    Args:
+        model: The LLaMA model to modify
+        recent_size: Size of the recent token window (not used in this version but kept for compatibility)
+    """
+    # Add layer_idx to each attention module for Cache compatibility
+    for idx, layer in enumerate(model.model.layers):
+        layer.self_attn.layer_idx = idx
+    
+    # Recursively replace forward methods
+    def replace_forward(module):
+        for name, submodule in module._modules.items():
+            if len(list(submodule.children())) > 0:
+                replace_forward(submodule)
+            
+            if isinstance(submodule, LlamaAttention):
+                module._modules[name].forward = types.MethodType(
+                    llama_pos_shift_attention_forward, module._modules[name]
+                )
+    
+    replace_forward(model)

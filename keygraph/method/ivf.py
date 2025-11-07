@@ -37,10 +37,8 @@ def _faiss_ivf_flat_neighbors(
         nlist = min(nlist, 1024)
     nprobe = int(params.get("nprobe", 16))
     nprobe = max(1, min(nprobe, nlist))
-
     train_subset = int(params.get("train_subset", min(N, 4096)))
     seed = int(params.get("seed", 42))
-
     # Normalize to cosine and cast to float32 (FAISS expects float32)
     # Keep data contiguous to avoid copies.
     phi_norm = torch.nn.functional.normalize(phi.to(dtype=torch.float32), dim=1)

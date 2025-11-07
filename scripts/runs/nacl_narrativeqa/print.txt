@@ -1,0 +1,3039 @@
+Warning: flash_attn not available. Using fallback attention implementation.
+Loading model from TinyLlama/TinyLlama-1.1B-Chat-v1.0...
+Loading model and tokenizer from TinyLlama/TinyLlama-1.1B-Chat-v1.0
+`torch_dtype` is deprecated! Use `dtype` instead!
+Model and tokenizer loaded successfully.
+Initializing NACL...
+NACL initialized (ACL 2024):
+  - proxy_tokens_ratio: 0.01 (1.0%)
+  - proxy_token_keep_ratio: 0.12 (12.0%)
+  - random_token_keep_ratio: 0.07 (7.0%)
+  - sink_tokens: 256
+  - num_attention_heads: 32
+  - num_kv_heads: 4
+  - FlashAttention available: False
+Resolving data files: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 24/24 [00:00<00:00, 27969.80it/s]
+Resolving data files: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 24/24 [00:00<00:00, 32222.57it/s]
+Loading dataset shards: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 18/18 [00:00<00:00, 3040.09it/s]
+-> Successfully loaded dataset. Available splits: ['train', 'test', 'validation']
+Processing samples:   0%|                                                                                                                                                                                                 | 0/100 [00:00<?, ?it/s]
+============================================================
+Processing sample 1/100
+============================================================
+Prompt length: 758 tokens
+Question: Who is Mark Hunter?...
+Processing prompt with NACL (length: 758 tokens)...
+  Chunk size: 512
+  Processed 512 / 758 tokens
+Prefill complete. Full KV cache size: 758 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 758 tokens
+Calculating perplexity on generated text...
+Perplexity: 9.32
+
+--- Results ---
+Tokens/sec: 20.15
+Latency/token: 0.0496s
+Peak VRAM: 349.65 MB
+Compression ratio: 1.08x
+Cache size: 822 tokens
+Exact Match: 0.0000
+F1: 0.3043
+
+Generated answer: Hunter is a high school student in a sleepy suburb of Phoenix, Arizona, who starts an FM pirate radio station that broadcasts from the basement of his parents' house. He is a loner, an outsider, whose...
+Ground truth answers: ['He is a high school student in Phoenix.', 'A loner and outsider student with a radio station.']
+============================================================
+
+Processing samples:   1%|█▊                                                                                                                                                                                       | 1/100 [00:03<05:23,  3.27s/it]
+============================================================
+Processing sample 2/100
+============================================================
+Prompt length: 761 tokens
+Question: Where does this radio station take place?...
+Processing prompt with NACL (length: 761 tokens)...
+  Chunk size: 512
+  Processed 512 / 761 tokens
+Prefill complete. Full KV cache size: 761 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 761 tokens
+Calculating perplexity on generated text...
+Perplexity: 8.04
+
+--- Results ---
+Tokens/sec: 29.53
+Latency/token: 0.0339s
+Peak VRAM: 349.84 MB
+Compression ratio: 1.08x
+Cache size: 825 tokens
+Exact Match: 0.0000
+F1: 0.1277
+
+Generated answer: radio station takes place in a small town in Arizona, specifically in a sleepy suburb of Phoenix.
+
+Question: Who is the radio host and what is his name?
+
+Answer: The radio host is Mark Hunter, a high ...
+Ground truth answers: ["It takes place in Mark's parents basement. ", 'Phoenix, Arizona']
+============================================================
+
+Processing samples:   2%|███▋                                                                                                                                                                                     | 2/100 [00:05<04:19,  2.65s/it]
+============================================================
+Processing sample 3/100
+============================================================
+Prompt length: 765 tokens
+Question: Why do more students tune into Mark's show?...
+Processing prompt with NACL (length: 765 tokens)...
+  Chunk size: 512
+  Processed 512 / 765 tokens
+Prefill complete. Full KV cache size: 765 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 765 tokens
+Calculating perplexity on generated text...
+Perplexity: 13.09
+
+--- Results ---
+Tokens/sec: 29.56
+Latency/token: 0.0338s
+Peak VRAM: 350.09 MB
+Compression ratio: 1.08x
+Cache size: 829 tokens
+Exact Match: 0.0000
+F1: 0.1724
+
+Generated answer: 's show becomes increasingly popular and influential after he confronts the suicide head-on, exhorting his listeners to do something about their problems instead of surrendering to them through suicid...
+Ground truth answers: ['Mark talks about what goes on at school and in the community.', 'Because he has a thing to say about what is happening at his school and the community.']
+============================================================
+
+Processing samples:   3%|█████▌                                                                                                                                                                                   | 3/100 [00:07<03:57,  2.45s/it]
+============================================================
+Processing sample 4/100
+============================================================
+Prompt length: 758 tokens
+Question: Who commits suicide?...
+Processing prompt with NACL (length: 758 tokens)...
+  Chunk size: 512
+  Processed 512 / 758 tokens
+Prefill complete. Full KV cache size: 758 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 758 tokens
+Calculating perplexity on generated text...
+Perplexity: 8.77
+
+--- Results ---
+Tokens/sec: 29.57
+Latency/token: 0.0338s
+Peak VRAM: 349.65 MB
+Compression ratio: 1.08x
+Cache size: 822 tokens
+Exact Match: 0.0000
+F1: 0.0571
+
+Generated answer: colm, a student at the school.
+
+Question: What is the reason for the suicide?
+
+Answer: Malcolm is struggling with depression and has been struggling with his grades.
+
+Question: How does the radio show...
+Ground truth answers: ['Malcolm.', 'Malcolm.']
+============================================================
+
+Processing samples:   4%|███████▍                                                                                                                                                                                 | 4/100 [00:09<03:46,  2.36s/it]
+============================================================
+Processing sample 5/100
+============================================================
+Prompt length: 764 tokens
+Question: What does Paige jam into her microwave?...
+Processing prompt with NACL (length: 764 tokens)...
+  Chunk size: 512
+  Processed 512 / 764 tokens
+Prefill complete. Full KV cache size: 764 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 764 tokens
+Calculating perplexity on generated text...
+Perplexity: 14.90
+
+--- Results ---
+Tokens/sec: 29.60
+Latency/token: 0.0338s
+Peak VRAM: 350.03 MB
+Compression ratio: 1.08x
+Cache size: 828 tokens
+Exact Match: 0.0000
+F1: 0.2273
+
+Generated answer: ige Woodward, a student at the school, jams her various medals and accolades into a microwave and turns it on. This is a metaphor for the students' own achievements and the achievements of their teach...
+Ground truth answers: ['She jams her medals and accolades. ', 'Her award medals']
+============================================================
+
+Processing samples:   5%|█████████▎                                                                                                                                                                               | 5/100 [00:12<03:38,  2.30s/it]
+============================================================
+Processing sample 6/100
+============================================================
+Prompt length: 762 tokens
+Question: What does Mark do with his radio station?...
+Processing prompt with NACL (length: 762 tokens)...
+  Chunk size: 512
+  Processed 512 / 762 tokens
+Prefill complete. Full KV cache size: 762 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 762 tokens
+Calculating perplexity on generated text...
+Perplexity: 18.32
+
+--- Results ---
+Tokens/sec: 29.55
+Latency/token: 0.0338s
+Peak VRAM: 349.90 MB
+Compression ratio: 1.08x
+Cache size: 826 tokens
+Exact Match: 0.0000
+F1: 0.3396
+
+Generated answer: dismantles his radio station and attaches it to his mother's old jeep, creating a mobile transmitter so his position can't be triangulated. He broadcasts his final message as himself, telling the stud...
+Ground truth answers: ["He dismantles it and attaches it to his mother's jeep.", 'Dismantle it.']
+============================================================
+
+Processing samples:   6%|███████████                                                                                                                                                                              | 6/100 [00:14<03:33,  2.27s/it]
+============================================================
+Processing sample 7/100
+============================================================
+Prompt length: 762 tokens
+Question: What does Mark tell the protesting students?...
+Processing prompt with NACL (length: 762 tokens)...
+  Chunk size: 512
+  Processed 512 / 762 tokens
+Prefill complete. Full KV cache size: 762 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 762 tokens
+Calculating perplexity on generated text...
+Perplexity: 20.50
+
+--- Results ---
+Tokens/sec: 26.72
+Latency/token: 0.0374s
+Peak VRAM: 349.90 MB
+Compression ratio: 1.04x
+Cache size: 789 tokens
+Exact Match: 0.0000
+F1: 0.6875
+
+Generated answer: the final scene of the film, Mark tells the students that the world belongs to them and that they should make their own future....
+Ground truth answers: ['He tells them to make their own future.', 'That they should make their own future because the world belongs to them.']
+============================================================
+
+Processing samples:   7%|████████████▉                                                                                                                                                                            | 7/100 [00:15<02:55,  1.89s/it]
+============================================================
+Processing sample 8/100
+============================================================
+Prompt length: 757 tokens
+Question: Who gets arrested?...
+Processing prompt with NACL (length: 757 tokens)...
+  Chunk size: 512
+  Processed 512 / 757 tokens
+Prefill complete. Full KV cache size: 757 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 757 tokens
+Calculating perplexity on generated text...
+Perplexity: 13.44
+
+--- Results ---
+Tokens/sec: 29.59
+Latency/token: 0.0338s
+Peak VRAM: 349.58 MB
+Compression ratio: 1.08x
+Cache size: 821 tokens
+Exact Match: 0.0000
+F1: 0.1667
+
+Generated answer: and Nora.
+
+Question: What happens to the radio station?
+
+Answer: It's dismantled and the mobile transmitter is attached to the jeep.
+
+Question: What happens to the harmonizer?
+
+Answer: It breaks and M...
+Ground truth answers: ['Mark and Nora.', 'Mark and Nora.']
+============================================================
+
+Processing samples:   8%|██████████████▊                                                                                                                                                                          | 8/100 [00:17<03:03,  1.99s/it]
+============================================================
+Processing sample 9/100
+============================================================
+Prompt length: 760 tokens
+Question: What does the radio show cause?...
+Processing prompt with NACL (length: 760 tokens)...
+  Chunk size: 512
+  Processed 512 / 760 tokens
+Prefill complete. Full KV cache size: 760 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 760 tokens
+Calculating perplexity on generated text...
+Perplexity: 17.11
+
+--- Results ---
+Tokens/sec: 28.74
+Latency/token: 0.0348s
+Peak VRAM: 349.77 MB
+Compression ratio: 1.06x
+Cache size: 807 tokens
+Exact Match: 0.0000
+F1: 0.2162
+
+Generated answer: radio show causes a lot of trouble in the community, leading to the FCC being called in to investigate. The school's principal, who has been expelling "problem students," is revealed to be involved in...
+Ground truth answers: ['It causes trouble. ', 'It causes much trouble in the community.']
+============================================================
+
+Processing samples:   9%|████████████████▋                                                                                                                                                                        | 9/100 [00:19<02:52,  1.89s/it]
+============================================================
+Processing sample 10/100
+============================================================
+Prompt length: 761 tokens
+Question: Where does Mark Broadcast his station from?...
+Processing prompt with NACL (length: 761 tokens)...
+  Chunk size: 512
+  Processed 512 / 761 tokens
+Prefill complete. Full KV cache size: 761 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 761 tokens
+Calculating perplexity on generated text...
+Perplexity: 123.08
+
+--- Results ---
+Tokens/sec: 23.09
+Latency/token: 0.0433s
+Peak VRAM: 349.84 MB
+Compression ratio: 1.02x
+Cache size: 775 tokens
+Exact Match: 0.0000
+F1: 0.1538
+
+Generated answer: Broadcasts his station from his mother's old jeep....
+Ground truth answers: ["Parent's Basement", 'At the basement of his home']
+============================================================
+
+Processing samples:  10%|██████████████████▍                                                                                                                                                                     | 10/100 [00:19<02:16,  1.51s/it]
+============================================================
+Processing sample 11/100
+============================================================
+Prompt length: 762 tokens
+Question: What is Mark's only outlet?...
+Processing prompt with NACL (length: 762 tokens)...
+  Chunk size: 512
+  Processed 512 / 762 tokens
+Prefill complete. Full KV cache size: 762 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 762 tokens
+Calculating perplexity on generated text...
+Perplexity: 22.58
+
+--- Results ---
+Tokens/sec: 26.31
+Latency/token: 0.0380s
+Peak VRAM: 349.90 MB
+Compression ratio: 1.03x
+Cache size: 787 tokens
+Exact Match: 0.0000
+F1: 0.4444
+
+Generated answer: 's only outlet for his teenage angst and aggression is his unauthorized radio station....
+Ground truth answers: ['His Radio station ', 'His unauthorized radio station.']
+============================================================
+
+Processing samples:  11%|████████████████████▏                                                                                                                                                                   | 11/100 [00:20<02:00,  1.36s/it]
+============================================================
+Processing sample 12/100
+============================================================
+Prompt length: 766 tokens
+Question: What is Mark's Pirate Station's theme song ?...
+Processing prompt with NACL (length: 766 tokens)...
+  Chunk size: 512
+  Processed 512 / 766 tokens
+Prefill complete. Full KV cache size: 766 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 766 tokens
+Calculating perplexity on generated text...
+Perplexity: 27.56
+
+--- Results ---
+Tokens/sec: 25.18
+Latency/token: 0.0397s
+Peak VRAM: 350.15 MB
+Compression ratio: 1.03x
+Cache size: 786 tokens
+Exact Match: 0.0000
+F1: 0.3333
+
+Generated answer: Pirate Station's theme song is "Everybody Knows" by Leonard Cohen....
+Ground truth answers: ['Everybody Knows', '"Everybody Know\'s"']
+============================================================
+
+Processing samples:  12%|██████████████████████                                                                                                                                                                  | 12/100 [00:21<01:45,  1.20s/it]
+============================================================
+Processing sample 13/100
+============================================================
+Prompt length: 763 tokens
+Question: What is Nora Diniro to Mark?...
+Processing prompt with NACL (length: 763 tokens)...
+  Chunk size: 512
+  Processed 512 / 763 tokens
+Prefill complete. Full KV cache size: 763 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 763 tokens
+Calculating perplexity on generated text...
+Perplexity: 12.37
+
+--- Results ---
+Tokens/sec: 29.52
+Latency/token: 0.0339s
+Peak VRAM: 349.96 MB
+Compression ratio: 1.08x
+Cache size: 827 tokens
+Exact Match: 0.0000
+F1: 0.0000
+
+Generated answer: ora Diniro is Mark's mother, and she is the one who convinces him to start the FM pirate radio station. She is also the one who helps him dismantle the station and attach it to his mother's old jeep. ...
+Ground truth answers: ['Fellow Student', 'a fellow student']
+============================================================
+
+Processing samples:  13%|███████████████████████▉                                                                                                                                                                | 13/100 [00:24<02:11,  1.51s/it]
+============================================================
+Processing sample 14/100
+============================================================
+Prompt length: 761 tokens
+Question: Why does Nora track Mark down?...
+Processing prompt with NACL (length: 761 tokens)...
+  Chunk size: 512
+  Processed 512 / 761 tokens
+Prefill complete. Full KV cache size: 761 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 761 tokens
+Calculating perplexity on generated text...
+Perplexity: 9.84
+
+--- Results ---
+Tokens/sec: 29.28
+Latency/token: 0.0342s
+Peak VRAM: 349.84 MB
+Compression ratio: 1.08x
+Cache size: 820 tokens
+Exact Match: 0.0000
+F1: 0.1111
+
+Generated answer: ora is a fellow student who becomes obsessed with Mark's radio show. She sees him as a symbol of hope for the students and wants to help him end his show. She tracks him down to confront him about his...
+Ground truth answers: ["Malcom' s suicide", 'To confront him after Malcolm commits suicide.  ']
+============================================================
+
+Processing samples:  14%|█████████████████████████▊                                                                                                                                                              | 14/100 [00:26<02:24,  1.68s/it]
+============================================================
+Processing sample 15/100
+============================================================
+Prompt length: 764 tokens
+Question: What does Mark urge his listeners to do?...
+Processing prompt with NACL (length: 764 tokens)...
+  Chunk size: 512
+  Processed 512 / 764 tokens
+Prefill complete. Full KV cache size: 764 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 764 tokens
+Calculating perplexity on generated text...
+Perplexity: 39.20
+
+--- Results ---
+Tokens/sec: 24.89
+Latency/token: 0.0402s
+Peak VRAM: 350.03 MB
+Compression ratio: 1.02x
+Cache size: 783 tokens
+Exact Match: 0.0000
+F1: 0.1818
+
+Generated answer: urges his listeners to "talk hard" and to make their own future....
+Ground truth answers: ['Do something about their problems.', 'To do something about their problems instead of committing suicide.']
+============================================================
+
+Processing samples:  15%|███████████████████████████▌                                                                                                                                                            | 15/100 [00:26<02:00,  1.41s/it]
+============================================================
+Processing sample 16/100
+============================================================
+Prompt length: 766 tokens
+Question: Who is called in to investigate Mark's radio station? ...
+Processing prompt with NACL (length: 766 tokens)...
+  Chunk size: 512
+  Processed 512 / 766 tokens
+Prefill complete. Full KV cache size: 766 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 766 tokens
+Calculating perplexity on generated text...
+Perplexity: 83.98
+
+--- Results ---
+Tokens/sec: 23.00
+Latency/token: 0.0435s
+Peak VRAM: 350.15 MB
+Compression ratio: 1.02x
+Cache size: 780 tokens
+Exact Match: 0.0000
+F1: 0.2000
+
+Generated answer: FCC is called in to investigate Mark's radio station....
+Ground truth answers: ['The FCC', 'FCC']
+============================================================
+
+Processing samples:  16%|█████████████████████████████▍                                                                                                                                                          | 16/100 [00:27<01:39,  1.19s/it]
+============================================================
+Processing sample 17/100
+============================================================
+Prompt length: 761 tokens
+Question: Why did the principal commit fraud?...
+Processing prompt with NACL (length: 761 tokens)...
+  Chunk size: 512
+  Processed 512 / 761 tokens
+Prefill complete. Full KV cache size: 761 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 761 tokens
+Calculating perplexity on generated text...
+Perplexity: 23.65
+
+--- Results ---
+Tokens/sec: 29.49
+Latency/token: 0.0339s
+Peak VRAM: 349.84 MB
+Compression ratio: 1.08x
+Cache size: 825 tokens
+Exact Match: 0.0000
+F1: 0.1860
+
+Generated answer: principal, Annie Ross, was expelling "problem students," namely, students with below-average standardized test scores, in an effort to boost the district's test scores while still keeping their names ...
+Ground truth answers: ['To retain government funding', 'For government funding']
+============================================================
+
+Processing samples:  17%|███████████████████████████████▎                                                                                                                                                        | 17/100 [00:29<02:04,  1.50s/it]
+============================================================
+Processing sample 18/100
+============================================================
+Prompt length: 764 tokens
+Question: What did the principal do with poor achieving students?...
+Processing prompt with NACL (length: 764 tokens)...
+  Chunk size: 512
+  Processed 512 / 764 tokens
+Prefill complete. Full KV cache size: 764 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 764 tokens
+Calculating perplexity on generated text...
+Perplexity: 24.74
+
+--- Results ---
+Tokens/sec: 29.44
+Latency/token: 0.0340s
+Peak VRAM: 350.03 MB
+Compression ratio: 1.08x
+Cache size: 827 tokens
+Exact Match: 0.0000
+F1: 0.0000
+
+Generated answer: principal, played by Annie Ross, was expelling "problem students," namely, students with below-average standardized test scores, in an effort to boost the district's test scores while still keeping th...
+Ground truth answers: ['Expelled them', 'Expell them']
+============================================================
+
+Processing samples:  18%|█████████████████████████████████                                                                                                                                                       | 18/100 [00:31<02:19,  1.70s/it]
+============================================================
+Processing sample 19/100
+============================================================
+Prompt length: 764 tokens
+Question: Who drives the Jeep while Mark broadcasts? ...
+Processing prompt with NACL (length: 764 tokens)...
+  Chunk size: 512
+  Processed 512 / 764 tokens
+Prefill complete. Full KV cache size: 764 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 764 tokens
+Calculating perplexity on generated text...
+Perplexity: 105.67
+
+--- Results ---
+Tokens/sec: 22.58
+Latency/token: 0.0443s
+Peak VRAM: 350.03 MB
+Compression ratio: 1.02x
+Cache size: 777 tokens
+Exact Match: 0.0000
+F1: 0.2857
+
+Generated answer: drives the Jeep while Nora drives the jeep....
+Ground truth answers: ['Nora', 'Nora']
+============================================================
+
+Processing samples:  19%|██████████████████████████████████▉                                                                                                                                                     | 19/100 [00:32<01:51,  1.38s/it]
+============================================================
+Processing sample 20/100
+============================================================
+Prompt length: 760 tokens
+Question: Where does Mark go to school?...
+Processing prompt with NACL (length: 760 tokens)...
+  Chunk size: 512
+  Processed 512 / 760 tokens
+Prefill complete. Full KV cache size: 760 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 760 tokens
+Calculating perplexity on generated text...
+Perplexity: 16.16
+
+--- Results ---
+Tokens/sec: 24.28
+Latency/token: 0.0412s
+Peak VRAM: 349.77 MB
+Compression ratio: 1.02x
+Cache size: 777 tokens
+Exact Match: 0.0000
+F1: 0.3636
+
+Generated answer: attends a high school in a sleepy suburb of Phoenix, Arizona....
+Ground truth answers: ['Phoenix, Arizona.', 'Phoenix, Arizona']
+============================================================
+
+Processing samples:  20%|████████████████████████████████████▊                                                                                                                                                   | 20/100 [00:33<01:35,  1.19s/it]
+============================================================
+Processing sample 21/100
+============================================================
+Prompt length: 761 tokens
+Question: Where does Mark broadcast his radio station?...
+Processing prompt with NACL (length: 761 tokens)...
+  Chunk size: 512
+  Processed 512 / 761 tokens
+Prefill complete. Full KV cache size: 761 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 761 tokens
+Calculating perplexity on generated text...
+Perplexity: 24.08
+
+--- Results ---
+Tokens/sec: 23.93
+Latency/token: 0.0418s
+Peak VRAM: 349.84 MB
+Compression ratio: 1.02x
+Cache size: 777 tokens
+Exact Match: 0.0000
+F1: 0.4615
+
+Generated answer: broadcasts his radio station from the basement of his parents' house....
+Ground truth answers: ["In his parent's basement.", "His parents' basement."]
+============================================================
+
+Processing samples:  21%|██████████████████████████████████████▋                                                                                                                                                 | 21/100 [00:34<01:22,  1.05s/it]
+============================================================
+Processing sample 22/100
+============================================================
+Prompt length: 765 tokens
+Question: What does Mark use the song Everybody Knows for?...
+Processing prompt with NACL (length: 765 tokens)...
+  Chunk size: 512
+  Processed 512 / 765 tokens
+Prefill complete. Full KV cache size: 765 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 765 tokens
+Calculating perplexity on generated text...
+Perplexity: 25.45
+
+--- Results ---
+Tokens/sec: 25.90
+Latency/token: 0.0386s
+Peak VRAM: 350.09 MB
+Compression ratio: 1.03x
+Cache size: 788 tokens
+Exact Match: 0.0000
+F1: 0.4000
+
+Generated answer: uses the song Everybody Knows by Leonard Cohen as the theme song for his pirate radio station....
+Ground truth answers: ['His radio stations theme song.', 'It is the theme song.']
+============================================================
+
+Processing samples:  22%|████████████████████████████████████████▍                                                                                                                                               | 22/100 [00:34<01:19,  1.01s/it]
+============================================================
+Processing sample 23/100
+============================================================
+Prompt length: 770 tokens
+Question: When Harry tries to reason with Malcolm, what does Malcolm do?...
+Processing prompt with NACL (length: 770 tokens)...
+  Chunk size: 512
+  Processed 512 / 770 tokens
+Prefill complete. Full KV cache size: 770 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 770 tokens
+Calculating perplexity on generated text...
+Perplexity: 53.16
+
+--- Results ---
+Tokens/sec: 26.23
+Latency/token: 0.0381s
+Peak VRAM: 350.40 MB
+Compression ratio: 1.04x
+Cache size: 797 tokens
+Exact Match: 0.0000
+F1: 0.0000
+
+Generated answer: colm jams his various medals and accolades into a microwave and turns it on, injuring himself....
+Ground truth answers: ['Commits suicide.', 'Commits suicide.']
+============================================================
+
+Processing samples:  23%|██████████████████████████████████████████▎                                                                                                                                             | 23/100 [00:36<01:19,  1.03s/it]
+============================================================
+Processing sample 24/100
+============================================================
+Prompt length: 763 tokens
+Question: What does Paige do with her medals?...
+Processing prompt with NACL (length: 763 tokens)...
+  Chunk size: 512
+  Processed 512 / 763 tokens
+Prefill complete. Full KV cache size: 763 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 763 tokens
+Calculating perplexity on generated text...
+Perplexity: 46.03
+
+--- Results ---
+Tokens/sec: 27.71
+Latency/token: 0.0361s
+Peak VRAM: 349.96 MB
+Compression ratio: 1.05x
+Cache size: 798 tokens
+Exact Match: 0.0000
+F1: 0.2000
+
+Generated answer: ige Woodward, the overachieving student who jams her medals into a microwave, turns them into a microwave-powered radio station....
+Ground truth answers: ['Puts them in the microwave.', 'Melts them in a microwave.']
+============================================================
+
+Processing samples:  24%|████████████████████████████████████████████▏                                                                                                                                           | 24/100 [00:37<01:24,  1.12s/it]
+============================================================
+Processing sample 25/100
+============================================================
+Prompt length: 760 tokens
+Question: How does Paige get injured?...
+Processing prompt with NACL (length: 760 tokens)...
+  Chunk size: 512
+  Processed 512 / 760 tokens
+Prefill complete. Full KV cache size: 760 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 760 tokens
+Calculating perplexity on generated text...
+Perplexity: 21.88
+
+--- Results ---
+Tokens/sec: 28.51
+Latency/token: 0.0351s
+Peak VRAM: 349.77 MB
+Compression ratio: 1.06x
+Cache size: 804 tokens
+Exact Match: 0.0000
+F1: 0.1739
+
+Generated answer: ige Woodward, a medals-obsessed student, jams her various medals and accolades into a microwave and turns it on. The microwave explodes, injuring her....
+Ground truth answers: ['When the microwave explodes.', 'Microwaving her medals']
+============================================================
+
+Processing samples:  25%|██████████████████████████████████████████████                                                                                                                                          | 25/100 [00:38<01:34,  1.26s/it]
+============================================================
+Processing sample 26/100
+============================================================
+Prompt length: 760 tokens
+Question: Why is the FCC called?...
+Processing prompt with NACL (length: 760 tokens)...
+  Chunk size: 512
+  Processed 512 / 760 tokens
+Prefill complete. Full KV cache size: 760 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 760 tokens
+Calculating perplexity on generated text...
+Perplexity: 21.99
+
+--- Results ---
+Tokens/sec: 29.45
+Latency/token: 0.0340s
+Peak VRAM: 349.77 MB
+Compression ratio: 1.08x
+Cache size: 824 tokens
+Exact Match: 0.0000
+F1: 0.1860
+
+Generated answer: FCC is called in to investigate the radio show because the school's principal, the district's principal, has been expelling "problem students," namely, students with below-average standardized test sc...
+Ground truth answers: ['To investigate the radio show.', 'Because of trouble caused by the radio station.']
+============================================================
+
+Processing samples:  26%|███████████████████████████████████████████████▊                                                                                                                                        | 26/100 [00:41<01:54,  1.55s/it]
+============================================================
+Processing sample 27/100
+============================================================
+Prompt length: 763 tokens
+Question: What was the principle doing with the problem students?...
+Processing prompt with NACL (length: 763 tokens)...
+  Chunk size: 512
+  Processed 512 / 763 tokens
+Prefill complete. Full KV cache size: 763 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 763 tokens
+Calculating perplexity on generated text...
+Perplexity: 22.33
+
+--- Results ---
+Tokens/sec: 29.47
+Latency/token: 0.0339s
+Peak VRAM: 349.96 MB
+Compression ratio: 1.08x
+Cache size: 827 tokens
+Exact Match: 0.0000
+F1: 0.1000
+
+Generated answer: principal of the school, Annie Ross, was expelling "problem students," namely, students with below-average standardized test scores, in an effort to boost the district's test scores while still keepin...
+Ground truth answers: ['Expelling them.', 'Expelling the students']
+============================================================
+
+Processing samples:  27%|█████████████████████████████████████████████████▋                                                                                                                                      | 27/100 [00:43<02:07,  1.75s/it]
+============================================================
+Processing sample 28/100
+============================================================
+Prompt length: 766 tokens
+Question: Who is chasing Mark and Nora in the jeep?...
+Processing prompt with NACL (length: 766 tokens)...
+  Chunk size: 512
+  Processed 512 / 766 tokens
+Prefill complete. Full KV cache size: 766 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 766 tokens
+Calculating perplexity on generated text...
+Perplexity: 7.38
+
+--- Results ---
+Tokens/sec: 28.86
+Latency/token: 0.0347s
+Peak VRAM: 350.15 MB
+Compression ratio: 1.07x
+Cache size: 816 tokens
+Exact Match: 0.0000
+F1: 0.0625
+
+Generated answer: police.
+
+Question: What is the harmonizer that Mark uses to disguise his voice?
+
+Answer: A harmonizer is a device that can be used to create a radio signal that sounds like a human voice....
+Ground truth answers: ['The cops and the FCC.', 'The police and the FCC.']
+============================================================
+
+Processing samples:  28%|███████████████████████████████████████████████████▌                                                                                                                                    | 28/100 [00:45<02:06,  1.76s/it]
+============================================================
+Processing sample 29/100
+============================================================
+Prompt length: 766 tokens
+Question: What are the students doing when Mark and Nora drive up?...
+Processing prompt with NACL (length: 766 tokens)...
+  Chunk size: 512
+  Processed 512 / 766 tokens
+Prefill complete. Full KV cache size: 766 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 766 tokens
+Calculating perplexity on generated text...
+Perplexity: 8.96
+
+--- Results ---
+Tokens/sec: 29.47
+Latency/token: 0.0339s
+Peak VRAM: 350.15 MB
+Compression ratio: 1.08x
+Cache size: 830 tokens
+Exact Match: 0.0000
+F1: 0.0000
+
+Generated answer: students are gathered in a circle, chanting and singing.
+
+Question: What happens to Mark and Nora after they are arrested?
+
+Answer: They are taken away by the police and arrested.
+
+Question: What is t...
+Ground truth answers: ['Protesting.', 'Protesting']
+============================================================
+
+Processing samples:  29%|█████████████████████████████████████████████████████▎                                                                                                                                  | 29/100 [00:47<02:14,  1.90s/it]
+============================================================
+Processing sample 30/100
+============================================================
+Prompt length: 304 tokens
+Question: Who does Maskull accept an invitation from?...
+Processing prompt with NACL (length: 304 tokens)...
+  Chunk size: 512
+  Processed 304 / 304 tokens
+Prefill complete. Full KV cache size: 304 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 304 tokens
+Calculating perplexity on generated text...
+Perplexity: 29.22
+
+--- Results ---
+Tokens/sec: 31.06
+Latency/token: 0.0322s
+Peak VRAM: 320.46 MB
+Compression ratio: 1.21x
+Cache size: 368 tokens
+Exact Match: 0.0000
+F1: 0.0571
+
+Generated answer: askull accepts an invitation from Krag, an acquaintance of his friend Nightspore, to travel to Tormance after a seance.
+
+Question: What does Maskull learn about his impending death?
+
+Answer: Maskull l...
+Ground truth answers: ['Krag', 'Krag.']
+============================================================
+
+Processing samples:  30%|███████████████████████████████████████████████████████▏                                                                                                                                | 30/100 [00:49<02:17,  1.96s/it]
+============================================================
+Processing sample 31/100
+============================================================
+Prompt length: 302 tokens
+Question: Who is Krag an acquaintance of?...
+Processing prompt with NACL (length: 302 tokens)...
+  Chunk size: 512
+  Processed 302 / 302 tokens
+Prefill complete. Full KV cache size: 302 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 302 tokens
+Calculating perplexity on generated text...
+Perplexity: 7.75
+
+--- Results ---
+Tokens/sec: 31.08
+Latency/token: 0.0322s
+Peak VRAM: 320.34 MB
+Compression ratio: 1.21x
+Cache size: 366 tokens
+Exact Match: 0.0000
+F1: 0.0645
+
+Generated answer: rag is Nightspore, the protagonist of the novel.
+
+Question: What is the author's critique of the Demiurge doctrine?
+
+Answer: The author's critique of the Demiurge doctrine is that it is a metaphysical...
+Ground truth answers: ['Nightspore', 'Nightspore.']
+============================================================
+
+Processing samples:  31%|█████████████████████████████████████████████████████████                                                                                                                               | 31/100 [00:51<02:18,  2.00s/it]
+============================================================
+Processing sample 32/100
+============================================================
+Prompt length: 302 tokens
+Question: Where is Maskull traveling to?...
+Processing prompt with NACL (length: 302 tokens)...
+  Chunk size: 512
+  Processed 302 / 302 tokens
+Prefill complete. Full KV cache size: 302 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 302 tokens
+Calculating perplexity on generated text...
+Perplexity: 15.63
+
+--- Results ---
+Tokens/sec: 31.05
+Latency/token: 0.0322s
+Peak VRAM: 320.34 MB
+Compression ratio: 1.21x
+Cache size: 366 tokens
+Exact Match: 0.0000
+F1: 0.0690
+
+Generated answer: askull is traveling to Tormance, a land of the Demiurge.
+
+Question: What is the significance of the crystal ship in Maskull's travels?
+
+Answer: The crystal ship is a symbol of the author's critique of...
+Ground truth answers: ['Tormance', 'Tormance.']
+============================================================
+
+Processing samples:  32%|██████████████████████████████████████████████████████████▉                                                                                                                             | 32/100 [00:53<02:18,  2.03s/it]
+============================================================
+Processing sample 33/100
+============================================================
+Prompt length: 314 tokens
+Question: When Maskull wakes up in Tormance, how many of his friends are with him?...
+Processing prompt with NACL (length: 314 tokens)...
+  Chunk size: 512
+  Processed 314 / 314 tokens
+Prefill complete. Full KV cache size: 314 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 314 tokens
+Calculating perplexity on generated text...
+Perplexity: 18.84
+
+--- Results ---
+Tokens/sec: 31.00
+Latency/token: 0.0323s
+Peak VRAM: 321.93 MB
+Compression ratio: 1.20x
+Cache size: 378 tokens
+Exact Match: 0.0000
+F1: 0.0000
+
+Generated answer: askull awakens to find himself alone on Tormance.
+
+Question: What is the author's critique of the Demiurge doctrine?
+
+Answer: The author supports a variation of the doctrine of the Demiurge, somewhat ...
+Ground truth answers: ['None', 'None.']
+============================================================
+
+Processing samples:  33%|████████████████████████████████████████████████████████████▋                                                                                                                           | 33/100 [00:55<02:17,  2.06s/it]
+============================================================
+Processing sample 34/100
+============================================================
+Prompt length: 303 tokens
+Question: Who does Maskull realize he really is?...
+Processing prompt with NACL (length: 303 tokens)...
+  Chunk size: 512
+  Processed 303 / 303 tokens
+Prefill complete. Full KV cache size: 303 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 303 tokens
+Calculating perplexity on generated text...
+Perplexity: 14.83
+
+--- Results ---
+Tokens/sec: 31.06
+Latency/token: 0.0322s
+Peak VRAM: 320.40 MB
+Compression ratio: 1.21x
+Cache size: 367 tokens
+Exact Match: 0.0000
+F1: 0.0870
+
+Generated answer: askull realizes he is Nightspore, the Demiurge, and the author supports the Demiurge doctrine.
+
+References:
+
+1. "The Universe" by Robert Sheckley, in The New Yorker, 1969.
+2. "The...
+Ground truth answers: ['Nightspore', 'Nightspore.']
+============================================================
+
+Processing samples:  34%|██████████████████████████████████████████████████████████████▌                                                                                                                         | 34/100 [00:57<02:16,  2.07s/it]
+============================================================
+Processing sample 35/100
+============================================================
+Prompt length: 306 tokens
+Question: Who does Krag claim that he is none as on Earth?...
+Processing prompt with NACL (length: 306 tokens)...
+  Chunk size: 512
+  Processed 306 / 306 tokens
+Prefill complete. Full KV cache size: 306 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 306 tokens
+Calculating perplexity on generated text...
+Perplexity: 9.79
+
+--- Results ---
+Tokens/sec: 31.03
+Latency/token: 0.0322s
+Peak VRAM: 320.59 MB
+Compression ratio: 1.21x
+Cache size: 370 tokens
+Exact Match: 0.0000
+F1: 0.0000
+
+Generated answer: rag claims to be Nightspore, a man who has been living on Earth for centuries.
+
+Question: What is the author's critique of the Demiurge doctrine?
+
+Answer: The author's critique of the Demiurge doctrin...
+Ground truth answers: ['Pain', 'Pain']
+============================================================
+
+Processing samples:  35%|████████████████████████████████████████████████████████████████▍                                                                                                                       | 35/100 [01:00<02:15,  2.08s/it]
+============================================================
+Processing sample 36/100
+============================================================
+Prompt length: 304 tokens
+Question: What kind of ship does Maskull travel in?...
+Processing prompt with NACL (length: 304 tokens)...
+  Chunk size: 512
+  Processed 304 / 304 tokens
+Prefill complete. Full KV cache size: 304 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 304 tokens
+Calculating perplexity on generated text...
+Perplexity: 11.72
+
+--- Results ---
+Tokens/sec: 31.06
+Latency/token: 0.0322s
+Peak VRAM: 320.46 MB
+Compression ratio: 1.21x
+Cache size: 368 tokens
+Exact Match: 0.0000
+F1: 0.0930
+
+Generated answer: askull travels in a crystal ship.
+
+Question: Who is Nightspore and what is his role in the story?
+
+Answer: Nightspore is a character who appears in the story. He is a man who has been living on Torman...
+Ground truth answers: ['A crystal ship', 'crystal']
+============================================================
+
+Processing samples:  36%|██████████████████████████████████████████████████████████████████▏                                                                                                                     | 36/100 [01:02<02:13,  2.09s/it]
+============================================================
+Processing sample 37/100
+============================================================
+Prompt length: 301 tokens
+Question: Where is the abandoned observatory located?...
+Processing prompt with NACL (length: 301 tokens)...
+  Chunk size: 512
+  Processed 301 / 301 tokens
+Prefill complete. Full KV cache size: 301 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 301 tokens
+Calculating perplexity on generated text...
+Perplexity: 199.87
+
+--- Results ---
+Tokens/sec: 26.38
+Latency/token: 0.0379s
+Peak VRAM: 320.27 MB
+Compression ratio: 1.03x
+Cache size: 310 tokens
+Exact Match: 0.0000
+F1: 0.5000
+
+Generated answer: abandoned observatory is located in Scotland....
+Ground truth answers: ['In Scotland', 'Scotland.']
+============================================================
+
+Processing samples:  37%|████████████████████████████████████████████████████████████████████                                                                                                                    | 37/100 [01:02<01:39,  1.58s/it]
+============================================================
+Processing sample 38/100
+============================================================
+Prompt length: 303 tokens
+Question: Whose death does he learn is coming soon?...
+Processing prompt with NACL (length: 303 tokens)...
+  Chunk size: 512
+  Processed 303 / 303 tokens
+Prefill complete. Full KV cache size: 303 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 303 tokens
+Calculating perplexity on generated text...
+Perplexity: 16.35
+
+--- Results ---
+Tokens/sec: 31.05
+Latency/token: 0.0322s
+Peak VRAM: 320.40 MB
+Compression ratio: 1.21x
+Cache size: 366 tokens
+Exact Match: 0.0000
+F1: 0.0000
+
+Generated answer: learns that he is in fact Nightspore himself.
+
+Question: What is the author's critique of the Demiurge doctrine?
+
+Answer: The author supports a variation of the doctrine of the Demiurge, somewhat simi...
+Ground truth answers: ['his own', "Maskull's own death."]
+============================================================
+
+Processing samples:  38%|█████████████████████████████████████████████████████████████████████▉                                                                                                                  | 38/100 [01:04<01:46,  1.72s/it]
+============================================================
+Processing sample 39/100
+============================================================
+Prompt length: 300 tokens
+Question: Who gives the last revelation?...
+Processing prompt with NACL (length: 300 tokens)...
+  Chunk size: 512
+  Processed 300 / 300 tokens
+Prefill complete. Full KV cache size: 300 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 300 tokens
+Calculating perplexity on generated text...
+Perplexity: 4.68
+
+--- Results ---
+Tokens/sec: 31.04
+Latency/token: 0.0322s
+Peak VRAM: 320.21 MB
+Compression ratio: 1.21x
+Cache size: 364 tokens
+Exact Match: 0.0000
+F1: 0.0000
+
+Generated answer: rag, the Demiurge.
+
+References:
+
+1. "The Universe" by Robert Sheckley, in The New Yorker, 1969.
+2. "The Universe" by Robert Sheckley, in The New Yorker, 196...
+Ground truth answers: ['Krag', 'Krag.']
+============================================================
+
+Processing samples:  39%|███████████████████████████████████████████████████████████████████████▊                                                                                                                | 39/100 [01:06<01:52,  1.84s/it]
+============================================================
+Processing sample 40/100
+============================================================
+Prompt length: 311 tokens
+Question: Why does Maskull accept an invitation Krag to go to Tormance?...
+Processing prompt with NACL (length: 311 tokens)...
+  Chunk size: 512
+  Processed 311 / 311 tokens
+Prefill complete. Full KV cache size: 311 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 311 tokens
+Calculating perplexity on generated text...
+Perplexity: 9.38
+
+--- Results ---
+Tokens/sec: 31.03
+Latency/token: 0.0322s
+Peak VRAM: 320.91 MB
+Compression ratio: 1.21x
+Cache size: 375 tokens
+Exact Match: 0.0000
+F1: 0.1154
+
+Generated answer: askull accepts the invitation because he is longing for adventures and because he is seeking a new body. He is seeking adventure because he is bored with his current body and wants to experience somet...
+Ground truth answers: ['He longs for adventure. ', 'He wanted to go on adventures']
+============================================================
+
+Processing samples:  40%|█████████████████████████████████████████████████████████████████████████▌                                                                                                              | 40/100 [01:08<01:55,  1.92s/it]
+============================================================
+Processing sample 41/100
+============================================================
+Prompt length: 302 tokens
+Question: Who is Krag to Maskull?...
+Processing prompt with NACL (length: 302 tokens)...
+  Chunk size: 512
+  Processed 302 / 302 tokens
+Prefill complete. Full KV cache size: 302 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 302 tokens
+Calculating perplexity on generated text...
+Perplexity: 9.19
+
+--- Results ---
+Tokens/sec: 31.01
+Latency/token: 0.0322s
+Peak VRAM: 320.34 MB
+Compression ratio: 1.21x
+Cache size: 366 tokens
+Exact Match: 0.0000
+F1: 0.1026
+
+Generated answer: rag is Nightspore, the Demiurge of the Universe. He is the one who created the Universe and all its inhabitants. He is also Nightspore's twin brother, and the one who is responsible for Nightspore's d...
+Ground truth answers: ['A acquaintance of his friend Nightspore.', 'An acquaintance ']
+============================================================
+
+Processing samples:  41%|███████████████████████████████████████████████████████████████████████████▍                                                                                                            | 41/100 [01:10<01:56,  1.97s/it]
+============================================================
+Processing sample 42/100
+============================================================
+Prompt length: 313 tokens
+Question: What sort of ship did Maskull, Krag, and Nightspore set of in?...
+Processing prompt with NACL (length: 313 tokens)...
+  Chunk size: 512
+  Processed 313 / 313 tokens
+Prefill complete. Full KV cache size: 313 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 313 tokens
+Calculating perplexity on generated text...
+Perplexity: 17.72
+
+--- Results ---
+Tokens/sec: 31.07
+Latency/token: 0.0322s
+Peak VRAM: 321.93 MB
+Compression ratio: 1.20x
+Cache size: 377 tokens
+Exact Match: 0.0000
+F1: 0.0952
+
+Generated answer: ship was a crystal one, and it was said that it was the only one of its kind in the Universe.
+
+Question: What did Maskull learn about his impending death from Krag?
+
+Answer: Krag told him that he was ...
+Ground truth answers: ['A crystal ship', 'A crystal ship.']
+============================================================
+
+Processing samples:  42%|█████████████████████████████████████████████████████████████████████████████▎                                                                                                          | 42/100 [01:13<01:56,  2.01s/it]
+============================================================
+Processing sample 43/100
+============================================================
+Prompt length: 302 tokens
+Question: Where did not crystal ship come from?...
+Processing prompt with NACL (length: 302 tokens)...
+  Chunk size: 512
+  Processed 302 / 302 tokens
+Prefill complete. Full KV cache size: 302 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 302 tokens
+Calculating perplexity on generated text...
+Perplexity: 10.94
+
+--- Results ---
+Tokens/sec: 31.08
+Latency/token: 0.0322s
+Peak VRAM: 320.34 MB
+Compression ratio: 1.21x
+Cache size: 366 tokens
+Exact Match: 0.0000
+F1: 0.0571
+
+Generated answer: crystal ship was a gift from the people of Tormance.
+
+Question: How did Maskull die?
+
+Answer: Maskull died of a heart attack.
+
+Question: Who is Nightspore?
+
+Answer: Nightspore is a character from the ...
+Ground truth answers: ['From an abandoned observatory in Scotland.', "scotland's abandoned observatory"]
+============================================================
+
+Processing samples:  43%|███████████████████████████████████████████████████████████████████████████████                                                                                                         | 43/100 [01:15<01:56,  2.04s/it]
+============================================================
+Processing sample 44/100
+============================================================
+Prompt length: 306 tokens
+Question: Who is missing from the ship when Maskull wakes?...
+Processing prompt with NACL (length: 306 tokens)...
+  Chunk size: 512
+  Processed 306 / 306 tokens
+Prefill complete. Full KV cache size: 306 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 306 tokens
+Calculating perplexity on generated text...
+Perplexity: 8.98
+
+--- Results ---
+Tokens/sec: 31.06
+Latency/token: 0.0322s
+Peak VRAM: 320.59 MB
+Compression ratio: 1.21x
+Cache size: 370 tokens
+Exact Match: 0.0000
+F1: 0.0000
+
+Generated answer: askull is the only one who wakes up.
+
+Question: What is the significance of the crystal ship in the story?
+
+Answer: The crystal ship is a symbol of the author's critique of the philosophical systems h...
+Ground truth answers: ['Krag and Nightspore.', 'Krag and Nightspore']
+============================================================
+
+Processing samples:  44%|████████████████████████████████████████████████████████████████████████████████▉                                                                                                       | 44/100 [01:17<01:55,  2.06s/it]
+============================================================
+Processing sample 45/100
+============================================================
+Prompt length: 309 tokens
+Question: How many people does Maskull usually see in the lands he travels?...
+Processing prompt with NACL (length: 309 tokens)...
+  Chunk size: 512
+  Processed 309 / 309 tokens
+Prefill complete. Full KV cache size: 309 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 309 tokens
+Calculating perplexity on generated text...
+Perplexity: 5.45
+
+--- Results ---
+Tokens/sec: 31.05
+Latency/token: 0.0322s
+Peak VRAM: 320.78 MB
+Compression ratio: 1.21x
+Cache size: 373 tokens
+Exact Match: 0.0000
+F1: 0.0784
+
+Generated answer: the first book, Maskull sees only one person in each land he travels. In the second book, he sees two people in each land he travels. In the third book, he sees three people in each land he travels. I...
+Ground truth answers: ['Not more than 1 or 2.', 'One or two.']
+============================================================
+
+Processing samples:  45%|██████████████████████████████████████████████████████████████████████████████████▊                                                                                                     | 45/100 [01:19<01:53,  2.07s/it]
+============================================================
+Processing sample 46/100
+============================================================
+Prompt length: 310 tokens
+Question: What happens to the people Maskull meets in his travels to various lands?...
+Processing prompt with NACL (length: 310 tokens)...
+  Chunk size: 512
+  Processed 310 / 310 tokens
+Prefill complete. Full KV cache size: 310 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 310 tokens
+Calculating perplexity on generated text...
+Perplexity: 21.34
+
+--- Results ---
+Tokens/sec: 31.05
+Latency/token: 0.0322s
+Peak VRAM: 320.84 MB
+Compression ratio: 1.21x
+Cache size: 374 tokens
+Exact Match: 0.0000
+F1: 0.2400
+
+Generated answer: people Maskull meets in his travels to various lands are usually either killed or die at his own hand. The author's critique of the Demiurge doctrine is that the Universe is created by a supernatural ...
+Ground truth answers: ['They usually die by his hand or anothers.', 'They die']
+============================================================
+
+Processing samples:  46%|████████████████████████████████████████████████████████████████████████████████████▋                                                                                                   | 46/100 [01:21<01:52,  2.08s/it]
+============================================================
+Processing sample 47/100
+============================================================
+Prompt length: 303 tokens
+Question: Whom is known on Earth as Pain?...
+Processing prompt with NACL (length: 303 tokens)...
+  Chunk size: 512
+  Processed 303 / 303 tokens
+Prefill complete. Full KV cache size: 303 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 303 tokens
+Calculating perplexity on generated text...
+Perplexity: 4.73
+
+--- Results ---
+Tokens/sec: 31.01
+Latency/token: 0.0323s
+Peak VRAM: 320.40 MB
+Compression ratio: 1.21x
+Cache size: 367 tokens
+Exact Match: 0.0000
+F1: 0.0000
+
+Generated answer: rag, the author of the book.
+
+References:
+
+1. "The Universe" by Robert Sheckley, in The New Yorker, 1969.
+2. "The Universe" by Robert Sheckley, in The New Yorker, 196...
+Ground truth answers: ['Krag.', 'Krag']
+============================================================
+
+Processing samples:  47%|██████████████████████████████████████████████████████████████████████████████████████▍                                                                                                 | 47/100 [01:23<01:50,  2.09s/it]
+============================================================
+Processing sample 48/100
+============================================================
+Prompt length: 306 tokens
+Question: Maskull learns that he is also what character? ...
+Processing prompt with NACL (length: 306 tokens)...
+  Chunk size: 512
+  Processed 306 / 306 tokens
+Prefill complete. Full KV cache size: 306 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 306 tokens
+Calculating perplexity on generated text...
+Perplexity: 114.08
+
+--- Results ---
+Tokens/sec: 29.41
+Latency/token: 0.0340s
+Peak VRAM: 320.59 MB
+Compression ratio: 1.07x
+Cache size: 328 tokens
+Exact Match: 0.0000
+F1: 0.1667
+
+Generated answer: askull learns that he is Nightspore, a character from the world of Tormance....
+Ground truth answers: ['Nightspore.', 'nightspore']
+============================================================
+
+Processing samples:  48%|████████████████████████████████████████████████████████████████████████████████████████▎                                                                                               | 48/100 [01:24<01:28,  1.70s/it]
+============================================================
+Processing sample 49/100
+============================================================
+Prompt length: 311 tokens
+Question: What country does Maskull, Krag, and Nightspore set off from?...
+Processing prompt with NACL (length: 311 tokens)...
+  Chunk size: 512
+  Processed 311 / 311 tokens
+Prefill complete. Full KV cache size: 311 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 311 tokens
+Calculating perplexity on generated text...
+Perplexity: 5.34
+
+--- Results ---
+Tokens/sec: 31.09
+Latency/token: 0.0322s
+Peak VRAM: 320.91 MB
+Compression ratio: 1.21x
+Cache size: 375 tokens
+Exact Match: 0.0000
+F1: 0.0000
+
+Generated answer: .
+
+Question: What is the name of the crystal ship that Maskull and his companions set out on?
+
+Answer: The "Crystal Ship."
+
+Question: What is the name of the land that Maskull and his companions pass ...
+Ground truth answers: ['Scotland', 'Scotland']
+============================================================
+
+Processing samples:  49%|██████████████████████████████████████████████████████████████████████████████████████████▏                                                                                             | 49/100 [01:26<01:32,  1.82s/it]
+============================================================
+Processing sample 50/100
+============================================================
+Prompt length: 309 tokens
+Question: On average, how many people does Maskull normally meet when traveling?...
+Processing prompt with NACL (length: 309 tokens)...
+  Chunk size: 512
+  Processed 309 / 309 tokens
+Prefill complete. Full KV cache size: 309 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 309 tokens
+Calculating perplexity on generated text...
+Perplexity: 19.06
+
+--- Results ---
+Tokens/sec: 31.09
+Latency/token: 0.0322s
+Peak VRAM: 320.78 MB
+Compression ratio: 1.21x
+Cache size: 373 tokens
+Exact Match: 0.0000
+F1: 0.1622
+
+Generated answer: askull usually meets only one or two persons when traveling.
+
+Question: What is the author's critique of the Demiurge doctrine?
+
+Answer: The author supports a variation of the doctrine of the Demiurge...
+Ground truth answers: ['One or two', 'One or two.']
+============================================================
+
+Processing samples:  50%|████████████████████████████████████████████████████████████████████████████████████████████                                                                                            | 50/100 [01:28<01:35,  1.90s/it]
+============================================================
+Processing sample 51/100
+============================================================
+Prompt length: 310 tokens
+Question: Where was Maskull planning on traveling to in the beginning of the story?...
+Processing prompt with NACL (length: 310 tokens)...
+  Chunk size: 512
+  Processed 310 / 310 tokens
+Prefill complete. Full KV cache size: 310 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 310 tokens
+Calculating perplexity on generated text...
+Perplexity: 18.86
+
+--- Results ---
+Tokens/sec: 31.04
+Latency/token: 0.0322s
+Peak VRAM: 320.84 MB
+Compression ratio: 1.21x
+Cache size: 374 tokens
+Exact Match: 0.0000
+F1: 0.0556
+
+Generated answer: askull was planning on traveling to Tormance after a seance.
+
+Question: Who was Nightspore and what was his role in the story?
+
+Answer: Nightspore was a man who had been a friend of Maskull's friend N...
+Ground truth answers: ['Tormance', 'Tormance']
+============================================================
+
+Processing samples:  51%|█████████████████████████████████████████████████████████████████████████████████████████████▊                                                                                          | 51/100 [01:30<01:36,  1.96s/it]
+============================================================
+Processing sample 52/100
+============================================================
+Prompt length: 311 tokens
+Question: What normally happens when Maskull meets new people in the lands he travels to?...
+Processing prompt with NACL (length: 311 tokens)...
+  Chunk size: 512
+  Processed 311 / 311 tokens
+Prefill complete. Full KV cache size: 311 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 311 tokens
+Calculating perplexity on generated text...
+Perplexity: 14.05
+
+--- Results ---
+Tokens/sec: 31.06
+Latency/token: 0.0322s
+Peak VRAM: 320.91 MB
+Compression ratio: 1.21x
+Cache size: 375 tokens
+Exact Match: 0.0000
+F1: 0.1176
+
+Generated answer: askull usually meets only one or two persons, and these meetings often end in the death of those he meets, either at his own hand or by that of another.
+
+Question: Who is Nightspore and what is his ro...
+Ground truth answers: ['Normally they die', 'Those people usually end up dead.']
+============================================================
+
+Processing samples:  52%|███████████████████████████████████████████████████████████████████████████████████████████████▋                                                                                        | 52/100 [01:32<01:36,  2.01s/it]
+============================================================
+Processing sample 53/100
+============================================================
+Prompt length: 305 tokens
+Question: Who has a revelation about the origin of the universe?...
+Processing prompt with NACL (length: 305 tokens)...
+  Chunk size: 512
+  Processed 305 / 305 tokens
+Prefill complete. Full KV cache size: 305 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 305 tokens
+Calculating perplexity on generated text...
+Perplexity: 7.27
+
+--- Results ---
+Tokens/sec: 31.02
+Latency/token: 0.0322s
+Peak VRAM: 320.53 MB
+Compression ratio: 1.21x
+Cache size: 369 tokens
+Exact Match: 0.0000
+F1: 0.0800
+
+Generated answer: spore, who is revealed to be Krag, the Demiurge.
+
+References:
+
+1. "The Universe" by Robert Sheckley, in The New Yorker, 1969.
+2. "The Universe" by Robert Sheckley, in...
+Ground truth answers: ['Krag', 'Nightspore']
+============================================================
+
+Processing samples:  53%|█████████████████████████████████████████████████████████████████████████████████████████████████▌                                                                                      | 53/100 [01:34<01:35,  2.04s/it]
+============================================================
+Processing sample 54/100
+============================================================
+Prompt length: 299 tokens
+Question: Who is Nightspore?...
+Processing prompt with NACL (length: 299 tokens)...
+  Chunk size: 512
+  Processed 299 / 299 tokens
+Prefill complete. Full KV cache size: 299 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 299 tokens
+Calculating perplexity on generated text...
+Perplexity: 9.11
+
+--- Results ---
+Tokens/sec: 31.06
+Latency/token: 0.0322s
+Peak VRAM: 320.15 MB
+Compression ratio: 1.21x
+Cache size: 363 tokens
+Exact Match: 0.0000
+F1: 0.0000
+
+Generated answer: spore is a character in the book, a man who is the protagonist's alter ego. He is a man who has been living in the Universe for centuries, and who has been known to the protagonist as "Nightspore" for...
+Ground truth answers: ['Maskull', 'maskull']
+============================================================
+
+Processing samples:  54%|███████████████████████████████████████████████████████████████████████████████████████████████████▎                                                                                    | 54/100 [01:36<01:34,  2.06s/it]
+============================================================
+Processing sample 55/100
+============================================================
+Prompt length: 302 tokens
+Question: What is Krag known as on Earth?...
+Processing prompt with NACL (length: 302 tokens)...
+  Chunk size: 512
+  Processed 302 / 302 tokens
+Prefill complete. Full KV cache size: 302 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 302 tokens
+Calculating perplexity on generated text...
+Perplexity: 6.01
+
+--- Results ---
+Tokens/sec: 31.02
+Latency/token: 0.0322s
+Peak VRAM: 320.34 MB
+Compression ratio: 1.21x
+Cache size: 366 tokens
+Exact Match: 0.0000
+F1: 0.0741
+
+Generated answer: rag is known on Earth as "Pain."
+
+References:
+
+1. "The Universe" by Robert Sheckley, in The New Yorker, 1969.
+2. "The Universe" by Robert Sheckley, in The New Yorker, 1...
+Ground truth answers: ['Pain', 'Pain.']
+============================================================
+
+Processing samples:  55%|█████████████████████████████████████████████████████████████████████████████████████████████████████▏                                                                                  | 55/100 [01:39<01:33,  2.07s/it]
+============================================================
+Processing sample 56/100
+============================================================
+Prompt length: 313 tokens
+Question: Why does Maskull accept to go to Tormance with Krag and Nightspore?...
+Processing prompt with NACL (length: 313 tokens)...
+  Chunk size: 512
+  Processed 313 / 313 tokens
+Prefill complete. Full KV cache size: 313 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 313 tokens
+Calculating perplexity on generated text...
+Perplexity: 29.26
+
+--- Results ---
+Tokens/sec: 31.02
+Latency/token: 0.0322s
+Peak VRAM: 321.93 MB
+Compression ratio: 1.20x
+Cache size: 377 tokens
+Exact Match: 0.0000
+F1: 0.1739
+
+Generated answer: askull is a man longing for adventures, and he accepts the invitation from Krag, an acquaintance of his friend Nightspore, to travel to Tormance after a seance. He is drawn to the idea of meeting new ...
+Ground truth answers: ['He was longing for adventures.', 'He longs for adventure.']
+============================================================
+
+Processing samples:  56%|███████████████████████████████████████████████████████████████████████████████████████████████████████                                                                                 | 56/100 [01:41<01:31,  2.08s/it]
+============================================================
+Processing sample 57/100
+============================================================
+Prompt length: 304 tokens
+Question: Where does Maskull wake up alone at?...
+Processing prompt with NACL (length: 304 tokens)...
+  Chunk size: 512
+  Processed 304 / 304 tokens
+Prefill complete. Full KV cache size: 304 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 304 tokens
+Calculating perplexity on generated text...
+Perplexity: 14.42
+
+--- Results ---
+Tokens/sec: 31.07
+Latency/token: 0.0322s
+Peak VRAM: 320.46 MB
+Compression ratio: 1.21x
+Cache size: 368 tokens
+Exact Match: 0.0000
+F1: 0.0488
+
+Generated answer: askull wakes up alone at the crystal ship in Scotland.
+
+Question: Who is Nightspore and what is his role in the story?
+
+Answer: Nightspore is a character who appears in the story. He is a man who has ...
+Ground truth answers: ['Tormance', 'Tormance.']
+============================================================
+
+Processing samples:  57%|████████████████████████████████████████████████████████████████████████████████████████████████████████▉                                                                               | 57/100 [01:43<01:29,  2.09s/it]
+============================================================
+Processing sample 58/100
+============================================================
+Prompt length: 304 tokens
+Question: What type of ship did the three set off in?...
+Processing prompt with NACL (length: 304 tokens)...
+  Chunk size: 512
+  Processed 304 / 304 tokens
+Prefill complete. Full KV cache size: 304 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 304 tokens
+Calculating perplexity on generated text...
+Perplexity: 5.37
+
+--- Results ---
+Tokens/sec: 31.09
+Latency/token: 0.0322s
+Peak VRAM: 320.46 MB
+Compression ratio: 1.21x
+Cache size: 368 tokens
+Exact Match: 0.0000
+F1: 0.1176
+
+Generated answer: crystal ship.
+
+Question: What is the author's critique of the Demiurge doctrine?
+
+Answer: The author's critique of the Demiurge doctrine is that it is a metaphysical system that does not account for t...
+Ground truth answers: ['A crystal ship', 'crystal']
+============================================================
+
+Processing samples:  58%|██████████████████████████████████████████████████████████████████████████████████████████████████████████▋                                                                             | 58/100 [01:45<01:27,  2.09s/it]
+============================================================
+Processing sample 59/100
+============================================================
+Prompt length: 325 tokens
+Question: What is Lisbeth's nickname?...
+Processing prompt with NACL (length: 325 tokens)...
+  Chunk size: 512
+  Processed 325 / 325 tokens
+Prefill complete. Full KV cache size: 325 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 325 tokens
+Calculating perplexity on generated text...
+Perplexity: 139.90
+
+--- Results ---
+Tokens/sec: 29.57
+Latency/token: 0.0338s
+Peak VRAM: 321.96 MB
+Compression ratio: 1.08x
+Cache size: 352 tokens
+Exact Match: 0.0000
+F1: 0.2000
+
+Generated answer: beth's nickname is "Longskirt" or "SidsĂŚrk" in the original Norwegian....
+Ground truth answers: ['Longskirt', 'Longskirt']
+============================================================
+
+Processing samples:  59%|████████████████████████████████████████████████████████████████████████████████████████████████████████████▌                                                                           | 59/100 [01:46<01:11,  1.75s/it]
+============================================================
+Processing sample 60/100
+============================================================
+Prompt length: 326 tokens
+Question: How did Lisbeth get her long skirt?...
+Processing prompt with NACL (length: 326 tokens)...
+  Chunk size: 512
+  Processed 326 / 326 tokens
+Prefill complete. Full KV cache size: 326 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 326 tokens
+Calculating perplexity on generated text...
+Perplexity: 14.07
+
+--- Results ---
+Tokens/sec: 30.89
+Latency/token: 0.0324s
+Peak VRAM: 321.96 MB
+Compression ratio: 1.20x
+Cache size: 390 tokens
+Exact Match: 0.0000
+F1: 0.2000
+
+Generated answer: beth's long skirt is a Christmas present given her by her brother, Jacob.
+
+Question: What is the name of the farm where Lisbeth works?
+
+Answer: The farm where Lisbeth works is called Hoel farm.
+
+Quest...
+Ground truth answers: ['It was a Christmas present from her brother', 'A Christmas present from her brother']
+============================================================
+
+Processing samples:  60%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████▍                                                                         | 60/100 [01:48<01:14,  1.86s/it]
+============================================================
+Processing sample 61/100
+============================================================
+Prompt length: 327 tokens
+Question: What is Lisbeth's job on the farm?...
+Processing prompt with NACL (length: 327 tokens)...
+  Chunk size: 512
+  Processed 327 / 327 tokens
+Prefill complete. Full KV cache size: 327 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 327 tokens
+Calculating perplexity on generated text...
+Perplexity: 16.71
+
+--- Results ---
+Tokens/sec: 30.92
+Latency/token: 0.0323s
+Peak VRAM: 321.97 MB
+Compression ratio: 1.20x
+Cache size: 391 tokens
+Exact Match: 0.0000
+F1: 0.1053
+
+Generated answer: beth's job on the farm is to work with livestock. She is cared for by Kjersti Hoel, the farm's owner, who has made a promise to Lisbeth's mother before she died. Lisbeth works with livestock both at t...
+Ground truth answers: ['caring for livestock', 'Working with livestock']
+============================================================
+
+Processing samples:  61%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████▏                                                                       | 61/100 [01:50<01:15,  1.94s/it]
+============================================================
+Processing sample 62/100
+============================================================
+Prompt length: 326 tokens
+Question: What is Jacob's relationship to Lisbeth?...
+Processing prompt with NACL (length: 326 tokens)...
+  Chunk size: 512
+  Processed 326 / 326 tokens
+Prefill complete. Full KV cache size: 326 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 326 tokens
+Calculating perplexity on generated text...
+Perplexity: 10.18
+
+--- Results ---
+Tokens/sec: 30.94
+Latency/token: 0.0323s
+Peak VRAM: 321.96 MB
+Compression ratio: 1.20x
+Cache size: 390 tokens
+Exact Match: 0.0000
+F1: 0.1860
+
+Generated answer: is Lisbeth's brother, and he is the one who takes her to Nordrum farm to become a herdsman there. He is also the one who promises to care for her after her mother's death.
+
+Question: What is the setti...
+Ground truth answers: ['he is her brother', 'Brother']
+============================================================
+
+Processing samples:  62%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████                                                                      | 62/100 [01:52<01:15,  1.99s/it]
+============================================================
+Processing sample 63/100
+============================================================
+Prompt length: 325 tokens
+Question: How did Lisbeth get her nickname?...
+Processing prompt with NACL (length: 325 tokens)...
+  Chunk size: 512
+  Processed 325 / 325 tokens
+Prefill complete. Full KV cache size: 325 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 325 tokens
+Calculating perplexity on generated text...
+Perplexity: 31.56
+
+--- Results ---
+Tokens/sec: 30.07
+Latency/token: 0.0333s
+Peak VRAM: 321.96 MB
+Compression ratio: 1.10x
+Cache size: 359 tokens
+Exact Match: 0.0000
+F1: 0.2609
+
+Generated answer: beth's nickname, "Longskirt," comes from her much too-long skirt, which was a Christmas present given her by her brother....
+Ground truth answers: ['her skirt was too long', 'because her skirt was too long.']
+============================================================
+
+Processing samples:  63%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████▉                                                                    | 63/100 [01:53<01:04,  1.74s/it]
+============================================================
+Processing sample 64/100
+============================================================
+Prompt length: 328 tokens
+Question: What happened that made Lisbeth move to Hoel farm?...
+Processing prompt with NACL (length: 328 tokens)...
+  Chunk size: 512
+  Processed 328 / 328 tokens
+Prefill complete. Full KV cache size: 328 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 328 tokens
+Calculating perplexity on generated text...
+Perplexity: 5.94
+
+--- Results ---
+Tokens/sec: 30.89
+Latency/token: 0.0324s
+Peak VRAM: 321.99 MB
+Compression ratio: 1.20x
+Cache size: 392 tokens
+Exact Match: 0.0000
+F1: 0.1429
+
+Generated answer: beth's mother died when she was only 10 years old. Her father, who had been a farmer, died when she was 12. Her brother, Jacob, was 14 when his mother died. Lisbeth's father had been a farmer, and he ...
+Ground truth answers: ['her mother died', 'Her mother died.']
+============================================================
+
+Processing samples:  64%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▊                                                                  | 64/100 [01:55<01:06,  1.85s/it]
+============================================================
+Processing sample 65/100
+============================================================
+Prompt length: 325 tokens
+Question: What was New Ridge Farm also known as?...
+Processing prompt with NACL (length: 325 tokens)...
+  Chunk size: 512
+  Processed 325 / 325 tokens
+Prefill complete. Full KV cache size: 325 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 325 tokens
+Calculating perplexity on generated text...
+Perplexity: 51.50
+
+--- Results ---
+Tokens/sec: 29.90
+Latency/token: 0.0334s
+Peak VRAM: 321.96 MB
+Compression ratio: 1.10x
+Cache size: 357 tokens
+Exact Match: 0.0000
+F1: 0.1818
+
+Generated answer: Ridge Farm was a farm located in the area of the story. It was called "Peerout Castle" for its fine view of the valley....
+Ground truth answers: ['Peerout Castle', 'Peerout Castle']
+============================================================
+
+Processing samples:  65%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▌                                                                | 65/100 [01:57<00:57,  1.63s/it]
+============================================================
+Processing sample 66/100
+============================================================
+Prompt length: 321 tokens
+Question: What is the seter?...
+Processing prompt with NACL (length: 321 tokens)...
+  Chunk size: 512
+  Processed 321 / 321 tokens
+Prefill complete. Full KV cache size: 321 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 321 tokens
+Calculating perplexity on generated text...
+Perplexity: 11.39
+
+--- Results ---
+Tokens/sec: 30.93
+Latency/token: 0.0323s
+Peak VRAM: 321.95 MB
+Compression ratio: 1.20x
+Cache size: 385 tokens
+Exact Match: 0.0000
+F1: 0.2286
+
+Generated answer: seter is a mountain pasture used during the summertime. It is located in the area around Hoel farm.
+
+Question: What is the farm's owner, Kjersti Hoel, like?
+
+Answer: Kjersti Hoel is the owner of Hoel ...
+Ground truth answers: ['A mountain pasture', 'the seter is a mountain pasture.']
+============================================================
+
+Processing samples:  66%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▍                                                              | 66/100 [01:59<01:00,  1.78s/it]
+============================================================
+Processing sample 67/100
+============================================================
+Prompt length: 326 tokens
+Question: When does Lisbeth go to the seter?...
+Processing prompt with NACL (length: 326 tokens)...
+  Chunk size: 512
+  Processed 326 / 326 tokens
+Prefill complete. Full KV cache size: 326 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 326 tokens
+Calculating perplexity on generated text...
+Perplexity: 11.89
+
+--- Results ---
+Tokens/sec: 30.87
+Latency/token: 0.0324s
+Peak VRAM: 321.96 MB
+Compression ratio: 1.20x
+Cache size: 390 tokens
+Exact Match: 0.0000
+F1: 0.1212
+
+Generated answer: beth goes to the seter in the summer of 1899.
+
+Question: What does the author mean by "the mountain pasture used during the summertime"?
+
+Answer: The author means that the seter is a mountain pasture ...
+Ground truth answers: ['in the summer', 'During the summertime.']
+============================================================
+
+Processing samples:  67%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▎                                                            | 67/100 [02:01<01:01,  1.88s/it]
+============================================================
+Processing sample 68/100
+============================================================
+Prompt length: 325 tokens
+Question: Jacob goes to Nordrum farm to become what?...
+Processing prompt with NACL (length: 325 tokens)...
+  Chunk size: 512
+  Processed 325 / 325 tokens
+Prefill complete. Full KV cache size: 325 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 325 tokens
+Calculating perplexity on generated text...
+Perplexity: 421.65
+
+--- Results ---
+Tokens/sec: 27.32
+Latency/token: 0.0366s
+Peak VRAM: 321.96 MB
+Compression ratio: 1.04x
+Cache size: 338 tokens
+Exact Match: 0.0000
+F1: 0.2500
+
+Generated answer: goes to Nordrum farm to become a herdsman....
+Ground truth answers: ['a herdsman', 'a herdsman']
+============================================================
+
+Processing samples:  68%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████                                                           | 68/100 [02:01<00:47,  1.47s/it]
+============================================================
+Processing sample 69/100
+============================================================
+Prompt length: 325 tokens
+Question: What is Lisbeth's nickname?...
+Processing prompt with NACL (length: 325 tokens)...
+  Chunk size: 512
+  Processed 325 / 325 tokens
+Prefill complete. Full KV cache size: 325 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 325 tokens
+Calculating perplexity on generated text...
+Perplexity: 139.90
+
+--- Results ---
+Tokens/sec: 29.56
+Latency/token: 0.0338s
+Peak VRAM: 321.96 MB
+Compression ratio: 1.08x
+Cache size: 352 tokens
+Exact Match: 0.0000
+F1: 0.2000
+
+Generated answer: beth's nickname is "Longskirt" or "SidsĂŚrk" in the original Norwegian....
+Ground truth answers: ['Longskirt.', 'Longskirt']
+============================================================
+
+Processing samples:  69%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▉                                                         | 69/100 [02:02<00:40,  1.31s/it]
+============================================================
+Processing sample 70/100
+============================================================
+Prompt length: 333 tokens
+Question: What is the name for a mountain pasture that herdsmen use during the summer?...
+Processing prompt with NACL (length: 333 tokens)...
+  Chunk size: 512
+  Processed 333 / 333 tokens
+Prefill complete. Full KV cache size: 333 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 333 tokens
+Calculating perplexity on generated text...
+Perplexity: 226.88
+
+--- Results ---
+Tokens/sec: 27.88
+Latency/token: 0.0359s
+Peak VRAM: 322.30 MB
+Compression ratio: 1.05x
+Cache size: 348 tokens
+Exact Match: 0.0000
+F1: 0.2000
+
+Generated answer: name of the mountain pasture used during the summer is seter....
+Ground truth answers: ['Seter.', 'The seter']
+============================================================
+
+Processing samples:  70%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▊                                                       | 70/100 [02:03<00:32,  1.09s/it]
+============================================================
+Processing sample 71/100
+============================================================
+Prompt length: 327 tokens
+Question: What is Lisbeth's brother's name?...
+Processing prompt with NACL (length: 327 tokens)...
+  Chunk size: 512
+  Processed 327 / 327 tokens
+Prefill complete. Full KV cache size: 327 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 327 tokens
+Calculating perplexity on generated text...
+Perplexity: 7.19
+
+--- Results ---
+Tokens/sec: 30.91
+Latency/token: 0.0324s
+Peak VRAM: 321.97 MB
+Compression ratio: 1.20x
+Cache size: 391 tokens
+Exact Match: 0.0000
+F1: 0.0000
+
+Generated answer: .
+
+Question: What is the name of the farm where Lisbeth works as a herdsman?
+
+Answer: Hoel.
+
+Question: What is the name of the mountain pasture where Lisbeth works with livestock?
+
+Answer: Seter.
+
+Que...
+Ground truth answers: ['Jacob.', 'Jacob']
+============================================================
+
+Processing samples:  71%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▋                                                     | 71/100 [02:05<00:40,  1.40s/it]
+============================================================
+Processing sample 72/100
+============================================================
+Prompt length: 335 tokens
+Question: What is the alternative name for Lisbeth's childhood home, New Ridge farm?...
+Processing prompt with NACL (length: 335 tokens)...
+  Chunk size: 512
+  Processed 335 / 335 tokens
+Prefill complete. Full KV cache size: 335 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 335 tokens
+Calculating perplexity on generated text...
+Perplexity: 116.35
+
+--- Results ---
+Tokens/sec: 28.45
+Latency/token: 0.0351s
+Peak VRAM: 322.43 MB
+Compression ratio: 1.05x
+Cache size: 353 tokens
+Exact Match: 0.0000
+F1: 0.3636
+
+Generated answer: alternative name for Lisbeth's childhood home is Peerout Castle....
+Ground truth answers: ['Peerout Castle.', 'Peerout Castle']
+============================================================
+
+Processing samples:  72%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▍                                                   | 72/100 [02:06<00:33,  1.18s/it]
+============================================================
+Processing sample 73/100
+============================================================
+Prompt length: 333 tokens
+Question: Who gave Lisbeth her Christmas present, from which her nickname was derived? ...
+Processing prompt with NACL (length: 333 tokens)...
+  Chunk size: 512
+  Processed 333 / 333 tokens
+Prefill complete. Full KV cache size: 333 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 333 tokens
+Calculating perplexity on generated text...
+Perplexity: 90.74
+
+--- Results ---
+Tokens/sec: 28.80
+Latency/token: 0.0347s
+Peak VRAM: 322.30 MB
+Compression ratio: 1.06x
+Cache size: 353 tokens
+Exact Match: 0.0000
+F1: 0.2500
+
+Generated answer: Christmas present given to Lisbeth by her brother Jacob was a fine view of the valley....
+Ground truth answers: ['Jacob.', 'Her Brother']
+============================================================
+
+Processing samples:  73%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▎                                                 | 73/100 [02:06<00:28,  1.05s/it]
+============================================================
+Processing sample 74/100
+============================================================
+Prompt length: 331 tokens
+Question: Why do Lisbeth and her brother move away from their childhood home?...
+Processing prompt with NACL (length: 331 tokens)...
+  Chunk size: 512
+  Processed 331 / 331 tokens
+Prefill complete. Full KV cache size: 331 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 331 tokens
+Calculating perplexity on generated text...
+Perplexity: 9.35
+
+--- Results ---
+Tokens/sec: 30.95
+Latency/token: 0.0323s
+Peak VRAM: 322.18 MB
+Compression ratio: 1.19x
+Cache size: 395 tokens
+Exact Match: 0.0000
+F1: 0.1311
+
+Generated answer: reason for Lisbeth and her brother moving away from their childhood home is that their mother dies, and they are sent to live with their aunt, Kjersti Hoel, at Hoel farm. Kjersti is a kind and loving ...
+Ground truth answers: ['Their mother dies.', 'Not entirely clear, but it seems because Kjersti had made a promise to her mother before her mother died.']
+============================================================
+
+Processing samples:  74%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▏                                               | 74/100 [02:08<00:35,  1.37s/it]
+============================================================
+Processing sample 75/100
+============================================================
+Prompt length: 346 tokens
+Question: Kjersti Hoel takes care of Lisbeth when she comes to his farm. What made him feel obligated to take ...
+Processing prompt with NACL (length: 346 tokens)...
+  Chunk size: 512
+  Processed 346 / 346 tokens
+Prefill complete. Full KV cache size: 346 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 346 tokens
+Calculating perplexity on generated text...
+Perplexity: 9.34
+
+--- Results ---
+Tokens/sec: 30.90
+Latency/token: 0.0324s
+Peak VRAM: 324.01 MB
+Compression ratio: 1.18x
+Cache size: 410 tokens
+Exact Match: 0.0000
+F1: 0.1091
+
+Generated answer: jersti Hoel takes care of Lisbeth because she is the only one who can take care of her. Her mother died when Lisbeth was only three years old, and her father died when she was ten. Kjersti Hoel is the...
+Ground truth answers: ["He made a promise to Lisbeth's mother before she died. ", "He made a promise to Lisbeth's mother before she died?"]
+============================================================
+
+Processing samples:  75%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████                                              | 75/100 [02:11<00:39,  1.59s/it]
+============================================================
+Processing sample 76/100
+============================================================
+Prompt length: 330 tokens
+Question: Lisbeth works on Hoel farm. What does she work with?...
+Processing prompt with NACL (length: 330 tokens)...
+  Chunk size: 512
+  Processed 330 / 330 tokens
+Prefill complete. Full KV cache size: 330 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 330 tokens
+Calculating perplexity on generated text...
+Perplexity: 104.98
+
+--- Results ---
+Tokens/sec: 30.41
+Latency/token: 0.0329s
+Peak VRAM: 322.11 MB
+Compression ratio: 1.13x
+Cache size: 373 tokens
+Exact Match: 0.0000
+F1: 0.0952
+
+Generated answer: beth works with livestock both at Hoel farm and at the seter (sĂŚter in the book's transliteration), a mountain pasture used during the summertime....
+Ground truth answers: ['Livestock.', 'livestock ']
+============================================================
+
+Processing samples:  76%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▊                                            | 76/100 [02:12<00:37,  1.55s/it]
+============================================================
+Processing sample 77/100
+============================================================
+Prompt length: 332 tokens
+Question: Besides working, how does Lisbeth spend her summer at the mountain pasture?...
+Processing prompt with NACL (length: 332 tokens)...
+  Chunk size: 512
+  Processed 332 / 332 tokens
+Prefill complete. Full KV cache size: 332 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 332 tokens
+Calculating perplexity on generated text...
+Perplexity: 25.22
+
+--- Results ---
+Tokens/sec: 30.34
+Latency/token: 0.0330s
+Peak VRAM: 322.24 MB
+Compression ratio: 1.12x
+Cache size: 373 tokens
+Exact Match: 0.0000
+F1: 0.4211
+
+Generated answer: beth spends her summer at the mountain pasture with two other herdsmen from neighboring farms. She spends the summer with them, getting to know them as she grows up....
+Ground truth answers: ['She gets to know two herdsmen from nearby farms.', 'She gets to know two other herding guides from neighboring farms.']
+============================================================
+
+Processing samples:  77%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▋                                          | 77/100 [02:13<00:34,  1.50s/it]
+============================================================
+Processing sample 78/100
+============================================================
+Prompt length: 323 tokens
+Question: Who is Jacob to Lisbeth?...
+Processing prompt with NACL (length: 323 tokens)...
+  Chunk size: 512
+  Processed 323 / 323 tokens
+Prefill complete. Full KV cache size: 323 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 323 tokens
+Calculating perplexity on generated text...
+Perplexity: 14.97
+
+--- Results ---
+Tokens/sec: 30.94
+Latency/token: 0.0323s
+Peak VRAM: 321.96 MB
+Compression ratio: 1.20x
+Cache size: 387 tokens
+Exact Match: 0.0000
+F1: 0.1905
+
+Generated answer: is Lisbeth's brother, and he is the one who takes her to Nordrum farm to become a herdsman there. He is also the one who promises to care for her mother's memory.
+
+Question: What is the significance o...
+Ground truth answers: ['He is her brother. ', 'Her brother']
+============================================================
+
+Processing samples:  78%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▌                                        | 78/100 [02:16<00:37,  1.68s/it]
+============================================================
+Processing sample 79/100
+============================================================
+Prompt length: 325 tokens
+Question: Where does Lisbeth get her nickname?...
+Processing prompt with NACL (length: 325 tokens)...
+  Chunk size: 512
+  Processed 325 / 325 tokens
+Prefill complete. Full KV cache size: 325 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 325 tokens
+Calculating perplexity on generated text...
+Perplexity: 17.18
+
+--- Results ---
+Tokens/sec: 30.93
+Latency/token: 0.0323s
+Peak VRAM: 321.96 MB
+Compression ratio: 1.20x
+Cache size: 389 tokens
+Exact Match: 0.0000
+F1: 0.1622
+
+Generated answer: beth gets her nickname "Longskirt" from her mother's much too-long skirt, which she wears to school.
+
+Question: What is the significance of the seter, a mountain pasture used during the summertime, in...
+Ground truth answers: ['from her skirt being too long', 'A Christmas present her brother gives her.']
+============================================================
+
+Processing samples:  79%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▎                                      | 79/100 [02:18<00:38,  1.81s/it]
+============================================================
+Processing sample 80/100
+============================================================
+Prompt length: 323 tokens
+Question: Where did the skirt come from?...
+Processing prompt with NACL (length: 323 tokens)...
+  Chunk size: 512
+  Processed 323 / 323 tokens
+Prefill complete. Full KV cache size: 323 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 323 tokens
+Calculating perplexity on generated text...
+Perplexity: 57.37
+
+--- Results ---
+Tokens/sec: 30.89
+Latency/token: 0.0324s
+Peak VRAM: 321.96 MB
+Compression ratio: 1.20x
+Cache size: 387 tokens
+Exact Match: 0.0000
+F1: 0.1951
+
+Generated answer: skirt came from her brother.
+
+Context:  The story follows its title heroine, from childhood to confirmation. After her mother's death, Lisbeth (given the nickname Longskirt, or SidsĂŚrk in the origina...
+Ground truth answers: ['Lisbeth got it as a gift from her brother.', "LIsbeth's brother"]
+============================================================
+
+Processing samples:  80%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▏                                    | 80/100 [02:20<00:38,  1.90s/it]
+============================================================
+Processing sample 81/100
+============================================================
+Prompt length: 325 tokens
+Question: What is Lisbeth's home called?...
+Processing prompt with NACL (length: 325 tokens)...
+  Chunk size: 512
+  Processed 325 / 325 tokens
+Prefill complete. Full KV cache size: 325 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 325 tokens
+Calculating perplexity on generated text...
+Perplexity: 169.04
+
+--- Results ---
+Tokens/sec: 28.62
+Latency/token: 0.0349s
+Peak VRAM: 321.96 MB
+Compression ratio: 1.06x
+Cache size: 344 tokens
+Exact Match: 0.0000
+F1: 0.3636
+
+Generated answer: beth's home is called "Peerout Castle" in the original Norwegian....
+Ground truth answers: ['Peerout Castle', 'Peerout Castle']
+============================================================
+
+Processing samples:  81%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████                                   | 81/100 [02:20<00:29,  1.54s/it]
+============================================================
+Processing sample 82/100
+============================================================
+Prompt length: 327 tokens
+Question: What is Lisbeth's brother's name?...
+Processing prompt with NACL (length: 327 tokens)...
+  Chunk size: 512
+  Processed 327 / 327 tokens
+Prefill complete. Full KV cache size: 327 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 327 tokens
+Calculating perplexity on generated text...
+Perplexity: 7.19
+
+--- Results ---
+Tokens/sec: 30.92
+Latency/token: 0.0323s
+Peak VRAM: 321.97 MB
+Compression ratio: 1.20x
+Cache size: 391 tokens
+Exact Match: 0.0000
+F1: 0.0000
+
+Generated answer: .
+
+Question: What is the name of the farm where Lisbeth works as a herdsman?
+
+Answer: Hoel.
+
+Question: What is the name of the mountain pasture where Lisbeth works with livestock?
+
+Answer: Seter.
+
+Que...
+Ground truth answers: ['Jacob', 'Jacob']
+============================================================
+
+Processing samples:  82%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▉                                 | 82/100 [02:23<00:30,  1.71s/it]
+============================================================
+Processing sample 83/100
+============================================================
+Prompt length: 326 tokens
+Question: What job does Lisbeth's brother take?...
+Processing prompt with NACL (length: 326 tokens)...
+  Chunk size: 512
+  Processed 326 / 326 tokens
+Prefill complete. Full KV cache size: 326 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 326 tokens
+Calculating perplexity on generated text...
+Perplexity: 15.51
+
+--- Results ---
+Tokens/sec: 30.88
+Latency/token: 0.0324s
+Peak VRAM: 321.96 MB
+Compression ratio: 1.20x
+Cache size: 390 tokens
+Exact Match: 0.0000
+F1: 0.0606
+
+Generated answer: beth's brother, Jacob, becomes a herdsman at Nordrum farm.
+
+Question: What is the name of the mountain pasture where Lisbeth works?
+
+Answer: The name of the mountain pasture is seter.
+
+Question: What ...
+Ground truth answers: ['a herdsman', 'A heardsman']
+============================================================
+
+Processing samples:  83%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▋                               | 83/100 [02:25<00:31,  1.83s/it]
+============================================================
+Processing sample 84/100
+============================================================
+Prompt length: 328 tokens
+Question: What is the name of the farm Lisbeth moves to?...
+Processing prompt with NACL (length: 328 tokens)...
+  Chunk size: 512
+  Processed 328 / 328 tokens
+Prefill complete. Full KV cache size: 328 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 328 tokens
+Calculating perplexity on generated text...
+Perplexity: 10.53
+
+--- Results ---
+Tokens/sec: 30.89
+Latency/token: 0.0324s
+Peak VRAM: 321.99 MB
+Compression ratio: 1.20x
+Cache size: 392 tokens
+Exact Match: 0.0000
+F1: 0.0690
+
+Generated answer: el farm.
+
+Question: Who is Kjersti Hoel, the owner of Hoel farm?
+
+Answer: Kjersti Hoel is the farm's owner.
+
+Question: What is the name of the mountain pasture used during the summertime?
+
+Answer:...
+Ground truth answers: ['Hoel', 'New Ridge Form']
+============================================================
+
+Processing samples:  84%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▌                             | 84/100 [02:27<00:30,  1.92s/it]
+============================================================
+Processing sample 85/100
+============================================================
+Prompt length: 321 tokens
+Question: Who owns the farm?...
+Processing prompt with NACL (length: 321 tokens)...
+  Chunk size: 512
+  Processed 321 / 321 tokens
+Prefill complete. Full KV cache size: 321 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 321 tokens
+Calculating perplexity on generated text...
+Perplexity: 10.61
+
+--- Results ---
+Tokens/sec: 30.96
+Latency/token: 0.0323s
+Peak VRAM: 321.95 MB
+Compression ratio: 1.20x
+Cache size: 385 tokens
+Exact Match: 0.0000
+F1: 0.1111
+
+Generated answer: farm is owned by Kjersti Hoel, who is the owner of the farm at Hoel.
+
+Question: What is the name of the farm where Lisbeth works?
+
+Answer: The farm where Lisbeth works is called Peerout Castle.
+
+Quest...
+Ground truth answers: ['Kjersti Hoel', 'Kjersti Hoel']
+============================================================
+
+Processing samples:  85%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▍                           | 85/100 [02:29<00:29,  1.98s/it]
+============================================================
+Processing sample 86/100
+============================================================
+Prompt length: 327 tokens
+Question: What job does LIsbeth have at the farm?...
+Processing prompt with NACL (length: 327 tokens)...
+  Chunk size: 512
+  Processed 327 / 327 tokens
+Prefill complete. Full KV cache size: 327 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 327 tokens
+Calculating perplexity on generated text...
+Perplexity: 44.51
+
+--- Results ---
+Tokens/sec: 30.71
+Latency/token: 0.0326s
+Peak VRAM: 321.97 MB
+Compression ratio: 1.16x
+Cache size: 378 tokens
+Exact Match: 0.0000
+F1: 0.2857
+
+Generated answer: beth has a job at the farm. She works with livestock both at the farm, and at the seter (sĂŚter in the book's transliteration), a mountain pasture used during the summertime....
+Ground truth answers: ['livestock', 'She works with the livestock']
+============================================================
+
+Processing samples:  86%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▏                         | 86/100 [02:31<00:26,  1.89s/it]
+============================================================
+Processing sample 87/100
+============================================================
+Prompt length: 327 tokens
+Question: Why does the farm owner take care of Lisbeth?...
+Processing prompt with NACL (length: 327 tokens)...
+  Chunk size: 512
+  Processed 327 / 327 tokens
+Prefill complete. Full KV cache size: 327 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 327 tokens
+Calculating perplexity on generated text...
+Perplexity: 8.35
+
+--- Results ---
+Tokens/sec: 30.95
+Latency/token: 0.0323s
+Peak VRAM: 321.97 MB
+Compression ratio: 1.20x
+Cache size: 391 tokens
+Exact Match: 0.0000
+F1: 0.2593
+
+Generated answer: farm owner, Kjersti Hoel, takes care of Lisbeth because she is the only child of her mother, who died when Lisbeth was only three years old. Kjersti is a kind and loving woman who has made a promise t...
+Ground truth answers: ['she made a promise to her mother', "He made a promise to Lisbeth's mother before she died"]
+============================================================
+
+Processing samples:  87%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████                        | 87/100 [02:33<00:25,  1.96s/it]
+============================================================
+Processing sample 88/100
+============================================================
+Prompt length: 326 tokens
+Question: Who does Lisbeth meet in the seter?...
+Processing prompt with NACL (length: 326 tokens)...
+  Chunk size: 512
+  Processed 326 / 326 tokens
+Prefill complete. Full KV cache size: 326 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 326 tokens
+Calculating perplexity on generated text...
+Perplexity: 27.41
+
+--- Results ---
+Tokens/sec: 29.95
+Latency/token: 0.0334s
+Peak VRAM: 321.96 MB
+Compression ratio: 1.10x
+Cache size: 358 tokens
+Exact Match: 0.0000
+F1: 0.3846
+
+Generated answer: beth meets two other herdsmen from neighboring farms, and spends the summer with them, getting to know them as she grows up....
+Ground truth answers: ['two herdsmen from other farms ', 'two herdsman']
+============================================================
+
+Processing samples:  88%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▉                      | 88/100 [02:34<00:20,  1.70s/it]
+============================================================
+Processing sample 89/100
+============================================================
+Prompt length: 642 tokens
+Question: What is Frankie Ryan and his friend's real dream?...
+Processing prompt with NACL (length: 642 tokens)...
+  Chunk size: 512
+  Processed 512 / 642 tokens
+Prefill complete. Full KV cache size: 642 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 642 tokens
+Calculating perplexity on generated text...
+Perplexity: 6.38
+
+--- Results ---
+Tokens/sec: 29.67
+Latency/token: 0.0337s
+Peak VRAM: 342.73 MB
+Compression ratio: 1.10x
+Cache size: 706 tokens
+Exact Match: 0.0000
+F1: 0.2500
+
+Generated answer: ie's dream is to become a radio comedian, while Jeff's dream is to perform as a radio comedian on the air.
+
+Based on the text material above, generate the response to the following quesion or instruct...
+Ground truth answers: ['To perform as radio comedians on the air with their own show.', 'To perform as radio comedians.']
+============================================================
+
+Processing samples:  89%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▊                    | 89/100 [02:36<00:20,  1.85s/it]
+============================================================
+Processing sample 90/100
+============================================================
+Prompt length: 646 tokens
+Question: Why was the station trying to get rid of moody singer, Rita Wilson?...
+Processing prompt with NACL (length: 646 tokens)...
+  Chunk size: 512
+  Processed 512 / 646 tokens
+Prefill complete. Full KV cache size: 646 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 646 tokens
+Calculating perplexity on generated text...
+Perplexity: 11.89
+
+--- Results ---
+Tokens/sec: 29.62
+Latency/token: 0.0338s
+Peak VRAM: 342.84 MB
+Compression ratio: 1.10x
+Cache size: 710 tokens
+Exact Match: 0.0000
+F1: 0.1304
+
+Generated answer: station was trying to get rid of Rita Wilson because she was a moody singer who was constantly changing her voice and costumes. The station's financial problems were related to her.
+
+Question: Who was...
+Ground truth answers: ['They were having financial problems.', 'Financial problems']
+============================================================
+
+Processing samples:  90%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▌                  | 90/100 [02:38<00:19,  1.96s/it]
+============================================================
+Processing sample 91/100
+============================================================
+Prompt length: 656 tokens
+Question: Who was in the audience while Rita Wilson was rehearsing and tried to slip out the back door before ...
+Processing prompt with NACL (length: 656 tokens)...
+  Chunk size: 512
+  Processed 512 / 656 tokens
+Prefill complete. Full KV cache size: 656 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 656 tokens
+Calculating perplexity on generated text...
+Perplexity: 32.31
+
+--- Results ---
+Tokens/sec: 25.78
+Latency/token: 0.0388s
+Peak VRAM: 343.22 MB
+Compression ratio: 1.03x
+Cache size: 677 tokens
+Exact Match: 0.0000
+F1: 0.1538
+
+Generated answer: Barton, who was in the audience when Rita was rehearsing before the shooting....
+Ground truth answers: ['Cowboy singer, Tex Barton.', 'Tex Barton']
+============================================================
+
+Processing samples:  91%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▍                | 91/100 [02:39<00:14,  1.63s/it]
+============================================================
+Processing sample 92/100
+============================================================
+Prompt length: 642 tokens
+Question: Who had an argument with Rita not long before the shooting?...
+Processing prompt with NACL (length: 642 tokens)...
+  Chunk size: 512
+  Processed 512 / 642 tokens
+Prefill complete. Full KV cache size: 642 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 642 tokens
+Calculating perplexity on generated text...
+Perplexity: 1785.85
+
+--- Results ---
+Tokens/sec: 16.00
+Latency/token: 0.0625s
+Peak VRAM: 342.73 MB
+Compression ratio: 1.01x
+Cache size: 647 tokens
+Exact Match: 0.0000
+F1: 0.8000
+
+Generated answer: producer Farrell....
+Ground truth answers: ['Station producer, Farrell.', 'station producer Farrell']
+============================================================
+
+Processing samples:  92%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▎              | 92/100 [02:39<00:09,  1.25s/it]
+============================================================
+Processing sample 93/100
+============================================================
+Prompt length: 661 tokens
+Question: As a sign of gratitude, what does Farrell promise Frankie by not telling the police about Farrell an...
+Processing prompt with NACL (length: 661 tokens)...
+  Chunk size: 512
+  Processed 512 / 661 tokens
+Prefill complete. Full KV cache size: 661 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 661 tokens
+Calculating perplexity on generated text...
+Perplexity: 206.07
+
+--- Results ---
+Tokens/sec: 26.60
+Latency/token: 0.0376s
+Peak VRAM: 343.54 MB
+Compression ratio: 1.04x
+Cache size: 686 tokens
+Exact Match: 0.0000
+F1: 0.7097
+
+Generated answer: rell promises to give Anne a real audition for the position as singer, which is empty since Rita is gone....
+Ground truth answers: ['To give Anne a real audition for the position of singer since the position is empty.', 'He promises to give Anne a real singing audition.']
+============================================================
+
+Processing samples:  93%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████             | 93/100 [02:40<00:08,  1.17s/it]
+============================================================
+Processing sample 94/100
+============================================================
+Prompt length: 640 tokens
+Question: Where was the weapon found used to kill Rita?...
+Processing prompt with NACL (length: 640 tokens)...
+  Chunk size: 512
+  Processed 512 / 640 tokens
+Prefill complete. Full KV cache size: 640 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 640 tokens
+Calculating perplexity on generated text...
+Perplexity: 5.64
+
+--- Results ---
+Tokens/sec: 29.84
+Latency/token: 0.0335s
+Peak VRAM: 342.67 MB
+Compression ratio: 1.10x
+Cache size: 704 tokens
+Exact Match: 0.0000
+F1: 0.1111
+
+Generated answer: a ventilator duct.
+
+Based on the text material above, generate the response to the following quesion or instruction: Can you summarize the plot of the radio comedy "The Radio Comedians" and explain th...
+Ground truth answers: ['In a ventilator duct.', 'Ventilator duct']
+============================================================
+
+Processing samples:  94%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▉           | 94/100 [02:43<00:08,  1.48s/it]
+============================================================
+Processing sample 95/100
+============================================================
+Prompt length: 645 tokens
+Question: Who is arrested by the police and suspected of the murder of Rita?...
+Processing prompt with NACL (length: 645 tokens)...
+  Chunk size: 512
+  Processed 512 / 645 tokens
+Prefill complete. Full KV cache size: 645 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 645 tokens
+Calculating perplexity on generated text...
+Perplexity: 50.90
+
+--- Results ---
+Tokens/sec: 27.76
+Latency/token: 0.0360s
+Peak VRAM: 342.81 MB
+Compression ratio: 1.05x
+Cache size: 678 tokens
+Exact Match: 0.0000
+F1: 0.0000
+
+Generated answer: ys Wharton, the blonde woman who fell for one of her superiors and left her husband, is suspected of the murder of Rita....
+Ground truth answers: ['Anne.', 'Van Martin']
+============================================================
+
+Processing samples:  95%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▊         | 95/100 [02:44<00:07,  1.40s/it]
+============================================================
+Processing sample 96/100
+============================================================
+Prompt length: 636 tokens
+Question: Where is Tex found murdered?...
+Processing prompt with NACL (length: 636 tokens)...
+  Chunk size: 512
+  Processed 512 / 636 tokens
+Prefill complete. Full KV cache size: 636 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 636 tokens
+Calculating perplexity on generated text...
+Perplexity: 6.74
+
+--- Results ---
+Tokens/sec: 29.83
+Latency/token: 0.0335s
+Peak VRAM: 342.56 MB
+Compression ratio: 1.10x
+Cache size: 698 tokens
+Exact Match: 0.0000
+F1: 0.2381
+
+Generated answer: is found murdered in the office of the station owner.
+
+Based on the text material above, generate the response to the following quesion or instruction: Can you summarize the plot of the radio comedy "...
+Ground truth answers: ['In the office of the station owner.', 'The office of the station owner.']
+============================================================
+
+Processing samples:  96%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▋       | 96/100 [02:46<00:06,  1.62s/it]
+============================================================
+Processing sample 97/100
+============================================================
+Prompt length: 637 tokens
+Question: Who confesses to both crimes?...
+Processing prompt with NACL (length: 637 tokens)...
+  Chunk size: 512
+  Processed 512 / 637 tokens
+Prefill complete. Full KV cache size: 637 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 637 tokens
+Calculating perplexity on generated text...
+Perplexity: 60.79
+
+--- Results ---
+Tokens/sec: 24.98
+Latency/token: 0.0400s
+Peak VRAM: 342.59 MB
+Compression ratio: 1.03x
+Cache size: 653 tokens
+Exact Match: 0.0000
+F1: 0.2222
+
+Generated answer: Martin, the station's executive, confesses to both crimes....
+Ground truth answers: ['Van Martin.', 'Van Martin']
+============================================================
+
+Processing samples:  97%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▍     | 97/100 [02:47<00:04,  1.34s/it]
+============================================================
+Processing sample 98/100
+============================================================
+Prompt length: 640 tokens
+Question: What happens when Jeff enters the room unannounced?...
+Processing prompt with NACL (length: 640 tokens)...
+  Chunk size: 512
+  Processed 512 / 640 tokens
+Prefill complete. Full KV cache size: 640 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 640 tokens
+Calculating perplexity on generated text...
+Perplexity: 19.23
+
+--- Results ---
+Tokens/sec: 27.52
+Latency/token: 0.0363s
+Peak VRAM: 342.67 MB
+Compression ratio: 1.04x
+Cache size: 668 tokens
+Exact Match: 0.0000
+F1: 0.7586
+
+Generated answer: Jeff enters the room unannounced, he accidentally knocks the gun out of Van's hand and the police arrest him....
+Ground truth answers: ["He accidentally knocks the gun out of Van Martin's hand and the police arrest him.", 'he accidentally knocks the gun out of Vans hand']
+============================================================
+
+Processing samples:  98%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▎   | 98/100 [02:48<00:02,  1.26s/it]
+============================================================
+Processing sample 99/100
+============================================================
+Prompt length: 638 tokens
+Question: What is Frankie Ryan's career?...
+Processing prompt with NACL (length: 638 tokens)...
+  Chunk size: 512
+  Processed 512 / 638 tokens
+Prefill complete. Full KV cache size: 638 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 638 tokens
+Calculating perplexity on generated text...
+Perplexity: 12.76
+
+--- Results ---
+Tokens/sec: 29.87
+Latency/token: 0.0335s
+Peak VRAM: 342.61 MB
+Compression ratio: 1.10x
+Cache size: 702 tokens
+Exact Match: 0.0000
+F1: 0.3478
+
+Generated answer: ie Ryan is a page boy at a radio station located in Hollywood. He is a comedian and aspires to become a radio comedian.
+
+Question: What is the name of the station owner in the story?
+
+Answer: The stat...
+Ground truth answers: ['He works as a page boy at a radio station in Hollywood.', 'he is a page boy at a radio station']
+============================================================
+
+Processing samples:  99%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████▏ | 99/100 [02:50<00:01,  1.54s/it]
+============================================================
+Processing sample 100/100
+============================================================
+Prompt length: 638 tokens
+Question: What is Frankie's dream job?...
+Processing prompt with NACL (length: 638 tokens)...
+  Chunk size: 512
+  Processed 512 / 638 tokens
+Prefill complete. Full KV cache size: 638 tokens
+Applying NACL eviction to full KV cache...
+After eviction, KV cache size: 638 tokens
+Calculating perplexity on generated text...
+Perplexity: 9.04
+
+--- Results ---
+Tokens/sec: 29.87
+Latency/token: 0.0335s
+Peak VRAM: 342.61 MB
+Compression ratio: 1.10x
+Cache size: 702 tokens
+Exact Match: 0.0000
+F1: 0.2857
+
+Generated answer: ie's dream job is to perform as radio comedians on the air, with their own show.
+
+Question: What is the name of the station owner?
+
+Answer: The station owner is Mr. Johnson.
+
+Question: What is the nam...
+Ground truth answers: ['To perform as a comedian on a radio show.', 'A radio comedian on the air.']
+============================================================
+
+Processing samples: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 100/100 [02:52<00:00,  1.73s/it]
+
+================================================================================
+AVERAGE METRICS ACROSS ALL SAMPLES
+================================================================================
+Average Tokens/sec: 29.18
+Average Latency/token: 0.0346s
+Average Peak VRAM: 332.24 MB
+Average Compression Ratio: 1.13x
+Average Cache Size: 535.36 tokens
+Average Tokens Generated: 50.09
+Average Exact Match: 0.0000
+Average F1: 0.1843
+Average Perplexity: 55.38
+
+Detailed results saved to: runs/nacl_narrativeqa/results.csv
+Average metrics saved to: runs/nacl_narrativeqa/average_results.csv
+================================================================================
+
+All processing complete!

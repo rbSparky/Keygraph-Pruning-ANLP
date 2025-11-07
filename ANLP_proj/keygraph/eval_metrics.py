@@ -63,8 +63,10 @@ def evaluate_prediction(task_type,prediction,ground_truths):
         else:
             ground_truth =ground_truths
 
-        rouge_scores =compute_rouge_scores(prediction,ground_truth)
-        return rouge_scores
+        scores =compute_rouge_scores(prediction,ground_truth)
+        scores['f1'] = compute_f1(prediction, ground_truth)
+        scores['exact_match'] = compute_exact_match(prediction, ground_truth)
+        return scores
 
     elif task_type in["qa","qasper"]:
 

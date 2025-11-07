@@ -1,0 +1,2 @@
+tokens_per_second,latency_per_token,peak_vram_mb,exact_match,f1,tokens_generated,perplexity,baseline,model,num_samples,streaming_start_size,streaming_recent_size
+39.41454908817027,0.0259219853486959,2215.19228515625,0.0,0.14581792836804022,129.71,34.395868883132934,streamingllm,TinyLlama/TinyLlama-1.1B-Chat-v1.0,100,4,1020
