@@ -211,8 +211,8 @@ def topk_generate(
     inputs = tokenizer(
         prompt,
         return_tensors="pt",
-        truncation=False,  # <--- MODIFIED
-        max_length=None,   # <--- MODIFIED
+        truncation=True,  # <--- MODIFIED
+        max_length=7000,   # <--- MODIFIED
         padding=False
     ).to(device)
     

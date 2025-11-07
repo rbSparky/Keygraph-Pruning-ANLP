@@ -4,6 +4,7 @@ import argparse
 import os
 import sys
 import csv
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 # Import your existing data adapter and evaluation functions
@@ -19,6 +20,8 @@ import time
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from typing import Tuple, Optional, Callable
 
+
+# ============================================================================
 # LLAMA2 CHAT TEMPLATE
 # ============================================================================
 LLAMA2_CHAT_TEMPLATE = r"""{% set sys = '' %}
@@ -33,7 +36,7 @@ LLAMA2_CHAT_TEMPLATE = r"""{% set sys = '' %}
 {{ sys }}
 <</SYS>>
 {{ m['content'] }} [/INST]
-       {% else %}
+        {% else %}
 [INST] {{ m['content'] }} [/INST]
         {% endif %}
     {% elif m['role'] == 'assistant' %}
@@ -41,6 +44,7 @@ LLAMA2_CHAT_TEMPLATE = r"""{% set sys = '' %}
     {% endif %}
 {% endfor %}
 {% if add_generation_prompt %}[INST] {% endif %}"""
+
 
 def maybe_set_llama2_chat_template(tokenizer, model_id: str):
     """
@@ -52,14 +56,27 @@ def maybe_set_llama2_chat_template(tokenizer, model_id: str):
     if not tmpl and ("llama-2" in mid or "llama2" in mid) and ("instruct" in mid or "chat" in mid):
         print("Setting Llama2 chat template...")
         tokenizer.chat_template = LLAMA2_CHAT_TEMPLATE
+
+
 def make_prompt(tokenizer, document: str) -> str:
-    if hasattr(tokenizer, "apply_chat_template"):
+    """
+    Create a prompt for summarization using chat template if available.
+    Falls back to simple format if no chat template exists.
+    """
+    if hasattr(tokenizer, "apply_chat_template") and tokenizer.chat_template:
         messages = [
             {"role": "system", "content": "You are a precise scientific summarizer."},
             {"role": "user", "content": "Summarize this government report into 4-6 sentences focusing on the main findings, methods, and implications.\n\n" + document},
         ]
         return tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+    
+    # Fallback for models without chat template
     return f"Summarize the following government report into 4-6 sentences:\n\n{document}\n\nSummary:"
+
+
+# ============================================================================
+# EVALUATION FUNCTIONS
+# ============================================================================
 @torch.no_grad()
 def compute_perplexity(model, tokenizer, text, stride=512):
     """
@@ -93,68 +110,7 @@ def compute_perplexity(model, tokenizer, text, stride=512):
     ppl = torch.exp(torch.stack(nlls).mean())
     return ppl.item()
 
-def _cuda_phase_begin():
-    """Prepare to measure a phase. Returns (base_alloc_bytes, base_reserved_bytes)."""
-    if not torch.cuda.is_available():
-        return 0, 0
-    torch.cuda.synchronize()
-    torch.cuda.empty_cache()             # optional, keeps fragmentation down
-    torch.cuda.reset_peak_memory_stats() # reset counters for this phase
-    base_alloc = torch.cuda.memory_allocated()
-    base_reserved = torch.cuda.memory_reserved()
-    return base_alloc, base_reserved
 
-def _cuda_phase_end(base_alloc, base_reserved):
-    """Read absolute and delta peaks since _cuda_phase_begin()."""
-    if not torch.cuda.is_available():
-        return {
-            "peak_alloc_MB": float("nan"),
-            "peak_reserved_MB": float("nan"),
-            "delta_alloc_MB": float("nan"),
-            "delta_reserved_MB": float("nan"),
-            "base_alloc_MB": float("nan"),
-            "base_reserved_MB": float("nan"),
-        }
-    torch.cuda.synchronize()
-    peak_alloc = torch.cuda.max_memory_allocated()
-    peak_reserved = torch.cuda.max_memory_reserved()
-    # Absolute peaks during the phase (include baseline if counters start below it)
-    abs_alloc = max(peak_alloc, base_alloc)
-    abs_reserved = max(peak_reserved, base_reserved)
-    return {
-        "peak_alloc_MB": round(abs_alloc / (1024**2), 2),
-        "peak_reserved_MB": round(abs_reserved / (1024**2), 2),
-        "delta_alloc_MB": round(max(0, peak_alloc - base_alloc) / (1024**2), 2),
-        "delta_reserved_MB": round(max(0, peak_reserved - base_reserved) / (1024**2), 2),
-        "base_alloc_MB": round(base_alloc / (1024**2), 2),
-        "base_reserved_MB": round(base_reserved / (1024**2), 2),
-    }
-
-def save_prediction_to_csv(csv_file: str, sample_id: str, input_text: str, 
-                          prediction: str, reference: str, append: bool = True):
-    """
-    Save prediction data to CSV for BERTScore calculation.
-
-    Args:
-        csv_file: Path to the CSV file
-        sample_id: Unique identifier for the sample
-        input_text: The input document text
-        prediction: The model's generated summary
-        reference: The ground truth summary
-        append: Whether to append to existing file or create new
-    """
-    file_exists = os.path.isfile(csv_file)
-    mode = 'a' if append and file_exists else 'w'
-
-    with open(csv_file, mode, newline='', encoding='utf-8') as f:
-        writer = csv.writer(f)
-
-        # Write header if creating new file
-        if mode == 'w' or not file_exists:
-            writer.writerow(['sample_id', 'input', 'prediction', 'reference'])
-
-        # Write the data row
-        writer.writerow([sample_id, input_text, prediction, reference])
 @torch.no_grad()
 def streaming_llm_generate(
     model: AutoModelForCausalLM,
@@ -201,21 +157,12 @@ def streaming_llm_generate(
     print(f"Prompt token count after truncation: {prompt_tokens}")
     
     # --- PREFILL PHASE ---
-    pref_base_alloc, pref_base_reserved = _cuda_phase_begin()
+    reset_vram()
     t_prefill_start = time.perf_counter()
-
-    try:
-        # ... your existing prefill code (chunked passes, kv_cache updates) ...
-        prefill_time = time.perf_counter() - t_prefill_start
-        prefill_stats = {"time_s": round(prefill_time, 3), **_cuda_phase_end(pref_base_alloc, pref_base_reserved)}
-        print("Prompt processing complete.")
-    except Exception as e:
-        prefill_stats = {"time_s": round(time.perf_counter() - t_prefill_start, 3), **_cuda_phase_end(pref_base_alloc, pref_base_reserved)}
-
     
     # CRITICAL FIX: Don't initialize past_key_values to None
     # Let the first forward pass create it
-    prompt_chunk_size = 5000
+    prompt_chunk_size = 512
     num_chunks = (prompt_tokens + prompt_chunk_size - 1) // prompt_chunk_size
     
     print(f"Processing prompt in {num_chunks} chunks...")
@@ -279,34 +226,48 @@ def streaming_llm_generate(
         return f"ERROR: {e}", metrics
     
     # --- DECODE PHASE ---
-    # --- DECODE PHASE ---
-    dec_base_alloc, dec_base_reserved = _cuda_phase_begin()
+    reset_vram()
     t_decode_start = time.perf_counter()
-
+    
     generated_ids = []
+    # Get the next token prediction from the last chunk's output
     pred_token_idx = outputs.logits[:, -1, :].argmax(dim=-1).unsqueeze(1)
-
+    
     try:
         for _ in range(max_new_tokens):
             outputs = model(
-                input_ids=pred_token_idx,
-                past_key_values=past_key_values,
+                input_ids=pred_token_idx, 
+                past_key_values=past_key_values, 
                 use_cache=True,
                 return_dict=True
             )
+            
+            # Apply StreamingLLM eviction after each new token
             past_key_values = kv_cache(outputs.past_key_values)
+            
             pred_token_idx = outputs.logits[:, -1, :].argmax(dim=-1).unsqueeze(1)
             token_id = pred_token_idx.item()
             generated_ids.append(token_id)
+            
             if token_id == tokenizer.eos_token_id:
                 break
-
+        
         decode_time = time.perf_counter() - t_decode_start
-        decode_stats = {"time_s": round(decode_time, 3), **_cuda_phase_end(dec_base_alloc, dec_base_reserved)}
+        decode_stats = {
+            "time_s": round(decode_time, 3),
+            **vram_peaks()
+        }
+        
     except Exception as e:
+        print(f"\nError during decode: {e}\n")
+        import traceback
+        traceback.print_exc()
+        
         decode_time = time.perf_counter() - t_decode_start
-        decode_stats = {"time_s": round(decode_time, 3), **_cuda_phase_end(dec_base_alloc, dec_base_reserved)}
-
+        decode_stats = {
+            "time_s": round(decode_time, 3),
+            **vram_peaks()
+        }
     
     # --- FINALIZE & RETURN ---
     generated_text = tokenizer.decode(generated_ids, skip_special_tokens=True)
@@ -333,6 +294,33 @@ def streaming_llm_generate(
     return generated_text, metrics
 
 
+def save_prediction_to_csv(csv_file: str, sample_id: str, input_text: str, 
+                           prediction: str, reference: str, append: bool = True):
+    """
+    Save prediction data to CSV for BERTScore calculation.
+    
+    Args:
+        csv_file: Path to the CSV file
+        sample_id: Unique identifier for the sample
+        input_text: The input document text
+        prediction: The model's generated summary
+        reference: The ground truth summary
+        append: Whether to append to existing file or create new
+    """
+    file_exists = os.path.isfile(csv_file)
+    mode = 'a' if append and file_exists else 'w'
+    
+    with open(csv_file, mode, newline='', encoding='utf-8') as f:
+        writer = csv.writer(f)
+        
+        # Write header if creating new file
+        if mode == 'w' or not file_exists:
+            writer.writerow(['sample_id', 'input', 'prediction', 'reference'])
+        
+        # Write the data row
+        writer.writerow([sample_id, input_text, prediction, reference])
+
+
 def main(args):
     # Clear CUDA cache at start
     if torch.cuda.is_available():
@@ -343,8 +331,11 @@ def main(args):
         args.model_dir, 
         "cuda" if torch.cuda.is_available() else "cpu"
     )
+    
+    # Set Llama2 chat template if applicable
     maybe_set_llama2_chat_template(tokenizer, args.model_dir)
-    # Enable StreamingLLM - FIXED: Pass start_size and recent_size!
+    
+    # Enable StreamingLLM
     print(f"Enabling StreamingLLM with start_size={args.start_size} and recent_size={args.recent_size}")
     kv_cache = enable_streaming_llm(
         model,
@@ -354,23 +345,24 @@ def main(args):
     
     # Load dataset
     dataset_adapter = GovReportAdapter(args.dataset_dir)
-    samples = dataset_adapter.get_samples("test", args.num_samples)  # Changed to "test"
+    samples = dataset_adapter.get_samples("test", args.num_samples)
     
     # Setup output
     output_dir = "runs/baseline_streamingllm_govreport"
     os.makedirs(output_dir, exist_ok=True)
     csv_file = os.path.join(output_dir, "results.csv")
     predictions_csv = os.path.join(output_dir, "streamingllm_govreport_predictions.csv")
+    
     # Process samples
     for i, sample in enumerate(tqdm(samples, desc="Processing Samples")):
         try:
             print(f"\n--- Processing sample {i + 1}/{len(samples)} ---")
-            prompt = dataset_adapter.format_prompt(sample)
+            
+            # Get the input document
             input_document = sample.get("report", sample.get("document", ""))
-            prompt = dataset_adapter.format_prompt(sample)
             ground_truth = sample["summary"]
-            sample_id = sample.get("id", f"govreport_{i}")        
-            # Generate text
+            sample_id = sample.get("id", f"govreport_{i}")
+            
             # Create prompt using chat template
             prompt = make_prompt(tokenizer, input_document)
             
@@ -385,14 +377,16 @@ def main(args):
                 model, tokenizer, prompt, args.max_new_tokens, kv_cache
             )
             
+            # Save to predictions CSV
             save_prediction_to_csv(
-               predictions_csv,
+                predictions_csv,
                 sample_id=sample_id,
-               input_text=input_document,
-               prediction=generated_text,
+                input_text=input_document,
+                prediction=generated_text,
                 reference=ground_truth,
-              append=(i > 0)  # Create new file for first sample, append for rest
+                append=(i > 0)
             )
+            
             # Compute perplexity if requested
             if args.compute_ppl and len(generated_text) > 50:
                 print("Calculating perplexity on generated text...")
@@ -405,17 +399,17 @@ def main(args):
                     metrics['perplexity'] = float('inf')
             
             # Evaluate against ground truth
-            ground_truth = sample["summary"]
             eval_scores = evaluate_prediction("summarization", generated_text, ground_truth)
             metrics.update(eval_scores)
             
             # Add metadata
-            metrics["sample_id"] = sample.get("id", f"govreport_{i}")
+            metrics["sample_id"] = sample_id
             metrics["baseline"] = "streamingllm"
             metrics["model"] = args.model_dir
             metrics["max_new_tokens"] = args.max_new_tokens
             metrics["streaming_start_size"] = args.start_size
             metrics["streaming_recent_size"] = args.recent_size
+            metrics["used_chat_template"] = bool(hasattr(tokenizer, "apply_chat_template") and tokenizer.chat_template)
             
             # Log to CSV
             log_metrics_to_csv(csv_file, metrics)
@@ -423,36 +417,26 @@ def main(args):
             # Print results
             print(f"Tokens/sec: {metrics['tokens_per_second']:.2f}")
             print(f"Latency/token: {metrics['latency_per_token']:.4f}s")
-            print(f"""
-            Prefill/Decode Metrics:
-            prefill_time_s           = {metrics['time_s']:.3f}s
-            prefill_peak_alloc_MB     = {metrics['peak_alloc_MB']:.2f} MB
-            prefill_peak_reserved_MB  = {metrics['peak_reserved_MB']:.2f} MB
-            decode_time_s             = {metrics['time_s']:.3f}s
-            decode_peak_alloc_MB      = {metrics['peak_alloc_MB']:.2f} MB
-            decode_peak_reserved_MB   = {metrics['peak_reserved_MB']:.2f} MB
-            """)
-
-            if 'rouge1' in metrics:
-                print(f"ROUGE-1: {metrics['rouge1']:.4f}")
-            if 'rouge2' in metrics:
-                print(f"ROUGE-2: {metrics['rouge2']:.4f}")
             if 'rougeL' in metrics:
                 print(f"ROUGE-L: {metrics['rougeL']:.4f}")
-            if 'rougeLsum' in metrics:
-                print(f"ROUGE-Lsum: {metrics['rougeLsum']:.4f}")
             if 'f1' in metrics:
                 print(f"F1 Score: {metrics['f1']:.4f}")
             if 'exact_match' in metrics:
                 print(f"Exact Match: {metrics['exact_match']:.4f}")
-            
             print(f"Generated text: {generated_text[:100]}...")
             
         except Exception as e:
             print(f"Error processing sample {i}: {e}")
+            import traceback
+            traceback.print_exc()
             continue
     
     print(f"\n✓ Results saved to: {csv_file}")
+    print(f"✓ Predictions saved to: {predictions_csv}")
+    print(f"\nTo calculate BERTScore, run:")
+    print(f"  python -m bert_score.score --lang en \\")
+    print(f"    --predictions {predictions_csv} \\")
+    print(f"    --references {predictions_csv}")
 
 
 if __name__ == "__main__":
