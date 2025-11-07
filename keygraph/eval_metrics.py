@@ -1,3 +1,4 @@
+from ast import List
 import torch
 import time
 import argparse
@@ -7,7 +8,7 @@ import re
 import string
 from tqdm import tqdm
 from rouge_score import rouge_scorer
-
+from typing import List, Dict, Any
 # Assuming your project structure is as you've set it up
 # You might need to adjust these imports based on your actual file locations
 # sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
@@ -86,6 +87,24 @@ def compute_f1(prediction, ground_truth):
     f1 = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0.0
     return f1
 
+def token_f1(pred: str, ref: str) -> float:
+    """Calculates F1 score between two normalized strings."""
+    p = normalize_answer(pred); r = normalize_answer(ref)
+    p_tokens, r_tokens = p.split(), r.split()
+    common = {}
+    for t in set(p_tokens) & set(r_tokens):
+        common[t] = min(p_tokens.count(t), r_tokens.count(t))
+    num_same = sum(common.values())
+    if len(p_tokens) == 0 and len(r_tokens) == 0: return 1.0
+    if len(p_tokens) == 0 or len(r_tokens) == 0: return 0.0
+    precision = num_same / len(p_tokens)
+    recall = num_same / len(r_tokens)
+    return 0.0 if precision + recall == 0 else (2 * precision * recall) / (precision + recall)
+
+def best_over_refs_f1(pred: str, refs: List[str]) -> float:
+    """Calculates the maximum F1 score against a list of references."""
+    if not refs: return float("nan")
+    return max(token_f1(pred, r) for r in refs) if refs else float("nan")
 def compute_rouge_scores(prediction, ground_truth):
     """Compute ROUGE scores between prediction and ground truth."""
     scorer = rouge_scorer.RougeScorer(['rouge1', 'rouge2', 'rougeL'], use_stemmer=True)
@@ -93,37 +112,41 @@ def compute_rouge_scores(prediction, ground_truth):
     return {
         'rouge1': scores['rouge1'].fmeasure,
         'rouge2': scores['rouge2'].fmeasure,
-        'rougeL': scores['rougeL'].fmeasure
+        'rougeL': scores['rougeL'].fmeasure,
+        "rougeLsum": scores["rougeLsum"].fmeasure
+
     }
 
 # --- MODIFIED evaluate_prediction FUNCTION ---
 def evaluate_prediction(task_type, prediction, ground_truths):
-    """Evaluate a prediction based on the task type."""
+    """
+    Evaluates a prediction based on the task type.
+    NOTE: For QA, this calculates ANSWER F1.
+    """
     if task_type == "summarization":
+        # ... (your summarization logic) ...
         if isinstance(ground_truths, list):
             ground_truth = ground_truths[0] if ground_truths else ""
         else:
             ground_truth = ground_truths
-
         scores = compute_rouge_scores(prediction, ground_truth)
-        
-        # ADDED: Calculate F1 and EM for summarization
-        scores['f1'] = compute_f1(prediction, ground_truth)
-        scores['exact_match'] = compute_exact_match(prediction, ground_truth)
-        
+        scores['f1'] = token_f1(prediction, ground_truth) # Use token_f1
+        scores['exact_match'] = (normalize_answer(prediction) == normalize_answer(ground_truth))
         return scores
 
     elif task_type in ["qa", "qasper"]:
         if not isinstance(ground_truths, list):
             ground_truths = [ground_truths]
-
-        em_scores = [compute_exact_match(prediction, gt) for gt in ground_truths]
-        f1_scores = [compute_f1(prediction, gt) for gt in ground_truths]
-
+        
+        # This calculates the max F1 over all references
+        max_f1 = best_over_refs_f1(prediction, ground_truths)
+        
+        # Calculate EM
+        em_scores = [1.0 if normalize_answer(prediction) == normalize_answer(gt) else 0.0 for gt in ground_truths]
         max_em = max(em_scores) if em_scores else 0.0
-        max_f1 = max(f1_scores) if f1_scores else 0.0
 
         return {'exact_match': max_em, 'f1': max_f1}
+    
     else:
         raise ValueError(f"Unsupported task type: {task_type}")
 
